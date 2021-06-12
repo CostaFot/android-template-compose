@@ -9,12 +9,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(Sdk.COMPILE_SDK_VERSION)
-    testOptions.unitTests.isIncludeAndroidResources = true
+    compileSdk = Sdk.COMPILE_SDK_VERSION
 
     defaultConfig {
-        minSdkVersion(Sdk.MIN_SDK_VERSION)
-        targetSdkVersion(Sdk.TARGET_SDK_VERSION)
+        minSdk = Sdk.MIN_SDK_VERSION
+        targetSdk = Sdk.TARGET_SDK_VERSION
 
         applicationId = AppCoordinates.APP_ID
         versionCode = AppCoordinates.APP_VERSION_CODE
@@ -35,7 +34,7 @@ android {
     }
 
     buildTypes {
-        releaseBuild {
+        release {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -45,7 +44,7 @@ android {
             versionNameSuffix = "-release"
         }
 
-        debugBuild {
+        debug {
             isMinifyEnabled = false
             isDebuggable = true
             applicationIdSuffix = ".debug"
@@ -84,6 +83,7 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
+        useIR = true
     }
 
     testOptions {
@@ -93,9 +93,14 @@ android {
 
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
-    lintOptions {
+    composeOptions {
+        kotlinCompilerExtensionVersion = Compose.kotlinCompilerExtensionVersion
+    }
+
+    lint {
         isWarningsAsErrors = true
         isAbortOnError = true
     }
@@ -104,25 +109,61 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
+    implementation(Compose.ui)
+    // Tooling support (Previews, etc.)
+    implementation(Compose.tooling)
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    implementation(Compose.foundation)
+    // Material Design
+    implementation(Compose.material)
+    // Material design icons
+    implementation(Compose.icons)
+    implementation(Compose.iconsExtended)
+    // Integration with observables
+    implementation(Compose.livedata)
+    implementation(Compose.rxJava)
+    // UI Tests
+    implementation(Compose.uiTest)
+
+
     implementation(Support.appCompat)
     implementation(Support.material)
     implementation(Support.cardViewX)
     implementation(Support.constraintLayout)
     implementation(Support.recyclerview)
     implementation(Support.annotations)
+
     implementation(Ktx.fragment)
-    implementation(Ktx.liveData)
-    implementation(Ktx.savedState)
-    implementation(Ktx.viewModel)
     implementation(Ktx.core)
     implementation(Ktx.collections)
+
+    implementation(Lifecycle.liveData)
+    implementation(Lifecycle.savedState)
+    implementation(Lifecycle.viewModel)
+
     implementation(Navigation.navigationFragments)
     implementation(Navigation.navigationUI)
+
+    implementation(WorkManager.workManager)
+
     implementation(RxJava.rxJava2)
     implementation(RxJava.rxAndroid)
+
     implementation(Permissions.rx)
+
     implementation(Libs.rxBindingMaterial)
     implementation(Libs.gson)
+    implementation(Libs.otto)
+    implementation(Libs.timberLogger)
+
+    implementation(Firebase.analytics)
+    implementation(Firebase.crashlytics)
+
+    implementation(Dagger.dagger)
+    kapt(Dagger.compiler)
+    implementation(Dagger.android)
+    kapt(Dagger.processor)
+
     implementation(Retrofit.okHttp)
     implementation(Retrofit.loggingInterceptor)
     implementation(Retrofit.retrofit) {
@@ -135,28 +176,8 @@ dependencies {
         exclude("io.reactivex.rxjava2", "rxjava")
     }
 
-    implementation(Libs.reactiveNetwork)
-    implementation(Dagger.dagger)
-    kapt(Dagger.compiler)
-    implementation(Dagger.android)
-    kapt(Dagger.processor)
-    implementation(Libs.kotlinpref)
-    implementation(Libs.timberLogger)
-
-    implementation(Libs.toast)
-    implementation(Libs.lovelydialog)
-    implementation(Libs.flashbar)
-    implementation(Libs.shimmer)
-    implementation(Libs.gif)
-    implementation(Libs.animations1)
-    implementation(Libs.animations2)
-    implementation(Libs.otto)
     debugImplementation(Libs.leakCanary)
-    implementation(Firebase.analytics)
-    implementation(Firebase.crashlytics)
-    implementation(Libs.stetho)
-    implementation(Libs.stethoOkHttp)
-    implementation(WorkManager.workManager)
+
 
     testImplementation(TestingLib.jUnit)
     testImplementation(TestingLib.jUnitKotlin)

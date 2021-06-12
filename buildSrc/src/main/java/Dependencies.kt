@@ -1,5 +1,31 @@
 @file:Suppress("SpellCheckingInspection")
 
+object Compose {
+    const val kotlinCompilerExtensionVersion = "1.0.0-beta03"
+    private const val version = "1.0.0-beta08"
+    const val ui = "androidx.compose.ui:ui:1.0.0-beta08"
+
+    // Tooling support (Previews, etc.)
+    const val tooling = "androidx.compose.ui:ui-tooling:$version"
+
+    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
+    const val foundation = "androidx.compose.foundation:foundation:$version"
+
+    // Material Design
+    const val material = "androidx.compose.material:material:$version"
+
+    // Material design icons
+    const val icons = "androidx.compose.material:material-icons-core:$version"
+    const val iconsExtended = "androidx.compose.material:material-icons-extended:$version"
+
+    // Integration with observables
+    const val livedata = "androidx.compose.runtime:runtime-livedata:$version"
+    const val rxJava = "androidx.compose.runtime:runtime-rxjava2:$version"
+
+    // UI Tests
+    const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
+}
+
 object Support {
     const val appCompat = "androidx.appcompat:appcompat:1.3.0-alpha01"
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-rc1"
@@ -107,10 +133,13 @@ object Ktx {
     const val palette = "androidx.palette:palette-ktx:1.0.0"
     const val sqlite = "androidx.sqlite:sqlite-ktx:1.0.0"
     const val collections = "androidx.collection:collection-ktx:1.1.0"
-    const val reactiveStreams = "androidx.lifecycle:lifecycle-reactivestreams-ktx:2.2.0"
+}
+
+object Lifecycle {
     const val liveData = "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
     const val viewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     const val savedState = "androidx.savedstate:savedstate-ktx:1.1.0-alpha01"
+    const val reactiveStreams = "androidx.lifecycle:lifecycle-reactivestreams-ktx:2.2.0"
 }
 
 object TestingLib {
