@@ -1,9 +1,9 @@
 @file:Suppress("SpellCheckingInspection")
 
 object Compose {
-    const val kotlinCompilerExtensionVersion = "1.0.0-beta03"
-    private const val version = "1.0.0-beta08"
-    const val ui = "androidx.compose.ui:ui:1.0.0-beta08"
+    const val kotlinCompilerExtensionVersion = "1.0.3"
+    private const val version = "1.0.3"
+    const val ui = "androidx.compose.ui:ui:$version"
 
     // Tooling support (Previews, etc.)
     const val tooling = "androidx.compose.ui:ui-tooling:$version"
@@ -21,6 +21,8 @@ object Compose {
     // Integration with observables
     const val livedata = "androidx.compose.runtime:runtime-livedata:$version"
     const val rxJava = "androidx.compose.runtime:runtime-rxjava2:$version"
+
+    const val activity = "androidx.activity:activity-compose:1.3.1"
 
     // UI Tests
     const val uiTest = "androidx.compose.ui:ui-test-junit4:$version"
@@ -95,11 +97,11 @@ object Navigation {
 }
 
 object Dagger {
-    const val dagger = "com.google.dagger:dagger:2.28.3"
-    const val compiler = "com.google.dagger:dagger-compiler:2.28.3"
-    const val android = "com.google.dagger:dagger-android:2.28.3"
+    const val dagger = "com.google.dagger:dagger:2.39.1"
+    const val compiler = "com.google.dagger:dagger-compiler:2.39.1"
+    const val android = "com.google.dagger:dagger-android:2.39.1"
     const val androidSupport = "com.google.dagger:dagger-android-support:2.28.3"
-    const val processor = "com.google.dagger:dagger-android-processor:2.28.3"
+    const val processor = "com.google.dagger:dagger-android-processor:2.39.1"
 }
 
 object Room {

@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("kotlin-android-extensions")
     id("kotlin-kapt")
     greet
     todo
@@ -124,11 +123,10 @@ dependencies {
     implementation(Compose.rxJava)
     // UI Tests
     implementation(Compose.uiTest)
-
+    implementation(Compose.activity)
 
     implementation(Support.appCompat)
     implementation(Support.material)
-    implementation(Support.cardViewX)
     implementation(Support.constraintLayout)
     implementation(Support.recyclerview)
     implementation(Support.annotations)
@@ -164,6 +162,7 @@ dependencies {
     implementation(Dagger.android)
     kapt(Dagger.processor)
 
+    implementation(Libs.kotlinpref)
     implementation(Retrofit.okHttp)
     implementation(Retrofit.loggingInterceptor)
     implementation(Retrofit.retrofit) {

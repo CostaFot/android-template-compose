@@ -2,7 +2,6 @@ package com.feelsokman.androidtemplate.di.module
 
 import android.content.Context
 import android.net.ConnectivityManager
-import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.feelsokman.androidtemplate.core.coroutine.DispatcherProvider
 import com.feelsokman.androidtemplate.core.features.FlagProvider
 import com.feelsokman.androidtemplate.net.connectivity.ConnectivityChecker
@@ -51,16 +50,12 @@ object NetworkModule {
     @Singleton
     internal fun providesOkHttpClient(
         cache: Cache,
-        httpLoggingInterceptor: HttpLoggingInterceptor,
-        flagProvider: FlagProvider
+        httpLoggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
         return OkHttpClient().newBuilder()
             .apply {
                 addInterceptor(httpLoggingInterceptor)
                 cache(cache)
-                if (flagProvider.isDebugEnabled) {
-                    addNetworkInterceptor(StethoInterceptor())
-                }
             }.build()
     }
 
