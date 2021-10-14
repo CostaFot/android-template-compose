@@ -16,7 +16,6 @@ import com.feelsokman.androidtemplate.extensions.logDebug
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.androidtemplate.ui.base.BaseActivity
 import com.feelsokman.androidtemplate.utilities.viewmodel.ViewModelFactory
-import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
 class MainActivity : BaseActivity() {
@@ -32,7 +31,7 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
 
         // Initial setup!
-        setSupportActionBar(toolbar)
+        setSupportActionBar(findViewById(R.id.toolbar))
         supportActionBar?.setDisplayShowTitleEnabled(false)
         val navController = findNavController(R.id.nav_host_fragment)
         appBarConfiguration = AppBarConfiguration(navController.graph)
