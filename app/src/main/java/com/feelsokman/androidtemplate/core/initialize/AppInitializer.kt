@@ -12,20 +12,19 @@ class AppInitializer @Inject constructor(
     private val featureFlagProvider: FlagProvider
 ) {
 
-    private var isInitialized = AtomicBoolean(false)
+    private val isInitialized = AtomicBoolean(false)
 
     fun startup(application: Application) {
-
         check(!isInitialized.get()) { "Attempted to initialize app more than once" }
 
-        initTimber()
+        initLogger()
         isInitialized.set(true)
     }
 
-    private fun initTimber() {
+    private fun initLogger() {
         if (featureFlagProvider.isDebugEnabled) {
             Timber.plant(Timber.DebugTree())
-            logDebug { "Timber initialised" }
+            logDebug { "Logger initialised" }
         }
     }
 
