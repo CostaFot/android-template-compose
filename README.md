@@ -1,17 +1,19 @@
-# android--template
+# android-template-compose
 
-Template repo for android projects using
+Template repo for android compose projects using
 
-`Navigation`
+`Navigation Compose`
 
-`Dagger`
+`Hilt`
 
 `Retrofit`
 
 `MVVM`
 
-`RxJava`
+`Coroutines`
 
-`Firebase`
+`Version Catalogs`
 
+`KotlinX`
 
+`Coil`
