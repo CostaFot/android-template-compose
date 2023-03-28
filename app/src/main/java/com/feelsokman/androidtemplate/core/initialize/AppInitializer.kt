@@ -6,8 +6,10 @@ import com.feelsokman.androidtemplate.extensions.logDebug
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
+import javax.inject.Singleton
 
 
+@Singleton
 class AppInitializer @Inject constructor(
     private val featureFlagProvider: FlagProvider
 ) {

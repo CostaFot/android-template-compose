@@ -1,23 +1,17 @@
 package com.feelsokman.androidtemplate.ui.activity.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.feelsokman.androidtemplate.extensions.logDebug
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
 
-    val textData = MutableLiveData<String>().apply { postValue(UUID.randomUUID().toString()) }
+    private val _textData = MutableStateFlow(UUID.randomUUID().toString())
+    val uiState: StateFlow<String>
+        get() = _textData
 
-    override fun onCleared() {
-        logDebug { "MainViewModel cleared" }
-        super.onCleared()
-    }
-
-    fun go() {
-
-    }
 }
