@@ -27,7 +27,6 @@ object NetworkModule {
         return Cache(context.cacheDir, 10 * 1024 * 1024)
     }
 
-
     @Provides
     @Singleton
     internal fun providesHttpLoggingInterceptor(

@@ -25,7 +25,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
-
         setContent {
             MaterialTheme {
                 Content()
@@ -39,19 +38,23 @@ private fun Content(viewModel: MainViewModel = viewModel()) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.SpaceAround,
         modifier = Modifier.fillMaxSize()
     ) {
         Text(text = state)
         Button(
-            onClick = {
-                viewModel.gg()
-            },
+            onClick = viewModel::getTodo,
             content = {
                 Text(text = "Get TODO")
+            }
+        )
+
+        Button(
+            onClick = viewModel::startSomeWork,
+            content = {
+                Text(text = "Start worker")
             }
         )
 
