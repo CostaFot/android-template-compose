@@ -52,7 +52,7 @@ private fun Content(viewModel: MainViewModel = viewModel()) {
         )
 
         Button(
-            onClick = viewModel::startSomeWork,
+            onClick = viewModel::startTodoWork,
             content = {
                 Text(text = "Start worker")
             }

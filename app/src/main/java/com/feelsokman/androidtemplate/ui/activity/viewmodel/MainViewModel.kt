@@ -2,13 +2,13 @@ package com.feelsokman.androidtemplate.ui.activity.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingWorkPolicy
 import androidx.work.WorkManager
+import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.androidtemplate.extensions.logDebug
 import com.feelsokman.androidtemplate.extensions.logError
-import com.feelsokman.androidtemplate.net.JsonPlaceHolderService
-import com.feelsokman.androidtemplate.result.attempt
 import com.feelsokman.androidtemplate.result.fold
-import com.feelsokman.androidtemplate.work.GetTodoWorker
+import com.feelsokman.androidtemplate.work.ExpeditedGetTodoWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val jsonPlaceHolderService: JsonPlaceHolderService,
+    private val jsonPlaceHolderRepository: JsonPlaceHolderRepository,
     private val workManager: WorkManager
 ) : ViewModel() {
 
@@ -28,11 +28,9 @@ class MainViewModel @Inject constructor(
 
     fun getTodo() {
         viewModelScope.launch {
-            attempt {
-                jsonPlaceHolderService.getTodo(2)
-            }.fold(
+            jsonPlaceHolderRepository.getTodo(2).fold(
                 ifError = {
-                    logError { it.localizedMessage }
+                    logError { it.toString() }
                 },
                 ifSuccess = {
                     logDebug { it.title }
@@ -42,8 +40,12 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun startSomeWork() {
-        workManager.enqueue(GetTodoWorker.getWorkRequest())
+    fun startTodoWork() {
+        workManager.enqueueUniqueWork(
+            "ggg",
+            ExistingWorkPolicy.REPLACE,
+            ExpeditedGetTodoWorker.getWorkRequest()
+        )
     }
 
 }
