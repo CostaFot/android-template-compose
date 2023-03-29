@@ -2,6 +2,7 @@ plugins {
     id("feelsokayman.android.application")
     id("feelsokayman.android.application.compose")
     id("feelsokayman.android.hilt")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -68,6 +69,19 @@ dependencies {
     implementation(libs.androidx.compose.runtime)
     implementation(libs.timber)
     implementation(libs.coil.kt)
+    implementation(libs.coil.kt.svg)
+
+    implementation(libs.androidx.startup)
+    implementation(libs.androidx.work.ktx)
+    implementation(libs.hilt.ext.work)
+    kapt(libs.hilt.ext.compiler) // enables injecting workers
+
+    // networking
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp.logging)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.kotlin.serialization)
+
     implementation(libs.coil.kt.svg)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
