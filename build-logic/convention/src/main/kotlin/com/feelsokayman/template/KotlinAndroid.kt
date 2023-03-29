@@ -41,6 +41,8 @@ internal fun Project.configureKotlinAndroid(
                 "-opt-in=kotlinx.coroutines.FlowPreview",
                 "-opt-in=kotlin.Experimental",
                 "-opt-in=androidx.lifecycle.compose.ExperimentalLifecycleComposeApi",
+                "-opt-in=androidx.lifecycle.compose.ExperimentalLifecycleComposeApi",
+                "-opt-in=kotlinx.serialization.ExperimentalSerializationApi",
             )
 
             // Set JVM target to 1.8
