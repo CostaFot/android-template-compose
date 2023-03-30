@@ -29,7 +29,7 @@ class ExpeditedGetTodoWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(dispatcherProvider.io) {
-        delay(10000)
+        delay(5000) // simulate a long running worker
         jsonPlaceHolderRepository.getTodo(2).fold(
             ifError = {
                 logError { it.toString() }
@@ -46,6 +46,7 @@ class ExpeditedGetTodoWorker @AssistedInject constructor(
 
     companion object {
 
+        const val TAG = "ExpeditedGetTodoWorker"
         fun getWorkRequest(): OneTimeWorkRequest {
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -53,6 +54,7 @@ class ExpeditedGetTodoWorker @AssistedInject constructor(
 
             return OneTimeWorkRequestBuilder<ExpeditedGetTodoWorker>()
                 .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .addTag(TAG)
                 .setConstraints(constraints)
                 .build()
         }

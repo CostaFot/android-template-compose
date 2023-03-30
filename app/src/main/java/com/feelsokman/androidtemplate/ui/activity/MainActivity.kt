@@ -27,34 +27,57 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                Content()
+                MainScreenContent()
             }
         }
     }
 }
 
 @Composable
-private fun Content(viewModel: MainViewModel = viewModel()) {
+private fun MainScreenContent(viewModel: MainViewModel = viewModel()) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    InnerMainScreenContent(
+        state = state,
+        onGetTodo = viewModel::getTodo,
+        onCancelWork = viewModel::cancelWork,
+        onStartWork = viewModel::startTodoWork
+    )
+}
+
+@Composable
+private fun InnerMainScreenContent(
+    state: String,
+    onGetTodo: () -> Unit,
+    onStartWork: () -> Unit,
+    onCancelWork: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceAround,
-        modifier = Modifier.fillMaxSize()
+        modifier = modifier.fillMaxSize()
     ) {
         Text(text = state)
         Button(
-            onClick = viewModel::getTodo,
+            onClick = onGetTodo,
             content = {
                 Text(text = "Get TODO")
             }
         )
 
         Button(
-            onClick = viewModel::startTodoWork,
+            onClick = onStartWork,
             content = {
                 Text(text = "Start worker")
+            }
+        )
+
+        Button(
+            onClick = onCancelWork,
+            content = {
+                Text(text = "Cancel worker")
             }
         )
 
