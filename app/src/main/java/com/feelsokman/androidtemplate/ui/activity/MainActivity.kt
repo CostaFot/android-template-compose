@@ -1,71 +1,85 @@
 package com.feelsokman.androidtemplate.ui.activity
 
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import androidx.activity.viewModels
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.feelsokman.androidtemplate.R
-import com.feelsokman.androidtemplate.di.component.AppComponent
-import com.feelsokman.androidtemplate.di.getComponent
-import com.feelsokman.androidtemplate.extensions.logDebug
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
-import com.feelsokman.androidtemplate.ui.base.BaseActivity
-import com.feelsokman.androidtemplate.utilities.viewmodel.ViewModelFactory
-import javax.inject.Inject
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : BaseActivity() {
-
-    @Inject internal lateinit var viewModelFactory: ViewModelFactory
-
-    private val mainViewModel by viewModels<MainViewModel> { viewModelFactory }
-    private lateinit var appBarConfiguration: AppBarConfiguration
+@AndroidEntryPoint
+class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        injectDependencies()
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Initial setup!
-        setSupportActionBar(findViewById(R.id.toolbar))
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-        val navController = findNavController(R.id.nav_host_fragment)
-        appBarConfiguration = AppBarConfiguration(navController.graph)
-        setupActionBarWithNavController(navController, appBarConfiguration)
-
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            when (destination.id) {
-                R.id.hostFragment -> logDebug { "hostFragment showing!" }
-                R.id.anotherFragment -> logDebug { "anotherFragment showing!" }
+        setContent {
+            MaterialTheme {
+                MainScreenContent()
             }
         }
-
-        mainViewModel.textData.observe(this) {
-            logDebug { "MainActivity $it" }
-        }
     }
+}
 
-    override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+@Composable
+private fun MainScreenContent(viewModel: MainViewModel = viewModel()) {
+
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    InnerMainScreenContent(
+        state = state,
+        onGetTodo = viewModel::getTodo,
+        onCancelWork = viewModel::cancelWork,
+        onStartWork = viewModel::startTodoWork
+    )
+}
+
+@Composable
+private fun InnerMainScreenContent(
+    state: String,
+    onGetTodo: () -> Unit,
+    onStartWork: () -> Unit,
+    onCancelWork: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceAround,
+        modifier = modifier.fillMaxSize()
+    ) {
+        Text(text = state)
+        Button(
+            onClick = onGetTodo,
+            content = {
+                Text(text = "Get TODO")
+            }
+        )
+
+        Button(
+            onClick = onStartWork,
+            content = {
+                Text(text = "Start worker")
+            }
+        )
+
+        Button(
+            onClick = onCancelWork,
+            content = {
+                Text(text = "Cancel worker")
+            }
+        )
+
     }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment)
-        return item.onNavDestinationSelected(navController)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
-        return true
-    }
-
-    override fun injectDependencies() {
-        application.getComponent<AppComponent>().inject(this)
-    }
-
 }

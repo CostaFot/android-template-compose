@@ -1,20 +1,76 @@
 package com.feelsokman.androidtemplate.ui.activity.viewmodel
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.feelsokman.androidtemplate.usecase.GetStringFromStorageUseCase
-import timber.log.Timber
-import java.util.UUID
+import androidx.lifecycle.asFlow
+import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingWorkPolicy
+import androidx.work.WorkManager
+import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
+import com.feelsokman.androidtemplate.extensions.logDebug
+import com.feelsokman.androidtemplate.extensions.logError
+import com.feelsokman.androidtemplate.result.fold
+import com.feelsokman.androidtemplate.work.ExpeditedGetTodoWorker
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
+import java.util.*
 import javax.inject.Inject
 
+@HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getStringFromStorageUseCase: GetStringFromStorageUseCase
+    private val jsonPlaceHolderRepository: JsonPlaceHolderRepository,
+    private val workManager: WorkManager
 ) : ViewModel() {
 
-    val textData = MutableLiveData<String>().apply { postValue(UUID.randomUUID().toString()) }
+    private val _textData = MutableStateFlow(UUID.randomUUID().toString())
+    val uiState: StateFlow<String>
+        get() = _textData
 
-    override fun onCleared() {
-        Timber.d("MainViewModel cleared")
-        super.onCleared()
+    fun getTodo() {
+        viewModelScope.launch {
+            jsonPlaceHolderRepository.getTodo(2).fold(
+                ifError = {
+                    logError { it.toString() }
+                },
+                ifSuccess = {
+                    logDebug { it.title }
+                }
+            )
+
+        }
     }
+
+    fun cancelWork() {
+        workManager.cancelAllWorkByTag(ExpeditedGetTodoWorker.TAG)
+    }
+
+    fun startTodoWork() {
+        viewModelScope.launch {
+            val oneTimeWorkRequest = ExpeditedGetTodoWorker.getWorkRequest()
+            workManager.enqueueUniqueWork(
+                "uniqueName",
+                ExistingWorkPolicy.REPLACE,
+                oneTimeWorkRequest
+            )
+
+            supervisorScope {
+                launch {
+                    workManager.getWorkInfoByIdLiveData(oneTimeWorkRequest.id).asFlow().collect {
+                        logDebug { it?.state?.name }
+                        if (it.state.isFinished) {
+                            logDebug { "Work finished" }
+                            cancel()
+                        }
+                    }
+                }
+            }.invokeOnCompletion {
+                logDebug { "${oneTimeWorkRequest.id} observation end" }
+            }
+
+        }
+    }
+
 }

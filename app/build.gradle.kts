@@ -1,218 +1,91 @@
 plugins {
-    id("com.android.application")
-    kotlin("android")
-    id("kotlin-kapt")
-    greet
-    todo
-    packaging
+    id("feelsokayman.android.application")
+    id("feelsokayman.android.application.compose")
+    id("feelsokayman.android.hilt")
+    id("kotlinx-serialization")
 }
 
 android {
-    compileSdk = Sdk.COMPILE_SDK_VERSION
-
     defaultConfig {
-        minSdk = Sdk.MIN_SDK_VERSION
-        targetSdk = Sdk.TARGET_SDK_VERSION
+        applicationId = "com.feelsokman.androidtemplate"
+        versionCode = 2
+        versionName = "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
-        applicationId = AppCoordinates.APP_ID
-        versionCode = AppCoordinates.APP_VERSION_CODE
-        versionName = AppCoordinates.APP_VERSION_NAME
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables.useSupportLibrary = true
-
-        buildConfigField("String", "serverUrl", "\"https://jsonplaceholder.typicode.com/\"")
-    }
-
-    signingConfigs {
-        create("release") {
-            /*keyAlias keystoreProperties['releaseKeyAlias']
-              keyPassword keystoreProperties['releaseKeyPassword']
-              storeFile rootProject.file("keystore.jks")
-              storePassword keystoreProperties['releaseStorePassword']*/
+        vectorDrawables {
+            useSupportLibrary = true
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     buildTypes {
-        release {
+        val debug by getting {
+            applicationIdSuffix = ".debug"
+        }
+        val release by getting {
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            applicationIdSuffix = ".release"
-            versionNameSuffix = "-release"
-        }
-
-        debug {
-            isMinifyEnabled = false
-            isDebuggable = true
-            applicationIdSuffix = ".debug"
-            versionNameSuffix = "-debug"
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
-    flavorDimensions("style", "monetize")
-    productFlavors {
-        create("templateStyle") {
-            dimension = "style"
-            applicationIdSuffix = ".templateStyle"
-            versionNameSuffix = "-templateStyle"
-            resValue("string", "app_name", "Android Template")
-            versionCode = 1
-            versionName = "0.1"
-        }
-
-        create("free") {
-            dimension = "monetize"
-            applicationIdSuffix = ".free"
-            versionNameSuffix = "-free"
-        }
-
-        create("premium") {
-            dimension = "monetize"
-            applicationIdSuffix = ".premium"
-            versionNameSuffix = "-premium"
+    packagingOptions {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-        useIR = true
-    }
-
     testOptions {
-        unitTests.isReturnDefaultValues = true
-        unitTests.isIncludeAndroidResources = true
+        unitTests {
+            isIncludeAndroidResources = true
+        }
     }
-
-    buildFeatures {
-        viewBinding = true
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = Compose.kotlinCompilerExtensionVersion
-    }
-
-    lint {
-        isWarningsAsErrors = true
-        isAbortOnError = true
-    }
+    namespace = "com.feelsokman.androidtemplate"
 }
 
 dependencies {
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.compose.runtime.tracing)
+    implementation(libs.androidx.compose.material3.windowSizeClass)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.window.manager)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.foundation.layout)
+    implementation(libs.androidx.compose.material.iconsExtended)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.ui.util)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.timber)
+    implementation(libs.coil.kt)
+    implementation(libs.coil.kt.svg)
 
-    implementation(Compose.ui)
-    // Tooling support (Previews, etc.)
-    implementation(Compose.tooling)
-    // Foundation (Border, Background, Box, Image, Scroll, shapes, animations, etc.)
-    implementation(Compose.foundation)
-    // Material Design
-    implementation(Compose.material)
-    // Material design icons
-    implementation(Compose.icons)
-    implementation(Compose.iconsExtended)
-    // Integration with observables
-    implementation(Compose.livedata)
-    implementation(Compose.rxJava)
-    // UI Tests
-    implementation(Compose.uiTest)
-    implementation(Compose.activity)
+    implementation(libs.androidx.startup)
+    implementation(libs.androidx.work.ktx)
+    implementation(libs.hilt.ext.work)
+    kapt(libs.hilt.ext.compiler) // enables injecting workers
 
-    implementation(Support.appCompat)
-    implementation(Support.material)
-    implementation(Support.constraintLayout)
-    implementation(Support.recyclerview)
-    implementation(Support.annotations)
+    // networking
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.okhttp.logging)
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.kotlin.serialization)
 
-    implementation(Ktx.fragment)
-    implementation(Ktx.core)
-    implementation(Ktx.collections)
+    implementation(libs.coil.kt.svg)
 
-    implementation(Lifecycle.liveData)
-    implementation(Lifecycle.savedState)
-    implementation(Lifecycle.viewModel)
-
-    implementation(Navigation.navigationFragments)
-    implementation(Navigation.navigationUI)
-
-    implementation(WorkManager.workManager)
-
-    implementation(RxJava.rxJava2)
-    implementation(RxJava.rxAndroid)
-
-    implementation(Permissions.rx)
-
-    implementation(Libs.rxBindingMaterial)
-    implementation(Libs.gson)
-    implementation(Libs.otto)
-    implementation(Libs.timberLogger)
-
-    implementation(Firebase.analytics)
-    implementation(Firebase.crashlytics)
-
-    implementation(Dagger.dagger)
-    kapt(Dagger.compiler)
-    implementation(Dagger.android)
-    kapt(Dagger.processor)
-
-    implementation(Libs.kotlinpref)
-    implementation(Retrofit.okHttp)
-    implementation(Retrofit.loggingInterceptor)
-    implementation(Retrofit.retrofit) {
-        exclude("com.squareup.okhttp3", "okhttp")
-    }
-    implementation(Retrofit.gsonConverter) {
-        exclude("com.google.code.gson", "gson")
-    }
-    implementation(Retrofit.rxJava) {
-        exclude("io.reactivex.rxjava2", "rxjava")
-    }
-
-    debugImplementation(Libs.leakCanary)
-
-
-    testImplementation(TestingLib.jUnit)
-    testImplementation(TestingLib.jUnitKotlin)
-    implementation(TestingLib.testCoreX)
-
-    testImplementation(TestingLib.testArchCompX)
-    //testImplementation(TestingLib.robolectric)
-    testImplementation(TestingLib.mockitoCore)
-    testImplementation(TestingLib.mockitoKotlin)
-    testImplementation(TestingLib.mockitoInline)
-    testImplementation(TestingLib.runner)
-    testImplementation(TestingLib.espresso)
-    testImplementation(TestingLib.espressoIntents)
-    testImplementation(TestingLib.rules)
-    testImplementation(TestingLib.truth)
-    testImplementation(TestingLib.kluent)
-    testImplementation(TestingLib.coroutineTest)
-
-    androidTestImplementation(TestingLib.jUnit)
-    androidTestImplementation(TestingLib.jUnitKotlin)
-    androidTestImplementation(TestingLib.testCoreX)
-    androidTestImplementation(TestingLib.runner)
-    androidTestImplementation(TestingLib.espresso)
-
-    debugImplementation(TestingLib.fragmentScenario)
-
+    debugImplementation(libs.androidx.compose.ui.tooling)
 }
-
-
-// Configure the extension using a DSL block
-greeting {
-    // Replace defaults here if you want
-}
-
-todo {
-    // Replace defaults here if you want
-    id = 2
-}
-
