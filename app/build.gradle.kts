@@ -1,15 +1,15 @@
 plugins {
-    id("feelsokayman.android.application")
-    id("feelsokayman.android.application.compose")
-    id("feelsokayman.android.hilt")
+    id("application.common")
+    id("application.compose.common")
+    id("hilt.common")
     id("kotlinx-serialization")
 }
 
 android {
     defaultConfig {
-        applicationId = "com.feelsokman.androidtemplate"
-        versionCode = 2
-        versionName = "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        applicationId = "com.feelsokman.androidtemplate.compose"
+        versionCode = 1
+        versionName = "0.0.1"
 
         vectorDrawables {
             useSupportLibrary = true

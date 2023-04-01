@@ -16,33 +16,25 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("androidApplicationCompose") {
-            id = "feelsokayman.android.application.compose"
-            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        register("applicationComposeCommonPlugin") {
+            id = "application.compose.common"
+            implementationClass = "ApplicationComposeCommonPlugin"
         }
-        register("androidApplication") {
-            id = "feelsokayman.android.application"
-            implementationClass = "AndroidApplicationConventionPlugin"
+        register("applicationCommon") {
+            id = "application.common"
+            implementationClass = "ApplicationCommonPlugin"
         }
-        register("androidLibraryCompose") {
-            id = "feelsokayman.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        register("libraryComposeCommon") {
+            id = "library.compose.common"
+            implementationClass = "LibraryComposeCommonPlugin"
         }
-        register("androidLibrary") {
-            id = "feelsokayman.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
+        register("libraryCommon") {
+            id = "android.library"
+            implementationClass = "LibraryCommonPlugin"
         }
-        register("androidFeature") {
-            id = "feelsokayman.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
-        }
-        register("androidTest") {
-            id = "feelsokayman.android.test"
-            implementationClass = "AndroidTestConventionPlugin"
-        }
-        register("androidHilt") {
-            id = "feelsokayman.android.hilt"
-            implementationClass = "AndroidHiltConventionPlugin"
+        register("hiltCommon") {
+            id = "hilt.common"
+            implementationClass = "HiltCommonPlugin"
         }
     }
 }
