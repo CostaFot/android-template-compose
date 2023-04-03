@@ -6,9 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -46,6 +44,7 @@ private fun MainScreenContent(viewModel: MainViewModel = viewModel()) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InnerMainScreenContent(
     state: String,
@@ -59,6 +58,9 @@ private fun InnerMainScreenContent(
         verticalArrangement = Arrangement.SpaceAround,
         modifier = modifier.fillMaxSize()
     ) {
+        OutlinedTextField(value = "hello", onValueChange = {
+
+        })
         Text(text = state)
         Button(
             onClick = onGetTodo,
