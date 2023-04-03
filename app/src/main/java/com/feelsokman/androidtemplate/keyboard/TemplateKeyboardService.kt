@@ -37,10 +37,12 @@ class TemplateKeyboardService : InputMethodService(), KeyboardView.OnKeyboardAct
         return createKeyboardComposeView(this, keyboardVM)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onText(text: CharSequence?) {
         currentInputConnection.commitText(text, 1)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onKey(primaryCode: Int, keyCodes: IntArray?) {
         val inputConnection = currentInputConnection
 

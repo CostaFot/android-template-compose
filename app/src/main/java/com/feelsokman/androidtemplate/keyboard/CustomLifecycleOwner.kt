@@ -18,9 +18,8 @@ class CustomLifecycleOwner : SavedStateRegistryOwner, ViewModelStoreOwner {
         ViewModelStore()
     }
 
-    override fun getLifecycle(): Lifecycle {
-        return mLifecycleRegistry
-    }
+    override val lifecycle: Lifecycle
+        get() = mLifecycleRegistry
 
     fun setCurrentState(state: Lifecycle.State) {
         mLifecycleRegistry.currentState = state
@@ -42,6 +41,7 @@ class CustomLifecycleOwner : SavedStateRegistryOwner, ViewModelStoreOwner {
         mSavedStateRegistryController.performSave(outBundle)
     }
 
-    override fun getViewModelStore(): ViewModelStore = internalViewModelStore
+    override val viewModelStore: ViewModelStore
+        get() = internalViewModelStore
 }
 

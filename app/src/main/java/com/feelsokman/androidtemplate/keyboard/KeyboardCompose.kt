@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,11 +20,10 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.compositionContext
 import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.ViewTreeLifecycleOwner
-import androidx.lifecycle.ViewTreeViewModelStoreOwner
+import androidx.lifecycle.setViewTreeLifecycleOwner
+import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.feelsokman.androidtemplate.R
-import com.feelsokman.androidtemplate.core.compose.OnLifecycleEvent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -42,10 +43,8 @@ fun createKeyboardComposeView(
 
     customLifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
 
-    ViewTreeLifecycleOwner.set(composeView, customLifecycleOwner)
-
-    ViewTreeViewModelStoreOwner.set(composeView) { customLifecycleOwner.viewModelStore }
-
+    composeView.setViewTreeLifecycleOwner(customLifecycleOwner)
+    composeView.setViewTreeViewModelStoreOwner(customLifecycleOwner)
     composeView.setViewTreeSavedStateRegistryOwner(customLifecycleOwner)
 
     val coroutineContext = AndroidUiDispatcher.CurrentThread
@@ -90,27 +89,34 @@ private fun ComposeView.setMainContent(
                 keyboardVM.get()
             }
 
-            KeyboardContent(rememberKeyboardVM)
-        }
-
-        OnLifecycleEvent { _, event ->
-            Timber.tag("KeyboardComposeView").d("Compose lifecycle: ${event.name}")
+            HorizontalPager(
+                pageCount = 3,
+                state = rememberPagerState()
+            ) {
+                KeyboardContent(rememberKeyboardVM, it)
+            }
         }
     }
-
 }
 
 @Composable
-fun KeyboardContent(keyboardVM: KeyboardVM) {
+fun KeyboardContent(keyboardVM: KeyboardVM, page: Int) {
     val state by keyboardVM.uiState.collectAsState()
     InnerKeyboardContent(
         state = state,
-        onClick = keyboardVM::getTodo
+        page = page,
+        onClick = keyboardVM::getTodo,
+        onCleared = keyboardVM::onCleared
     )
 }
 
 @Composable
-fun InnerKeyboardContent(state: String, onClick: () -> Unit) {
+fun InnerKeyboardContent(
+    state: String,
+    page: Int,
+    onClick: () -> Unit,
+    onCleared: () -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly,
@@ -128,6 +134,13 @@ fun InnerKeyboardContent(state: String, onClick: () -> Unit) {
             }
         ) {
             Text(text = "Click me")
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            Timber.tag("KeyboardComposeView").d("Page: $page, left composition")
+            onCleared()
         }
     }
 }

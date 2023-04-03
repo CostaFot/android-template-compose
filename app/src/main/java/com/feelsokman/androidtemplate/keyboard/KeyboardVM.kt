@@ -5,12 +5,10 @@ import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.androidtemplate.extensions.logDebug
 import com.feelsokman.androidtemplate.extensions.logError
 import com.feelsokman.androidtemplate.result.fold
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -31,9 +29,9 @@ class KeyboardVM @Inject constructor(
         logDebug { "Init KeyboardVM, id: ${hashCode()}" }
     }
 
-
     fun getTodo() {
         viewModelScope.launch {
+            delay(5000)
             jsonPlaceHolderRepository.getTodo(2).fold(
                 ifError = {
                     logError { it.toString() }
@@ -45,6 +43,10 @@ class KeyboardVM @Inject constructor(
             )
 
         }
+    }
+
+    fun onCleared() {
+        viewModelScope.coroutineContext.cancelChildren()
     }
 
 }
