@@ -111,11 +111,8 @@ private fun ComposeView.setMainContent(
                 }
             }
 
-            LaunchedEffect(Unit) {
-                Timber.tag("KeyboardComposeView").d("MasterView entered composition")
-            }
-
             DisposableEffect(Unit) {
+                Timber.tag("KeyboardComposeView").d("MasterView entered composition")
                 onDispose {
                     Timber.tag("KeyboardComposeView").d("MasterView left composition")
                 }
@@ -142,6 +139,7 @@ fun InnerKeyboardContent(
     onClick: () -> Unit,
     onCleared: () -> Unit
 ) {
+
     Box(Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -185,16 +183,13 @@ fun InnerKeyboardContent(
             Text(text = state)
 
         }
+    }
 
-        LaunchedEffect(Unit) {
-            Timber.tag("KeyboardComposeView").d("Page: $page entered composition")
-        }
-
-        DisposableEffect(Unit) {
-            onDispose {
-                Timber.tag("KeyboardComposeView").d("Page: $page, left composition")
-                onCleared()
-            }
+    DisposableEffect(Unit) {
+        Timber.tag("KeyboardComposeView").d("Page: $page entered composition")
+        onDispose {
+            Timber.tag("KeyboardComposeView").d("Page: $page, left composition")
+            onCleared()
         }
     }
 
