@@ -89,7 +89,7 @@ private fun ComposeView.setMainContent(
             }
             Surface(
                 modifier = Modifier
-                    .height(150.dp)
+                    .height(250.dp)
                     .fillMaxWidth(),
                 color = MaterialTheme.colorScheme.background
             ) {
