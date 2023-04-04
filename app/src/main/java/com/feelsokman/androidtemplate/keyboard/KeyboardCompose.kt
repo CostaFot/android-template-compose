@@ -1,29 +1,29 @@
 package com.feelsokman.androidtemplate.keyboard
 
 import android.view.View
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.compositionContext
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.feelsokman.androidtemplate.R
+import com.feelsokman.androidtemplate.ui.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -69,7 +69,6 @@ fun createKeyboardComposeView(
 private fun ComposeView.setMainContent(
     keyboardVM: Provider<KeyboardVM>
 ) {
-
     id = R.id.keyboardComposeView
     addOnAttachStateChangeListener(
         object : View.OnAttachStateChangeListener {
@@ -84,16 +83,42 @@ private fun ComposeView.setMainContent(
     )
 
     setContent {
-        MaterialTheme {
+        AppTheme {
             val rememberKeyboardVM: KeyboardVM = remember {
                 keyboardVM.get()
             }
-
-            HorizontalPager(
-                pageCount = 3,
-                state = rememberPagerState()
+            Surface(
+                modifier = Modifier
+                    .height(150.dp)
+                    .fillMaxWidth(),
+                color = MaterialTheme.colorScheme.background
             ) {
-                KeyboardContent(rememberKeyboardVM, it)
+                val pagerState = rememberPagerState()
+                HorizontalPager(
+                    pageCount = 3,
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+
+                    KeyboardContent(rememberKeyboardVM, it)
+                }
+
+                LaunchedEffect(pagerState) {
+                    // Collect from the a snapshotFlow reading the currentPage
+                    snapshotFlow { pagerState.currentPage }.collect { page ->
+                        Timber.d("Page change", "Page changed to $page")
+                    }
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                Timber.tag("KeyboardComposeView").d("MasterView entered composition")
+            }
+
+            DisposableEffect(Unit) {
+                onDispose {
+                    Timber.tag("KeyboardComposeView").d("MasterView left composition")
+                }
             }
         }
     }
@@ -117,30 +142,60 @@ fun InnerKeyboardContent(
     onClick: () -> Unit,
     onCleared: () -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .background(Color.White)
-    ) {
-        Text(text = "Hello from Custom Keyboard")
-        Text(text = "This is a custom ComposeView")
-        Text(text = state)
-        Button(
-            onClick = {
-                onClick()
-            }
+    Box(Modifier.fillMaxSize()) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
         ) {
-            Text(text = "Click me")
+            Button(
+                onClick = {
+                    onClick()
+                }
+            ) {
+                Text(text = "Click me")
+            }
+            Text(text = "Hello from Custom Keyboard")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = "This is a custom ComposeView")
+            Text(text = state)
+
+        }
+
+        LaunchedEffect(Unit) {
+            Timber.tag("KeyboardComposeView").d("Page: $page entered composition")
+        }
+
+        DisposableEffect(Unit) {
+            onDispose {
+                Timber.tag("KeyboardComposeView").d("Page: $page, left composition")
+                onCleared()
+            }
         }
     }
 
-    DisposableEffect(Unit) {
-        onDispose {
-            Timber.tag("KeyboardComposeView").d("Page: $page, left composition")
-            onCleared()
-        }
-    }
 }

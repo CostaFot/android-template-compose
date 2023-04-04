@@ -73,6 +73,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.svg)
+    implementation(libs.accompanist.systemuicontroller)
 
     implementation(libs.androidx.startup)
     implementation(libs.androidx.work.ktx)

@@ -3,12 +3,13 @@ package com.feelsokman.androidtemplate.keyboard
 import com.feelsokman.androidtemplate.core.coroutine.DispatcherProvider
 import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.androidtemplate.extensions.logDebug
-import com.feelsokman.androidtemplate.extensions.logError
-import com.feelsokman.androidtemplate.result.fold
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -31,16 +32,17 @@ class KeyboardVM @Inject constructor(
 
     fun getTodo() {
         viewModelScope.launch {
-            delay(5000)
-            jsonPlaceHolderRepository.getTodo(2).fold(
-                ifError = {
-                    logError { it.toString() }
-                },
-                ifSuccess = {
-                    logDebug { it.title }
-                    _textData.update { UUID.randomUUID().toString() }
-                }
-            )
+            _textData.update { UUID.randomUUID().toString() }
+            /*  delay(5000)
+              jsonPlaceHolderRepository.getTodo(2).fold(
+                  ifError = {
+                      logError { it.toString() }
+                  },
+                  ifSuccess = {
+                      logDebug { it.title }
+                      _textData.update { UUID.randomUUID().toString() }
+                  }
+              )*/
 
         }
     }

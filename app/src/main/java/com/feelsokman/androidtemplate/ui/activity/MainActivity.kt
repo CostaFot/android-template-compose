@@ -3,21 +3,21 @@ package com.feelsokman.androidtemplate.ui.activity
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
+import com.feelsokman.androidtemplate.ui.theme.AppTheme
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -26,9 +26,24 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+        // Turn off the decor fitting system windows, which allows us to handle insets
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            MaterialTheme {
-                MainScreenContent()
+            val systemUiController = rememberSystemUiController()
+            val darkTheme = isSystemInDarkTheme()
+            AppTheme {
+                DisposableEffect(systemUiController, darkTheme) {
+                    systemUiController.systemBarsDarkContentEnabled = !darkTheme
+                    onDispose {}
+                }
+
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    MainScreenContent()
+                }
             }
         }
     }
@@ -55,35 +70,45 @@ private fun InnerMainScreenContent(
     onCancelWork: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround,
-        modifier = modifier.fillMaxSize()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
     ) {
-        OutlinedTextField(value = "hello", onValueChange = {
+        Text(text = "Top Center avoiding status bar", Modifier.align(Alignment.TopCenter))
+        Text(text = "Bottom Center avoiding navigation bar", Modifier.align(Alignment.BottomCenter))
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.SpaceAround,
+            modifier = modifier
+                .fillMaxSize()
+        ) {
+            OutlinedTextField(value = "hello", onValueChange = {
 
-        })
-        Text(text = state)
-        Button(
-            onClick = onGetTodo,
-            content = {
-                Text(text = "Get TODO")
-            }
-        )
+            })
+            Text(text = state)
+            Button(
+                onClick = onGetTodo,
+                content = {
+                    Text(text = "Get TODO")
+                }
+            )
 
-        Button(
-            onClick = onStartWork,
-            content = {
-                Text(text = "Start worker")
-            }
-        )
+            Button(
+                onClick = onStartWork,
+                content = {
+                    Text(text = "Start worker")
+                }
+            )
 
-        Button(
-            onClick = onCancelWork,
-            content = {
-                Text(text = "Cancel worker")
-            }
-        )
+            Button(
+                onClick = onCancelWork,
+                content = {
+                    Text(text = "Cancel worker")
+                }
+            )
 
+        }
     }
+
 }
