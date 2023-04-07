@@ -6,9 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -83,9 +81,17 @@ private fun InnerMainScreenContent(
             modifier = modifier
                 .fillMaxSize()
         ) {
-            OutlinedTextField(value = "hello", onValueChange = {
-
-            })
+            var input by remember {
+                mutableStateOf("")
+            }
+            OutlinedTextField(
+                value = input,
+                onValueChange = { ff: String ->
+                    input = ff
+                },
+                modifier = Modifier,
+                label = { Text("Label") }
+            )
             Text(text = state)
             Button(
                 onClick = onGetTodo,

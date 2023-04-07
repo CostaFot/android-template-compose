@@ -10,8 +10,8 @@ enum class FlavorDimension {
 }
 
 enum class Flavor(val dimension: FlavorDimension, val applicationIdSuffix: String? = null) {
-    pink(FlavorDimension.style, ".pink"),
-    blue(FlavorDimension.style, ".blue")
+    free(dimension = FlavorDimension.style, applicationIdSuffix = ".free"),
+    premium(dimension = FlavorDimension.style, applicationIdSuffix = ".premium")
 }
 
 fun Project.configureFlavors(

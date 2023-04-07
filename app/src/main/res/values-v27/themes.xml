@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-    <style name="PlatformAdjusted.Theme.Template" parent="NightAdjusted.Theme.Template">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-    </style>
-</resources>

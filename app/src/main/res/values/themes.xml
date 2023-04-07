@@ -1,37 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Allows us to override night specific attributes in the
-         values-night folder. -->
-    <style name="NightAdjusted.Theme.Template" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
-    </style>
-
-    <!-- Allows us to override platform level specific attributes in their
-         respective values-vXX folder. -->
-    <style name="PlatformAdjusted.Theme.Template" parent="NightAdjusted.Theme.Template">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="android:statusBarColor">@color/black30</item>
-    </style>
-
-    <!-- The final theme we use -->
+    <!-- Top Level Theme -->
     <style name="Theme.Template" parent="PlatformAdjusted.Theme.Template">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
-        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
-    </style>
-
+    <!-- Splash Theme -->
     <style name="Theme.Template.Splash" parent="NightAdjusted.Theme.Splash">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.Template</item>
     </style>
 
+    <!-- Allows us to override night specific attributes in the
+         values-night folder. -->
+    <style name="NightAdjusted.Theme.Template" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <!-- Allows us to override platform level specific attributes in their
+         respective values-vXX folder. -->
+    <style name="PlatformAdjusted.Theme.Template" parent="NightAdjusted.Theme.Template" />
+
+    <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
 
 </resources>
