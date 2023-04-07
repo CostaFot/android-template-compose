@@ -39,11 +39,17 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
         }
     }
+
+    lint {
+        checkDependencies = true
+    }
+
     namespace = "com.feelsokman.androidtemplate"
 }
 
@@ -89,4 +95,7 @@ dependencies {
     implementation(libs.coil.kt.svg)
 
     debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.testManifest)
+
+    lintPublish(project(":lint"))
 }
