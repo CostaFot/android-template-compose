@@ -29,7 +29,7 @@ gradlePlugin {
             implementationClass = "LibraryComposeCommonPlugin"
         }
         register("libraryCommon") {
-            id = "android.library"
+            id = "library.common"
             implementationClass = "LibraryCommonPlugin"
         }
         register("hiltCommon") {

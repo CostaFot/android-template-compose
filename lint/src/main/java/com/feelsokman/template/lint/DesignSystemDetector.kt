@@ -6,7 +6,6 @@ import org.jetbrains.uast.UCallExpression
 import org.jetbrains.uast.UElement
 import org.jetbrains.uast.UQualifiedReferenceExpression
 
-@Suppress("UnstableApiUsage")
 class DesignSystemDetector : Detector(), Detector.UastScanner {
 
     override fun getApplicableUastTypes(): List<Class<out UElement>> {
@@ -35,11 +34,10 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
     companion object {
         @JvmField
         val ISSUE: Issue = Issue.create(
-            id = "DesignSystem",
-            briefDescription = "Design system",
+            id = "Design",
+            briefDescription = "Design",
             explanation = "This check highlights calls in code that use Compose Material " +
-                    "composables instead of equivalents from the Now in Android design system " +
-                    "module.",
+                    "composables instead of equivalents from the design system module",
             category = Category.CUSTOM_LINT_CHECKS,
             priority = 7,
             severity = Severity.ERROR,
@@ -53,31 +51,10 @@ class DesignSystemDetector : Detector(), Detector.UastScanner {
         // Android module, so we can't use composable function references (eg. ::Button.name)
         // instead of hardcoded names.
         val METHOD_NAMES = mapOf(
-            "MaterialTheme" to "NiaTheme",
-            "Button" to "NiaFilledButton",
-            "OutlinedButton" to "NiaOutlinedButton",
-            "TextButton" to "NiaTextButton",
-            "FilterChip" to "NiaFilterChip",
-            "ElevatedFilterChip" to "NiaFilterChip",
-            "DropdownMenu" to "NiaDropdownMenu",
-            "NavigationBar" to "NiaNavigationBar",
-            "NavigationBarItem" to "NiaNavigationBarItem",
-            "NavigationRail" to "NiaNavigationRail",
-            "NavigationRailItem" to "NiaNavigationRailItem",
-            "TabRow" to "NiaTabRow",
-            "Tab" to "NiaTab",
-            "IconToggleButton" to "NiaToggleButton",
-            "FilledIconToggleButton" to "NiaToggleButton",
-            "FilledTonalIconToggleButton" to "NiaToggleButton",
-            "OutlinedIconToggleButton" to "NiaToggleButton",
-            "CenterAlignedTopAppBar" to "NiaTopAppBar",
-            "SmallTopAppBar" to "NiaTopAppBar",
-            "MediumTopAppBar" to "NiaTopAppBar",
-            "LargeTopAppBar" to "NiaTopAppBar"
+            "MaterialTheme" to "AppTheme",
+            "Balls" to "BigBalls"
         )
-        val RECEIVER_NAMES = mapOf(
-            "Icons" to "NiaIcons"
-        )
+        val RECEIVER_NAMES: Map<String, String> = mapOf()
 
         fun reportIssue(
             context: JavaContext,

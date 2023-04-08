@@ -14,12 +14,14 @@ import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
-import com.feelsokman.androidtemplate.ui.theme.AppTheme
+import com.feelsokman.design.theme.AppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    val rr = "test lint issues"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()

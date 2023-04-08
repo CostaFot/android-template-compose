@@ -23,7 +23,7 @@ import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.feelsokman.androidtemplate.R
-import com.feelsokman.androidtemplate.ui.theme.AppTheme
+import com.feelsokman.design.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber

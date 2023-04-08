@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.ui.theme
+package com.feelsokman.design.theme
 
 import androidx.compose.ui.graphics.Color
 
