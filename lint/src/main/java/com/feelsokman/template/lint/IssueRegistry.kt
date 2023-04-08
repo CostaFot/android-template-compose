@@ -4,10 +4,8 @@ import com.android.tools.lint.client.api.IssueRegistry
 import com.android.tools.lint.client.api.Vendor
 import com.android.tools.lint.detector.api.CURRENT_API
 
-class DesignSystemIssueRegistry : IssueRegistry() {
+class IssueRegistry : IssueRegistry() {
     override val issues = listOf(
-        DesignSystemDetector.ISSUE,
-        LogWtfDetector.ISSUE,
         SampleCodeDetector.ISSUE
     )
 
