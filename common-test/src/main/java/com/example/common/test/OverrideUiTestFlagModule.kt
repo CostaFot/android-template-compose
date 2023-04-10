@@ -1,7 +1,7 @@
 package com.example.common.test
 
-import com.feelsokman.common.di.ProductionModule
 import com.feelsokman.common.di.RunningUiTestFlag
+import com.feelsokman.common.di.UiTestFlagModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
@@ -11,9 +11,9 @@ import javax.inject.Singleton
 @Module
 @TestInstallIn(
     components = [SingletonComponent::class],
-    replaces = [ProductionModule::class],
+    replaces = [UiTestFlagModule::class],
 )
-object TestingModule {
+object OverrideUiTestFlagModule {
     @Singleton
     @Provides
     @RunningUiTestFlag
