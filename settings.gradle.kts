@@ -18,3 +18,4 @@ rootProject.name = "android-template-compose"
 include(":app")
 include(":lint")
 include(":design")
+include(":common")

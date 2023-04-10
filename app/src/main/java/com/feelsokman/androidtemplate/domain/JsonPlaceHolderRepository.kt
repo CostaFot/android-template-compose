@@ -1,10 +1,10 @@
 package com.feelsokman.androidtemplate.domain
 
-import com.feelsokman.androidtemplate.core.coroutine.DispatcherProvider
 import com.feelsokman.androidtemplate.domain.model.DomainTodo
 import com.feelsokman.androidtemplate.net.JsonPlaceHolderService
-import com.feelsokman.androidtemplate.result.Result
-import com.feelsokman.androidtemplate.result.attempt
+import com.feelsokman.common.coroutine.DispatcherProvider
+import com.feelsokman.common.result.Result
+import com.feelsokman.common.result.attempt
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 

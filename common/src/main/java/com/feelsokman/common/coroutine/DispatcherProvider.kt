@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.core.coroutine
+package com.feelsokman.common.coroutine
 
 import kotlinx.coroutines.CoroutineDispatcher
 

@@ -10,11 +10,11 @@ import androidx.core.content.getSystemService
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.feelsokman.androidtemplate.R
-import com.feelsokman.androidtemplate.core.coroutine.DispatcherProvider
 import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.androidtemplate.extensions.logDebug
 import com.feelsokman.androidtemplate.extensions.logError
-import com.feelsokman.androidtemplate.result.fold
+import com.feelsokman.common.coroutine.DispatcherProvider
+import com.feelsokman.common.result.fold
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay

@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.result
+package com.feelsokman.common.result
 
 sealed class Result<out L, out R> {
     class Error<L>(val value: L) : Result<L, Nothing>()

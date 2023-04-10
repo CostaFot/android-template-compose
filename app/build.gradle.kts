@@ -51,6 +51,7 @@ android {
 
 dependencies {
     implementation(project(":design"))
+    implementation(project(":common"))
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
