@@ -8,8 +8,8 @@ import androidx.work.WorkManager
 import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.androidtemplate.extensions.logDebug
 import com.feelsokman.androidtemplate.extensions.logError
-import com.feelsokman.androidtemplate.work.ExpeditedGetTodoWorker
 import com.feelsokman.common.result.fold
+import com.feelsokman.work.ExpeditedGetTodoWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -1,10 +1,10 @@
-package com.feelsokman.androidtemplate.di
+package com.feelsokman.work
 
 import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.WorkManager
-import com.feelsokman.androidtemplate.core.features.FlagProvider
+import com.feelsokman.common.FlagProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

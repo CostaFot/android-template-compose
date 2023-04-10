@@ -13,4 +13,5 @@ android {
 
 dependencies {
     implementation(libs.kotlinx.coroutines.android)
+    implementation("androidx.hilt:hilt-work:1.0.0")
 }

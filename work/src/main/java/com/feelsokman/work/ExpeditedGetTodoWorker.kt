@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.work
+package com.feelsokman.work
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -9,7 +9,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
-import com.feelsokman.androidtemplate.R
 import com.feelsokman.common.coroutine.DispatcherProvider
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -83,7 +82,7 @@ private fun Context.getTodoWorkNotification(): Notification {
         this,
         NotificationChannelID
     ).apply {
-        setSmallIcon(R.drawable.ic_launcher_foreground)
+        setSmallIcon(com.feelsokman.design.R.drawable.ic_launcher_foreground)
         setContentTitle("This is a content title")
         setContentText("hello")
         priority = NotificationCompat.PRIORITY_DEFAULT

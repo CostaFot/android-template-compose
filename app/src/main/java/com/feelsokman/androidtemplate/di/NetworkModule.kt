@@ -1,8 +1,8 @@
 package com.feelsokman.androidtemplate.di
 
 import android.content.Context
-import com.feelsokman.androidtemplate.core.features.FlagProvider
 import com.feelsokman.androidtemplate.net.JsonPlaceHolderService
+import com.feelsokman.common.FlagProvider
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

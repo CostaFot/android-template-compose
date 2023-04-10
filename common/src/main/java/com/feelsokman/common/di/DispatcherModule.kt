@@ -8,7 +8,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineScope
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
@@ -26,6 +25,3 @@ object DispatcherModule {
 
 }
 
-@Qualifier
-@Retention(AnnotationRetention.RUNTIME)
-annotation class ApplicationCoroutineScope

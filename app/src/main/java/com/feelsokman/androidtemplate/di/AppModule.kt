@@ -2,6 +2,8 @@ package com.feelsokman.androidtemplate.di
 
 import android.content.Context
 import android.content.res.Resources
+import com.feelsokman.androidtemplate.BuildConfig
+import com.feelsokman.common.di.DebugFlag
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,4 +20,9 @@ object AppModule {
     fun providesApplicationResources(@ApplicationContext context: Context): Resources {
         return context.resources
     }
+
+    @Singleton
+    @Provides
+    @DebugFlag
+    fun providesDebugFlag(): Boolean = BuildConfig.DEBUG
 }
