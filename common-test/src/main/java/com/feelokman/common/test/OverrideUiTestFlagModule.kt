@@ -1,4 +1,4 @@
-package com.example.common.test
+package com.feelokman.common.test
 
 import com.feelsokman.common.di.RunningUiTestFlag
 import com.feelsokman.common.di.UiTestFlagModule
