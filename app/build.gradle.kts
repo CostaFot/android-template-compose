@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":design"))
     implementation(project(":common"))
     implementation(project(":work"))
+    implementation(project(":logging"))
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
@@ -71,15 +72,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window.manager)
     implementation(libs.androidx.compose.runtime.livedata)
-    implementation(libs.timber)
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.svg)
     implementation(libs.accompanist.systemuicontroller)
 
     implementation(libs.androidx.startup)
-    implementation(libs.androidx.work.ktx)
-    implementation(libs.hilt.ext.work)
-    kapt(libs.hilt.ext.compiler) // enables injecting workers
 
     // networking
     implementation(libs.kotlinx.serialization.json)

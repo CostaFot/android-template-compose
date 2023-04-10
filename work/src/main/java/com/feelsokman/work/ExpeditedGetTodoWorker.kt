@@ -4,12 +4,12 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.feelsokman.common.coroutine.DispatcherProvider
+import com.feelsokman.logging.logDebug
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
@@ -23,6 +23,7 @@ class ExpeditedGetTodoWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(dispatcherProvider.io) {
+        logDebug { "Starting work" }
         delay(5000) // simulate a long running worker
         Result.success()
     }
@@ -64,19 +65,17 @@ private fun Context.todoForegroundInfo() = ForegroundInfo(
  * run with a foreground service
  */
 private fun Context.getTodoWorkNotification(): Notification {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-        val channel = NotificationChannel(
-            NotificationChannelID,
-            "todo",
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            description = "Description for this notification channel"
-        }
-        // Register the channel with the system, could do this on app onCreate too
-        val notificationManager: NotificationManager? = this.getSystemService()
-
-        notificationManager?.createNotificationChannel(channel)
+    val channel = NotificationChannel(
+        NotificationChannelID,
+        "todo",
+        NotificationManager.IMPORTANCE_HIGH
+    ).apply {
+        description = "Description for this notification channel"
     }
+    // Register the channel with the system, could do this on app onCreate too
+    val notificationManager: NotificationManager? = this.getSystemService()
+
+    notificationManager?.createNotificationChannel(channel)
 
     return NotificationCompat.Builder(
         this,

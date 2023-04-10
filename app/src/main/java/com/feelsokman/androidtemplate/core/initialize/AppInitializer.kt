@@ -1,8 +1,8 @@
 package com.feelsokman.androidtemplate.core.initialize
 
 import android.app.Application
-import com.feelsokman.androidtemplate.extensions.logDebug
 import com.feelsokman.common.FlagProvider
+import com.feelsokman.logging.logDebug
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject

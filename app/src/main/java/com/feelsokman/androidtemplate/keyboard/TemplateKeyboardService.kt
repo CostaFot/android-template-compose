@@ -5,8 +5,8 @@ import android.inputmethodservice.Keyboard
 import android.inputmethodservice.KeyboardView
 import android.text.TextUtils
 import android.view.View
-import com.feelsokman.androidtemplate.extensions.logDebug
 import com.feelsokman.common.coroutine.DispatcherProvider
+import com.feelsokman.logging.logDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob

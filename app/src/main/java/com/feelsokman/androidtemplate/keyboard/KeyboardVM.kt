@@ -1,8 +1,8 @@
 package com.feelsokman.androidtemplate.keyboard
 
 import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
-import com.feelsokman.androidtemplate.extensions.logDebug
 import com.feelsokman.common.coroutine.DispatcherProvider
+import com.feelsokman.logging.logDebug
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren

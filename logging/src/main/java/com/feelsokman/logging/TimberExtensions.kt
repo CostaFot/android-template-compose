@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.feelsokman.androidtemplate.extensions
+package com.feelsokman.logging
 
 import timber.log.Timber
 

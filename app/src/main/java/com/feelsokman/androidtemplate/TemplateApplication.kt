@@ -3,7 +3,7 @@ package com.feelsokman.androidtemplate
 import android.app.Application
 import androidx.work.Configuration
 import com.feelsokman.androidtemplate.core.initialize.AppInitializer
-import com.feelsokman.androidtemplate.extensions.logDebug
+import com.feelsokman.logging.logDebug
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 

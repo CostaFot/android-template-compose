@@ -10,8 +10,9 @@ android {
 dependencies {
     implementation(project(":common"))
     implementation(project(":design"))
+    implementation(project(":logging"))
 
-    implementation(libs.androidx.work.ktx)
+    api(libs.androidx.work.ktx)
     implementation(libs.hilt.ext.work)
     implementation(libs.kotlinx.coroutines.android)
     kapt(libs.hilt.ext.compiler) // enables injecting workers
