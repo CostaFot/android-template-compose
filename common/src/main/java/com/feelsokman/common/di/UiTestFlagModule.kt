@@ -9,7 +9,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object UiTestFlagModule {
-
     @Singleton
     @Provides
     @RunningUiTestFlag
