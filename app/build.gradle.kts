@@ -61,7 +61,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.lifecycle.viewModelCompose)
@@ -91,4 +90,5 @@ dependencies {
 
     // UI testing
     androidTestImplementation(project(":testing"))
+    androidTestImplementation(project(":common-test"))
 }

@@ -15,10 +15,8 @@ dependencies {
     api(libs.androidx.work.ktx)
     implementation(libs.hilt.ext.work)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.work.testing)
     kapt(libs.hilt.ext.compiler) // enables injecting workers
 
-    testImplementation(project(":testing"))
-
-    androidTestImplementation(project(":testing"))
     androidTestImplementation(libs.androidx.work.testing)
 }

@@ -10,3 +10,7 @@ annotation class ApplicationCoroutineScope
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 annotation class DebugFlag
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class RunningUiTestFlag

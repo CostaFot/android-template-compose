@@ -9,6 +9,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":common"))
+
     api(libs.androidx.compose.ui.test)
     api(libs.androidx.test.core)
     api(libs.androidx.test.espresso.core)
@@ -20,5 +22,5 @@ dependencies {
 
     debugApi(libs.androidx.compose.ui.testManifest)
 
-    implementation(project(":common"))
+
 }
