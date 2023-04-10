@@ -10,11 +10,7 @@ import androidx.core.content.getSystemService
 import androidx.hilt.work.HiltWorker
 import androidx.work.*
 import com.feelsokman.androidtemplate.R
-import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
-import com.feelsokman.androidtemplate.extensions.logDebug
-import com.feelsokman.androidtemplate.extensions.logError
 import com.feelsokman.common.coroutine.DispatcherProvider
-import com.feelsokman.common.result.fold
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.delay
@@ -24,22 +20,12 @@ import kotlinx.coroutines.withContext
 class ExpeditedGetTodoWorker @AssistedInject constructor(
     @Assisted val appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val jsonPlaceHolderRepository: JsonPlaceHolderRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = withContext(dispatcherProvider.io) {
         delay(5000) // simulate a long running worker
-        jsonPlaceHolderRepository.getTodo(2).fold(
-            ifError = {
-                logError { it.toString() }
-                Result.failure()
-            },
-            ifSuccess = {
-                logDebug { it.title }
-                Result.success()
-            }
-        )
+        Result.success()
     }
 
     override suspend fun getForegroundInfo(): ForegroundInfo = appContext.todoForegroundInfo()

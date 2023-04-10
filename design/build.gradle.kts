@@ -7,11 +7,7 @@ android {
     lint {
         checkDependencies = true
     }
-    packagingOptions {
-        resources {
-            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
-        }
-    }
+
     namespace = "com.feelsokman.design"
 }
 

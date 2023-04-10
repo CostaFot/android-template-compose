@@ -11,6 +11,8 @@ android {
         versionCode = 1
         versionName = "0.0.1"
 
+        testInstrumentationRunner = "com.feelsokman.testing.CustomTestRunner"
+
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -52,6 +54,7 @@ android {
 dependencies {
     implementation(project(":design"))
     implementation(project(":common"))
+    implementation(project(":work"))
 
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
@@ -88,4 +91,7 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.testManifest)
+
+    // UI testing
+    androidTestImplementation(project(":testing"))
 }
