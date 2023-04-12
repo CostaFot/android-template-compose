@@ -49,7 +49,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
         )
     }
 
-    val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerReports")
+    val enableReportsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
     val enableReports = (enableReportsProvider.orNull == "true")
     if (enableReports) {
         val reportsFolder = File(project.buildDir, "compose-reports")
