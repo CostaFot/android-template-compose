@@ -37,6 +37,6 @@ inline fun LogCompositions(tag: String, msg: String) {
     if (BuildConfig.DEBUG) {
         val ref = remember { Ref(0) }
         SideEffect { ref.value++ }
-        Timber.tag("CHOP").d("Compositions: $msg ${ref.value}")
+        Timber.tag("LogCompositions").d("Compositions: $msg ${ref.value}")
     }
 }

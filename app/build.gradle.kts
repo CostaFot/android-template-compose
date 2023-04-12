@@ -20,11 +20,13 @@ android {
 
     buildFeatures {
         buildConfig = true
+        resValues = true
     }
 
     buildTypes {
         val debug by getting {
             applicationIdSuffix = ".debug"
+            resValue("string", "app_name", "Compose Debug")
         }
         val release by getting {
             isMinifyEnabled = true
@@ -33,6 +35,7 @@ android {
                 "proguard-rules.pro"
             )
             signingConfig = signingConfigs.getByName("debug")
+            resValue("string", "app_name", "Compose")
         }
     }
 
