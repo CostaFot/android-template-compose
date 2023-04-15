@@ -1,7 +1,7 @@
 [versions]
 accompanist = "0.27.0"
 androidDesugarJdkLibs = "1.2.0"
-androidGradlePlugin = "7.3.1"
+androidGradlePlugin = "8.0.0"
 androidxActivity = "1.6.1"
 androidxAppCompat = "1.5.1"
 androidxComposeBom = "2023.03.00"
@@ -36,7 +36,8 @@ kotlinxCoroutines = "1.6.4"
 kotlinxDatetime = "0.4.0"
 kotlinxSerializationJson = "1.4.1"
 ksp = "1.7.20-1.0.8"
-lint = "30.3.1"
+# Should be AGP + 23
+lint = "31.0.0"
 okhttp = "4.10.0"
 protobuf = "3.21.9"
 protobufPlugin = "0.8.19"

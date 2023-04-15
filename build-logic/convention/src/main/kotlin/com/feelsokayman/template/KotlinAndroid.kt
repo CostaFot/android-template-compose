@@ -23,9 +23,11 @@ internal fun Project.configureKotlinAndroid(
             minSdk = 27
         }
 
+        // Can remove this once https://issuetracker.google.com/issues/260059413 is fixed.
+        // See https://kotlinlang.org/docs/gradle-configure-project.html#gradle-java-toolchains-support
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_1_8
-            targetCompatibility = JavaVersion.VERSION_1_8
+            sourceCompatibility = JavaVersion.VERSION_11
+            targetCompatibility = JavaVersion.VERSION_11
             isCoreLibraryDesugaringEnabled = true
         }
 
@@ -44,8 +46,8 @@ internal fun Project.configureKotlinAndroid(
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api",
             )
 
-            // Set JVM target to 1.8
-            jvmTarget = JavaVersion.VERSION_1_8.toString()
+            // Set JVM target to 11
+            jvmTarget = JavaVersion.VERSION_11.toString()
         }
     }
 
