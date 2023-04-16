@@ -62,6 +62,7 @@ dependencies {
     implementation(project(":work"))
     implementation(project(":logging"))
 
+    implementation(libs.material.design)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
