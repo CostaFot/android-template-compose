@@ -21,7 +21,7 @@ class TemplateApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
-        appInitializer.startup(this)
+        appInitializer.startup()
         logDebug { "onCreate application" }
     }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="NightAdjusted.Theme.Template" parent="android:Theme.Material.NoActionBar">
+    <style name="NightAdjusted.Theme.Template" parent="Theme.MaterialComponents.NoActionBar">
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
     </style>

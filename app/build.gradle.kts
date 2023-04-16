@@ -16,6 +16,8 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        resConfigs("en", "en-rGB", "it")
     }
 
     buildFeatures {

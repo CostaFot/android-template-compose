@@ -17,7 +17,7 @@
 
     <!-- Allows us to override night specific attributes in the
          values-night folder. -->
-    <style name="NightAdjusted.Theme.Template" parent="android:Theme.Material.Light.NoActionBar">
+    <style name="NightAdjusted.Theme.Template" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
     </style>

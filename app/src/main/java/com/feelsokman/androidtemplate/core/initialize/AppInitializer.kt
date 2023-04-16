@@ -1,6 +1,6 @@
 package com.feelsokman.androidtemplate.core.initialize
 
-import android.app.Application
+import com.feelsokman.common.AppLocaleManager
 import com.feelsokman.common.FlagProvider
 import com.feelsokman.logging.logDebug
 import timber.log.Timber
@@ -11,15 +11,16 @@ import javax.inject.Singleton
 
 @Singleton
 class AppInitializer @Inject constructor(
-    private val featureFlagProvider: FlagProvider
+    private val featureFlagProvider: FlagProvider,
+    private val appLocaleManager: AppLocaleManager
 ) {
 
     private val isInitialized = AtomicBoolean(false)
 
-    fun startup(application: Application) {
+    fun startup() {
         check(!isInitialized.get()) { "Attempted to initialize app more than once" }
-
         initLogger()
+        appLocaleManager.initialise()
         isInitialized.set(true)
     }
 
