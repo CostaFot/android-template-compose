@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":logging"))
     implementation(libs.androidx.appcompat)
     implementation(libs.kotlinx.coroutines.android)
 }

@@ -17,7 +17,7 @@ android {
             useSupportLibrary = true
         }
 
-        resConfigs("en", "en-rGB", "it")
+        resourceConfigurations += setOf("en", "en-rAU", "it")
     }
 
     buildFeatures {

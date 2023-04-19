@@ -25,8 +25,8 @@ class ProdLocaleManager(
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-        val language = activity.getString(R.string.common_app_language)
-        val region = activity.getString(R.string.common_app_region)
+        val language = activity.getString(R.string.app_language)
+        val region = activity.getString(R.string.app_region)
         val locale = Locale(language, region)
         _currentLocale.update { locale }
     }
