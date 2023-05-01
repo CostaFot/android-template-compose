@@ -15,18 +15,18 @@
         <item name="postSplashScreenTheme">@style/Theme.Template</item>
     </style>
 
-    <!-- Allows us to override night specific attributes in the
-         values-night folder. -->
-    <style name="NightAdjusted.Theme.Template" parent="AppTheme">
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
-    </style>
-
     <!-- Allows us to override platform level specific attributes in their
          respective values-vXX folder. -->
     <style name="PlatformAdjusted.Theme.Template" parent="NightAdjusted.Theme.Template" />
 
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+
+    <!-- Allows us to override night specific attributes in the
+      values-night folder. -->
+    <style name="NightAdjusted.Theme.Template" parent="AppTheme">
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowLightNavigationBar">true</item>
     </style>
