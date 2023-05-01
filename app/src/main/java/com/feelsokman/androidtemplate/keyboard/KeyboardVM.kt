@@ -1,6 +1,6 @@
 package com.feelsokman.androidtemplate.keyboard
 
-import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
+import com.feelsokman.androidtemplate.domain.SomeDependency
 import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
 import kotlinx.coroutines.CoroutineScope
@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 class KeyboardVM @Inject constructor(
-    private val jsonPlaceHolderRepository: JsonPlaceHolderRepository,
+    private val someDependency: SomeDependency,
     private val dispatcherProvider: DispatcherProvider
 ) {
 
@@ -34,7 +34,7 @@ class KeyboardVM @Inject constructor(
         viewModelScope.launch {
             _textData.update { UUID.randomUUID().toString() }
             /*  delay(5000)
-              jsonPlaceHolderRepository.getTodo(2).fold(
+              someDependency.getTodo(2).fold(
                   ifError = {
                       logError { it.toString() }
                   },

@@ -3,6 +3,7 @@ package com.feelsokman.androidtemplate.ui.activity
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,11 +23,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.feelsokman.androidtemplate.R
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.common.NetworkMonitor
@@ -43,6 +49,9 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var networkMonitor: NetworkMonitor
 
+    @Inject
+    lateinit var factory: ViewModelProvider.Factory
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -52,6 +61,10 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val systemUiController = rememberSystemUiController()
             val darkTheme = isSystemInDarkTheme()
+
+            val getViewModelFactory = remember {
+                { factory }
+            }
             AppTheme {
                 DisposableEffect(systemUiController, darkTheme) {
                     systemUiController.systemBarsDarkContentEnabled = !darkTheme
@@ -62,7 +75,26 @@ class MainActivity : AppCompatActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreenContent()
+
+                    val navController = rememberNavController()
+                    val startRoute = "main"
+                    NavHost(navController, startDestination = startRoute) {
+                        composable("main") {
+                            MainRouteScreen(
+                                getViewModelFactory = getViewModelFactory,
+                                navigate = { navController.navigate("second") }
+                            )
+                        }
+                        composable("second") {
+                            SecondRouteScreen(
+                                getViewModelFactory = getViewModelFactory,
+                                navigate = { navController.navigate("third") }
+                            )
+                        }
+                        composable("third") {
+                            ThirdRouteScreen(getViewModelFactory = getViewModelFactory)
+                        }
+                    }
                 }
             }
         }
@@ -70,13 +102,56 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-private fun MainScreenContent(viewModel: MainViewModel = viewModel()) {
+fun SecondRouteScreen(
+    getViewModelFactory: () -> ViewModelProvider.Factory,
+    viewModel: MainViewModel = viewModel(factory = getViewModelFactory()),
+    navigate: () -> Unit,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .background(Color.Green)
+    ) {
+
+        Button(
+            onClick = {
+                navigate()
+            }
+        ) {
+            Text(text = "Go to third")
+        }
+
+    }
+}
+
+@Composable
+fun ThirdRouteScreen(
+    getViewModelFactory: () -> ViewModelProvider.Factory,
+    viewModel: MainViewModel = viewModel(factory = getViewModelFactory()),
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .background(Color.Red)
+    ) {
+
+    }
+}
+
+@Composable
+private fun MainRouteScreen(
+    getViewModelFactory: () -> ViewModelProvider.Factory,
+    viewModel: MainViewModel = viewModel(factory = getViewModelFactory()),
+    navigate: () -> Unit
+) {
 
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     InnerMainScreenContent(
         state = state,
-        onGetTodo = viewModel::getTodo,
+        onGetTodo = navigate,
         onCancelWork = viewModel::cancelWork,
         onStartWork = viewModel::startTodoWork
     )
