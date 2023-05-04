@@ -8,7 +8,7 @@ import com.feelsokman.common.result.attempt
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class SomeDependency @Inject constructor(
+class JsonPlaceHolderRepository @Inject constructor(
     private val jsonPlaceHolderService: JsonPlaceHolderService,
     private val dispatcherProvider: DispatcherProvider
 ) {

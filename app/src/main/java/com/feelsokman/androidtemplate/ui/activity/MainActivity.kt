@@ -27,9 +27,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -49,9 +48,6 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var networkMonitor: NetworkMonitor
 
-    @Inject
-    lateinit var factory: ViewModelProvider.Factory
-
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
@@ -62,9 +58,7 @@ class MainActivity : AppCompatActivity() {
             val systemUiController = rememberSystemUiController()
             val darkTheme = isSystemInDarkTheme()
 
-            val getViewModelFactory = remember {
-                { factory }
-            }
+
             AppTheme {
                 DisposableEffect(systemUiController, darkTheme) {
                     systemUiController.systemBarsDarkContentEnabled = !darkTheme
@@ -81,18 +75,16 @@ class MainActivity : AppCompatActivity() {
                     NavHost(navController, startDestination = startRoute) {
                         composable("main") {
                             MainRouteScreen(
-                                getViewModelFactory = getViewModelFactory,
                                 navigate = { navController.navigate("second") }
                             )
                         }
                         composable("second") {
                             SecondRouteScreen(
-                                getViewModelFactory = getViewModelFactory,
                                 navigate = { navController.navigate("third") }
                             )
                         }
                         composable("third") {
-                            ThirdRouteScreen(getViewModelFactory = getViewModelFactory)
+                            ThirdRouteScreen()
                         }
                     }
                 }
@@ -103,8 +95,7 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun SecondRouteScreen(
-    getViewModelFactory: () -> ViewModelProvider.Factory,
-    viewModel: MainViewModel = viewModel(factory = getViewModelFactory()),
+    viewModel: MainViewModel = hiltViewModel(),
     navigate: () -> Unit,
 ) {
     Box(
@@ -127,8 +118,7 @@ fun SecondRouteScreen(
 
 @Composable
 fun ThirdRouteScreen(
-    getViewModelFactory: () -> ViewModelProvider.Factory,
-    viewModel: MainViewModel = viewModel(factory = getViewModelFactory()),
+    viewModel: MainViewModel = hiltViewModel(),
 ) {
     Box(
         modifier = Modifier
@@ -142,8 +132,7 @@ fun ThirdRouteScreen(
 
 @Composable
 private fun MainRouteScreen(
-    getViewModelFactory: () -> ViewModelProvider.Factory,
-    viewModel: MainViewModel = viewModel(factory = getViewModelFactory()),
+    viewModel: MainViewModel = hiltViewModel(),
     navigate: () -> Unit
 ) {
 
@@ -151,7 +140,8 @@ private fun MainRouteScreen(
 
     InnerMainScreenContent(
         state = state,
-        onGetTodo = navigate,
+        navigate = navigate,
+        onGetTodo = viewModel::getTodo,
         onCancelWork = viewModel::cancelWork,
         onStartWork = viewModel::startTodoWork
     )
@@ -160,6 +150,7 @@ private fun MainRouteScreen(
 @Composable
 private fun InnerMainScreenContent(
     state: String,
+    navigate: () -> Unit,
     onGetTodo: () -> Unit,
     onStartWork: () -> Unit,
     onCancelWork: () -> Unit,
@@ -190,6 +181,12 @@ private fun InnerMainScreenContent(
                 label = { Text("Label") }
             )
             Text(text = state)
+            Button(
+                onClick = navigate,
+                content = {
+                    Text(text = "Go to second")
+                }
+            )
             Button(
                 onClick = onGetTodo,
                 content = {
