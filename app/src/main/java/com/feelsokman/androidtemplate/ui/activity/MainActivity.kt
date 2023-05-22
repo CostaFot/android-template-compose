@@ -75,13 +75,13 @@ class MainActivity : AppCompatActivity() {
                     NavHost(navController, startDestination = startRoute) {
                         composable("main") {
                             MainRouteScreen(
-                                navigate = { navController.navigate("second") }
+                                navigate = {
+                                    navController.navigate("second")
+                                }
                             )
                         }
                         composable("second") {
-                            SecondRouteScreen(
-                                navigate = { navController.navigate("third") }
-                            )
+                            SecondScreen()
                         }
                         composable("third") {
                             ThirdRouteScreen()
@@ -94,49 +94,12 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-fun SecondRouteScreen(
-    viewModel: MainViewModel = hiltViewModel(),
-    navigate: () -> Unit,
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .background(Color.Green)
-    ) {
-
-        Button(
-            onClick = {
-                navigate()
-            }
-        ) {
-            Text(text = "Go to third")
-        }
-
-    }
-}
-
-@Composable
-fun ThirdRouteScreen(
-    viewModel: MainViewModel = hiltViewModel(),
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .background(Color.Red)
-    ) {
-
-    }
-}
-
-@Composable
 private fun MainRouteScreen(
     viewModel: MainViewModel = hiltViewModel(),
     navigate: () -> Unit
 ) {
 
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     InnerMainScreenContent(
         state = state,
@@ -162,7 +125,10 @@ private fun InnerMainScreenContent(
             .systemBarsPadding()
     ) {
         Text(text = "Top Center avoiding status bar", Modifier.align(Alignment.TopCenter))
-        Text(text = "Bottom Center avoiding navigation bar", Modifier.align(Alignment.BottomCenter))
+        Text(
+            text = "Bottom Center avoiding navigation bar",
+            Modifier.align(Alignment.BottomCenter)
+        )
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround,
@@ -212,3 +178,84 @@ private fun InnerMainScreenContent(
     }
 
 }
+
+
+@Composable
+fun SecondScreen(
+    viewModel: MainViewModel = hiltViewModel(),
+) {
+    val onUpdateState: () -> Unit = remember(viewModel) {
+        return@remember viewModel::updateState
+    }
+
+    val onDoSomethingElse: () -> Unit = remember(viewModel) {
+        return@remember viewModel::doSomethingElse
+    }
+    val state: String by viewModel.state.collectAsStateWithLifecycle()
+    SecondMainContent(
+        state = state,
+        onUpdateState = viewModel::updateState,
+        onDoSomethingElse = viewModel::doSomethingElse,
+    )
+}
+
+@Composable
+fun SecondMainContent(
+    state: String,
+    onUpdateState: () -> Unit,
+    onDoSomethingElse: () -> Unit
+) {
+    Column {
+        TextThatDisplaysState(state = state)
+        FirstComposable(onUpdateState = onUpdateState)
+        SecondComposable(onDoSomethingElse = onDoSomethingElse)
+    }
+}
+
+@Composable
+fun TextThatDisplaysState(state: String) {
+    Text(text = state)
+}
+
+@Composable
+private fun FirstComposable(onUpdateState: () -> Unit) {
+    var ff by remember {
+        mutableStateOf("hello first")
+    }
+    Text(text = ff)
+    Button(
+        onClick = {
+            onUpdateState()
+        }
+    ) {
+        Text(text = "Click me to update state")
+    }
+}
+
+@Composable
+private fun SecondComposable(onDoSomethingElse: () -> Unit) {
+
+    Text(text = "hello second")
+    Button(
+        onClick = {
+            onDoSomethingElse()
+        }
+    ) {
+        Text(text = "frewferf")
+    }
+}
+
+@Composable
+fun ThirdRouteScreen(
+    viewModel: MainViewModel = hiltViewModel(),
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .systemBarsPadding()
+            .background(Color.Red)
+    ) {
+
+    }
+}
+

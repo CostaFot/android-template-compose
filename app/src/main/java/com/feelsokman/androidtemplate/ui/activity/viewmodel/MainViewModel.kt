@@ -14,6 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.supervisorScope
 import java.util.UUID
@@ -30,7 +31,7 @@ class MainViewModel @Inject constructor(
     }
 
     private val _textData = MutableStateFlow(UUID.randomUUID().toString())
-    val uiState: StateFlow<String>
+    val state: StateFlow<String>
         get() = _textData
 
     fun getTodo() {
@@ -75,6 +76,14 @@ class MainViewModel @Inject constructor(
             }
 
         }
+    }
+
+    fun updateState() {
+        _textData.update { UUID.randomUUID().toString() }
+    }
+
+    fun doSomethingElse() {
+        _textData.update { UUID.randomUUID().toString() }
     }
 
 }
