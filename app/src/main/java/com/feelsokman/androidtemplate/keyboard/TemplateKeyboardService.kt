@@ -1,9 +1,6 @@
 package com.feelsokman.androidtemplate.keyboard
 
 import android.inputmethodservice.InputMethodService
-import android.inputmethodservice.Keyboard
-import android.inputmethodservice.KeyboardView
-import android.text.TextUtils
 import android.view.View
 import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
@@ -15,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 @AndroidEntryPoint
-class TemplateKeyboardService : InputMethodService(), KeyboardView.OnKeyboardActionListener {
+class TemplateKeyboardService : InputMethodService() {
 
     @Inject
     lateinit var dispatchers: DispatcherProvider
@@ -37,76 +34,9 @@ class TemplateKeyboardService : InputMethodService(), KeyboardView.OnKeyboardAct
         return createKeyboardComposeView(this, keyboardVM)
     }
 
-    @Deprecated("Deprecated in Java")
-    override fun onText(text: CharSequence?) {
-        currentInputConnection.commitText(text, 1)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onKey(primaryCode: Int, keyCodes: IntArray?) {
-        val inputConnection = currentInputConnection
-
-        if (inputConnection != null) {
-            when (primaryCode) {
-                Keyboard.KEYCODE_DELETE -> {
-                    val selectedText = inputConnection.getSelectedText(0)
-
-                    if (TextUtils.isEmpty(selectedText)) {
-                        inputConnection.deleteSurroundingText(1, 0)
-                    } else {
-                        inputConnection.commitText("", 1)
-                    }
-                }
-                Keyboard.KEYCODE_SHIFT -> {
-                    val selectedText = inputConnection.getSelectedText(0)
-
-                    if (TextUtils.isEmpty(selectedText)) {
-                        inputConnection.deleteSurroundingText(10000, 0)
-                    } else {
-                        inputConnection.commitText("", 1)
-                    }
-                }
-                else -> {
-                    val code = primaryCode.toChar()
-                    inputConnection.commitText(code.toString(), 1)
-                }
-            }
-        }
-    }
-
     override fun onDestroy() {
         logDebug { "keyboard on onDestroy" }
         scope.coroutineContext.cancelChildren()
         super.onDestroy()
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun swipeRight() {
-        // NOOP
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onPress(primaryCode: Int) {
-        // NOOP
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onRelease(primaryCode: Int) {
-        // NOOP
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun swipeLeft() {
-        // NOOP
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun swipeUp() {
-        // NOOP
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun swipeDown() {
-        // NOOP
     }
 }

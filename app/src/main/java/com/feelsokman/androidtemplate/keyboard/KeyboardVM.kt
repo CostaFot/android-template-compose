@@ -48,6 +48,7 @@ class KeyboardVM @Inject constructor(
     }
 
     fun onCleared() {
+        logDebug { "OnDestroy KeyboardVM" }
         viewModelScope.coroutineContext.cancelChildren()
     }
 
