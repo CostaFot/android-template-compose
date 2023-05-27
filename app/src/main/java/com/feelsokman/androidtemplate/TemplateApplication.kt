@@ -3,6 +3,8 @@ package com.feelsokman.androidtemplate
 import android.app.Application
 import androidx.work.Configuration
 import com.feelsokman.androidtemplate.core.initialize.AppInitializer
+import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
+import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
@@ -35,4 +37,7 @@ class TemplateApplication : Application(), Configuration.Provider {
 @InstallIn(SingletonComponent::class)
 interface ApplicationEntryPoint {
     fun appInitializer(): AppInitializer
+
+    fun dispatcherProvider(): DispatcherProvider
+    fun jsonPlaceHolderRepository(): JsonPlaceHolderRepository
 }

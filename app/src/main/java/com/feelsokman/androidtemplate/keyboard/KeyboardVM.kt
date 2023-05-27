@@ -6,6 +6,7 @@ import com.feelsokman.logging.logDebug
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -27,11 +28,13 @@ class KeyboardVM @Inject constructor(
     }
 
     init {
+        getTodo()
         logDebug { "Init KeyboardVM, id: ${hashCode()}" }
     }
 
     fun getTodo() {
         viewModelScope.launch {
+            delay(5000)
             _textData.update { UUID.randomUUID().toString() }
             /*  delay(5000)
               jsonPlaceHolderRepository.getTodo(2).fold(

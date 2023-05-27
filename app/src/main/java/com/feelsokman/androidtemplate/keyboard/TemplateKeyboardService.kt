@@ -9,7 +9,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import javax.inject.Inject
-import javax.inject.Provider
 
 @AndroidEntryPoint
 class TemplateKeyboardService : InputMethodService() {
@@ -18,7 +17,7 @@ class TemplateKeyboardService : InputMethodService() {
     lateinit var dispatchers: DispatcherProvider
 
     @Inject
-    lateinit var keyboardVM: Provider<KeyboardVM>
+    lateinit var keyboardVM: KeyboardVM
 
     private val scope by lazy {
         CoroutineScope(dispatchers.ui + SupervisorJob())
@@ -37,6 +36,7 @@ class TemplateKeyboardService : InputMethodService() {
     override fun onDestroy() {
         logDebug { "keyboard on onDestroy" }
         scope.coroutineContext.cancelChildren()
+        keyboardVM.onCleared()
         super.onDestroy()
     }
 }
