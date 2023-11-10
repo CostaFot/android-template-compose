@@ -57,6 +57,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":auth"))
     implementation(project(":design"))
     implementation(project(":common"))
     implementation(project(":work"))
