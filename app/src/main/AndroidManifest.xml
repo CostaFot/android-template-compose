@@ -63,21 +63,6 @@
                   android:name="android.view.im"
                   android:resource="@xml/method" />
           </service>
-
-
-        <service
-            android:name="com.feelsokman.auth.AuthenticatorService"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
-        </service>
-
-
     </application>
 
 </manifest>

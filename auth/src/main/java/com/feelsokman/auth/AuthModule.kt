@@ -17,4 +17,10 @@ object AuthModule {
     fun providesAccountManager(@ApplicationContext context: Context): AccountManager {
         return AccountManager.get(context)
     }
+
+    @Provides
+    @Singleton
+    fun providesAndroidAccountManager(accountManager: AccountManager): AndroidAccountManager {
+        return AndroidAccountManagerImpl(accountManager)
+    }
 }

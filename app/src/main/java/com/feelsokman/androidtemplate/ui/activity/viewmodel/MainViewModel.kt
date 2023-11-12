@@ -3,7 +3,6 @@ package com.feelsokman.androidtemplate.ui.activity.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.feelsokman.auth.AndroidAccountManager
-import com.feelsokman.logging.logDebug
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -46,6 +45,27 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun logout() {
+        viewModelScope.launch {
+            androidAccountManager.removeAccount()
+        }
+    }
+
+    fun updateAccount() {
+        viewModelScope.launch {
+            val result = androidAccountManager.updateAccount(
+                "Detective Mittens",
+                "detectivemittens@example.com"
+            )
+        }
+    }
+
+    fun login() {
+        viewModelScope.launch {
+            androidAccountManager.addAccount("mittens", "mittens@example.com")
+        }
+    }
+
     private fun buildUiState(user: AndroidAccountManager.User): UiState {
         return when (user) {
             is AndroidAccountManager.User.LoggedIn -> {
@@ -69,29 +89,6 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun logout() {
-        viewModelScope.launch {
-            val result = androidAccountManager.removeAccount()
-            logDebug { "Remove account :$result" }
-        }
-    }
-
-    fun updateAccount() {
-        viewModelScope.launch {
-            val result = androidAccountManager.updateAccount(
-                "Detective Mittens",
-                "detectivemittens@example.com"
-            )
-            logDebug { "updateAccount :$result" }
-        }
-    }
-
-    fun login() {
-        viewModelScope.launch {
-            val result = androidAccountManager.addAccount("mittens", "mittens@example.com")
-            logDebug { "addAccount :$result" }
-        }
-    }
 
 
 }

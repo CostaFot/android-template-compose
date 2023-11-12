@@ -9,12 +9,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 class AccountAuthenticator @Inject constructor(
     @ApplicationContext val context: Context
 ) {
-
     val impl = object : AbstractAccountAuthenticator(context) {
 
         override fun editProperties(
