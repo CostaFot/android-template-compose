@@ -2,68 +2,96 @@ package com.feelsokman.androidtemplate.ui.activity.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.work.WorkManager
-import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.auth.AndroidAccountManager
 import com.feelsokman.logging.logDebug
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val jsonPlaceHolderRepository: JsonPlaceHolderRepository,
-    private val workManager: WorkManager,
     private val androidAccountManager: AndroidAccountManager
 ) : ViewModel() {
 
-    init {
-        logDebug { this.hashCode().toString() }
-    }
+    val uiState: MutableStateFlow<UiState> = MutableStateFlow(UiState.Loading)
 
-    private val _textData = MutableStateFlow(UUID.randomUUID().toString())
-    val state: StateFlow<String>
-        get() = _textData
+    sealed class UiState {
+
+        data object Loading : UiState()
+
+        data class LoggedOut(
+            val options: List<Option>
+        ) : UiState()
+
+        data class LoggedIn(
+            val name: String,
+            val email: String,
+            val options: List<Option>
+        ) : UiState()
+
+        sealed class Option {
+            data object LogIn : Option()
+            data object LogOut : Option()
+            data object UpdateAccount : Option()
+        }
+
+    }
 
     init {
         viewModelScope.launch {
-            androidAccountManager.userState.collect {
-                logDebug { "$it" }
+            androidAccountManager.userState.collect { user ->
+                uiState.value = buildUiState(user)
             }
         }
     }
 
-    fun getTodo() {
-        viewModelScope.launch {
-            val result = androidAccountManager.addAccount("costas")
-            logDebug { "addAccount :$result" }
+    private fun buildUiState(user: AndroidAccountManager.User): UiState {
+        return when (user) {
+            is AndroidAccountManager.User.LoggedIn -> {
+                UiState.LoggedIn(
+                    name = user.name,
+                    email = user.email,
+                    options = listOf(
+                        UiState.Option.LogOut,
+                        UiState.Option.UpdateAccount
+                    )
+                )
+            }
+
+            AndroidAccountManager.User.LoggedOut -> {
+                UiState.LoggedOut(
+                    options = listOf(
+                        UiState.Option.LogIn
+                    )
+                )
+            }
         }
     }
 
-    fun cancelWork() {
+    fun logout() {
         viewModelScope.launch {
             val result = androidAccountManager.removeAccount()
             logDebug { "Remove account :$result" }
         }
     }
 
-    fun startTodoWork() {
+    fun updateAccount() {
         viewModelScope.launch {
-            val result = androidAccountManager.updateAccount("hihi", "ffkrf")
+            val result = androidAccountManager.updateAccount(
+                "Detective Mittens",
+                "detectivemittens@example.com"
+            )
             logDebug { "updateAccount :$result" }
         }
     }
 
-    fun updateState() {
-        _textData.update { UUID.randomUUID().toString() }
+    fun login() {
+        viewModelScope.launch {
+            val result = androidAccountManager.addAccount("mittens", "mittens@example.com")
+            logDebug { "addAccount :$result" }
+        }
     }
 
-    fun doSomethingElse() {
-        _textData.update { UUID.randomUUID().toString() }
-    }
 
 }

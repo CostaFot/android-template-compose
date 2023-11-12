@@ -22,17 +22,19 @@ class AndroidAccountManager @Inject constructor(
     sealed class User {
         data object LoggedOut : User()
         data class LoggedIn(
-            val uniqueId: String?,
-            val email: String?
+            val name: String,
+            val email: String
         ) : User()
     }
 
-    fun addAccount(username: String): Boolean = update {
+    fun addAccount(username: String, email: String): Boolean = update {
         accountManager.addAccountExplicitly(
             Account(username, ACCOUNT_TYPE),
             null,
             null
         )
+
+        updateAccount(username, email)
     }
 
     fun removeAccount(): Boolean = update {
@@ -43,12 +45,12 @@ class AndroidAccountManager @Inject constructor(
         }
     }
 
-    fun updateAccount(uniqueId: String, email: String): Boolean = update {
+    fun updateAccount(name: String, email: String): Boolean = update {
         getAccount()?.let {
             updateUserData(
                 it,
                 mapOf(
-                    KEY_ID to uniqueId,
+                    KEY_NAME to name,
                     KEY_EMAIL to email
                 )
             )
@@ -70,8 +72,8 @@ class AndroidAccountManager @Inject constructor(
     private fun getUser(): User {
         return getAccount()?.let {
             User.LoggedIn(
-                accountManager.getUserData(it, KEY_ID).orEmpty(),
-                accountManager.getUserData(it, KEY_EMAIL)
+                accountManager.getUserData(it, KEY_NAME).orEmpty(),
+                accountManager.getUserData(it, KEY_EMAIL).orEmpty()
             )
         } ?: run {
             User.LoggedOut
@@ -89,7 +91,7 @@ class AndroidAccountManager @Inject constructor(
 
     companion object {
         private const val ACCOUNT_TYPE = "com.example.account.type"
-        private const val KEY_ID = "KEY_ID"
+        private const val KEY_NAME = "KEY_NAME"
         private const val KEY_EMAIL = "KEY_EMAIL"
     }
 }
