@@ -164,11 +164,11 @@ fun LoggedInContent(
     ) {
     Image(
         painter = painterResource(com.feelsokman.design.R.drawable.screenshot_2023_11_12_213141),
-        contentDescription = "avatar",
-        contentScale = ContentScale.Crop,            // crop the image if it's not a square
+        contentDescription = "",
+        contentScale = ContentScale.Crop,
         modifier = Modifier
             .size(82.dp)
-            .clip(CircleShape)                       // clip to the circle shape
+            .clip(CircleShape)
     )
 
     Text(text = state.name)
@@ -182,7 +182,7 @@ fun LoggedInContent(
                         logout.invoke()
                     }
                 ) {
-                    Text(text = "Log out")
+                    Text(text = "Logout")
                 }
             }
 
@@ -192,7 +192,7 @@ fun LoggedInContent(
                         update.invoke()
                     }
                 ) {
-                    Text(text = "Update name and email")
+                    Text(text = "Update account details")
                 }
             }
 
@@ -221,7 +221,7 @@ fun LoggedOutContent(
                         login.invoke()
                     }
                 ) {
-                    Text(text = "Log in")
+                    Text(text = "Login")
                 }
             }
 
