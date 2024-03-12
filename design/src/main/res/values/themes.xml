@@ -2,10 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Top Level Theme -->
-    <style name="Theme.Template" parent="PlatformAdjusted.Theme.Template">
+    <style name="Theme.Template" parent="AppTheme">
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
     <!-- Splash Theme -->
@@ -15,24 +13,19 @@
         <item name="postSplashScreenTheme">@style/Theme.Template</item>
     </style>
 
-    <!-- Allows us to override platform level specific attributes in their
-         respective values-vXX folder. -->
-    <style name="PlatformAdjusted.Theme.Template" parent="NightAdjusted.Theme.Template" />
-
     <style name="NightAdjusted.Theme.Splash" parent="Theme.SplashScreen">
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
-    </style>
 
-    <!-- Allows us to override night specific attributes in the
-      values-night folder. -->
-    <style name="NightAdjusted.Theme.Template" parent="AppTheme">
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
     </style>
-
 
     <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
+
+        <!-- enable window content transitions -->
+        <item name="android:windowActivityTransitions">true</item>
+
+        <!-- specify enter and exit transitions -->
+        <item name="android:windowEnterTransition">@android:transition/no_transition</item>
+        <item name="android:windowExitTransition">@android:transition/no_transition</item>
+
         <item name="colorPrimary">@color/md_theme_light_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_primaryContainer</item>

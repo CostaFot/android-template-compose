@@ -1,22 +1,40 @@
 package com.feelsokman.androidtemplate.ui.activity
 
+import android.app.ActivityOptions
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectVerticalDragGestures
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,21 +42,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.feelsokman.androidtemplate.R
+import com.feelsokman.androidtemplate.ui.SecondActivity
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import javax.inject.Inject
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -49,42 +69,53 @@ class MainActivity : AppCompatActivity() {
     lateinit var networkMonitor: NetworkMonitor
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        //installSplashScreen()
         super.onCreate(savedInstanceState)
-        // Turn off the decor fitting system windows, which allows us to handle insets
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Turn off the decor fitting system windows, which allows us to handle insets,
+        // including IME animations, and go edge-to-edge
+        // This also sets up the initial system bar style based on the platform theme
+        // enableEdgeToEdge()
 
         setContent {
             val systemUiController = rememberSystemUiController()
             val darkTheme = isSystemInDarkTheme()
 
-
             AppTheme {
-                DisposableEffect(systemUiController, darkTheme) {
-                    systemUiController.systemBarsDarkContentEnabled = !darkTheme
+                val defaultSystemBarColor = Color.Transparent
+                var systemBarStyle by remember {
+                    mutableStateOf(
+                        SystemBarStyle.auto(
+                            lightScrim = defaultSystemBarColor.toArgb(),
+                            darkScrim = defaultSystemBarColor.toArgb()
+                        )
+                    )
+                }
+                DisposableEffect(systemBarStyle) {
+                    enableEdgeToEdge(
+                        statusBarStyle = systemBarStyle,
+                        navigationBarStyle = systemBarStyle
+                    )
                     onDispose {}
                 }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = Color.Green
                 ) {
+                    Column {
 
-                    val navController = rememberNavController()
-                    val startRoute = "main"
-                    NavHost(navController, startDestination = startRoute) {
-                        composable("main") {
-                            MainRouteScreen(
-                                navigate = {
-                                    navController.navigate("second")
-                                }
-                            )
-                        }
-                        composable("second") {
-                            SecondScreen()
-                        }
-                        composable("third") {
-                            ThirdRouteScreen()
+                        Spacer(modifier = Modifier.height(100.dp))
+                        Button(
+                            onClick = {
+                                startActivity(
+                                    Intent(this@MainActivity, SecondActivity::class.java),
+                                    ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle()
+                                )
+
+                            }
+                        ) {
+                            Text(text = "click for second")
                         }
                     }
                 }
@@ -94,88 +125,115 @@ class MainActivity : AppCompatActivity() {
 }
 
 @Composable
-private fun MainRouteScreen(
-    viewModel: MainViewModel = hiltViewModel(),
-    navigate: () -> Unit
+private fun ExpandingEdgeToEdge(
 ) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        containerColor = Color.Black
+    ) { paddingValues ->
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
+        val layoutDirection = LocalLayoutDirection.current
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    start = paddingValues.calculateStartPadding(layoutDirection),
+                    end = paddingValues.calculateEndPadding(layoutDirection),
+                    bottom = paddingValues.calculateBottomPadding(),
+                )
+        ) {
 
-    InnerMainScreenContent(
-        state = state,
-        navigate = navigate,
-        onGetTodo = viewModel::getTodo,
-        onCancelWork = viewModel::cancelWork,
-        onStartWork = viewModel::startTodoWork
-    )
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                var color by remember {
+                    mutableStateOf(generateRandomColor)
+                }
+                LaunchedEffect(Unit) {
+                    while (true) {
+                        color = generateRandomColor
+                        delay(1000)
+                    }
+
+                }
+
+                val animatedColor by animateColorAsState(targetValue = color, label = "")
+
+                val statusBarHeight = WindowInsets.statusBars.getTop(LocalDensity.current).pxToDp()
+
+                var isFullExpanded by remember {
+                    mutableStateOf(false)
+                }
+                AnimatedVisibility(visible = isFullExpanded) {
+                    Spacer(
+                        modifier = Modifier
+                            .windowInsetsTopHeight(WindowInsets.statusBars)
+                            .fillMaxWidth()
+                            .background(animatedColor)
+                    )
+                }
+                BoxWithConstraints(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+
+                    val minimumBoxHeight = 200.dp
+                    val maximumBoxHeight = maxHeight - statusBarHeight // stop before covering the status bar
+                    var boxHeight by remember {
+                        mutableStateOf(minimumBoxHeight)
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(boxHeight)
+                            .background(Color.White)
+                            .align(Alignment.BottomCenter)
+                            .pointerInput(Unit) {
+                                detectVerticalDragGestures { change, dragAmount ->
+                                    if (dragAmount < 0f) { // dragging up
+                                        if (boxHeight >= maximumBoxHeight) {
+                                            isFullExpanded = true
+                                            boxHeight = maximumBoxHeight
+                                        } else {
+                                            if (boxHeight <= maxHeight - statusBarHeight) {
+                                                boxHeight += 6.dp
+                                            }
+                                        }
+                                    } else if (dragAmount > 0f) { // dragging down
+                                        isFullExpanded = false
+                                        if (boxHeight <= minimumBoxHeight) {
+                                            boxHeight = minimumBoxHeight
+                                        } else {
+                                            boxHeight -= 6.dp
+                                        }
+                                    }
+                                }
+                            }
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.cheems),
+                            contentDescription = "null",
+                            modifier = Modifier
+                                .size(300.dp)
+                                .align(Alignment.Center)
+                        )
+
+                    }
+                }
+            }
+
+
+        }
+
+    }
 }
 
 @Composable
-private fun InnerMainScreenContent(
-    state: String,
-    navigate: () -> Unit,
-    onGetTodo: () -> Unit,
-    onStartWork: () -> Unit,
-    onCancelWork: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-    ) {
-        Text(text = "Top Center avoiding status bar", Modifier.align(Alignment.TopCenter))
-        Text(
-            text = "Bottom Center avoiding navigation bar",
-            Modifier.align(Alignment.BottomCenter)
-        )
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround,
-            modifier = modifier
-                .fillMaxSize()
-        ) {
-            var input by remember {
-                mutableStateOf("")
-            }
-            OutlinedTextField(
-                value = input,
-                onValueChange = { ff: String ->
-                    input = ff
-                },
-                modifier = Modifier,
-                label = { Text("Label") }
-            )
-            Text(text = state)
-            Button(
-                onClick = navigate,
-                content = {
-                    Text(text = "Go to second")
-                }
-            )
-            Button(
-                onClick = onGetTodo,
-                content = {
-                    Text(text = stringResource(R.string.get_todo))
-                }
-            )
+fun Int.pxToDp() = with(LocalDensity.current) { this@pxToDp.toDp() }
 
-            Button(
-                onClick = onStartWork,
-                content = {
-                    Text(text = "Start worker")
-                }
-            )
+@Composable
+private fun InnerMainScreenContent() {
 
-            Button(
-                onClick = onCancelWork,
-                content = {
-                    Text(text = "Cancel worker")
-                }
-            )
-
-        }
-    }
 
 }
 
@@ -191,7 +249,7 @@ fun SecondScreen(
     val onDoSomethingElse: () -> Unit = remember(viewModel) {
         return@remember viewModel::doSomethingElse
     }
-    val state: String by viewModel.state.collectAsStateWithLifecycle()
+    val state: String = "rfefe"
     SecondMainContent(
         state = state,
         onUpdateState = viewModel::updateState,
@@ -258,4 +316,10 @@ fun ThirdRouteScreen(
 
     }
 }
+
+val generateRandomColor
+    get() = Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
+
+
+
 
