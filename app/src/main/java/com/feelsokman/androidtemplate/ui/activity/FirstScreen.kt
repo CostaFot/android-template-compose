@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -20,9 +19,9 @@ import com.feelsokman.androidtemplate.di.ViewModelFactory
 import com.feelsokman.androidtemplate.di.ViewModelKey
 import com.feelsokman.common.FlagProvider
 import com.feelsokman.logging.logDebug
+import com.sebaslogen.resaca.rememberScoped
 import dagger.Binds
 import dagger.Component
-import dagger.Lazy
 import dagger.Module
 import dagger.Provides
 import dagger.multibindings.IntoMap
@@ -77,16 +76,15 @@ interface FirstComponent {
 }
 
 @Stable
-class FirstContainer {
+class FirstContainer : ViewModel() {
 
     @Inject
-    lateinit var firstDependency: Lazy<FirstDependency>
+    lateinit var firstDependency: FirstDependency
 
     @Inject
-    lateinit var viewModelFactory: Lazy<ViewModelFactory> // maybe lazy not worth
+    lateinit var viewModelFactory: ViewModelFactory
 
-    fun isEnabled() = firstDependency.get().doSomething()
-
+    fun isEnabled() = firstDependency.doSomething()
 
 }
 
@@ -94,8 +92,9 @@ class FirstContainer {
 fun FirstScreen(
     navigate: () -> Unit,
     firstContainer: FirstContainer = rememberFirstContainer(),
-    firstViewModel: FirstViewModel = viewModel(factory = firstContainer.viewModelFactory.get())
+    firstViewModel: FirstViewModel = viewModel(factory = firstContainer.viewModelFactory)
 ) {
+
 
     val uiState by firstViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -140,7 +139,7 @@ fun Testy(
 @Composable
 fun rememberFirstContainer(): FirstContainer {
     val appComponentProvider = LocalAppComponentProvider.current
-    return remember(appComponentProvider) {
+    return rememberScoped(appComponentProvider) {
         logDebug { "gggggggggggggggggggggggggggggggggggggggggggggg" }
         // build component and container with all screen deps
         FirstContainer().also {
@@ -150,7 +149,8 @@ fun rememberFirstContainer(): FirstContainer {
 }
 
 class FirstViewModel @Inject constructor(
-    private val firstDependency: FirstDependency
+    private val firstDependency: FirstDependency,
+    private val secondDependency: SecondDependency
 ) : ViewModel() {
 
 
