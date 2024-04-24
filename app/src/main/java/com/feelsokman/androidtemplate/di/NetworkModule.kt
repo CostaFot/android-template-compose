@@ -1,14 +1,12 @@
 package com.feelsokman.androidtemplate.di
 
+import android.app.Application
 import android.content.Context
 import com.feelsokman.androidtemplate.net.JsonPlaceHolderService
 import com.feelsokman.common.FlagProvider
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.MediaType.Companion.toMediaType
@@ -18,12 +16,17 @@ import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides
     @Singleton
-    internal fun providesCache(@ApplicationContext context: Context): Cache {
+    fun providesApplicationContext(application: Application): Context {
+        return application
+    }
+
+    @Provides
+    @Singleton
+    internal fun providesCache(context: Context): Cache {
         return Cache(context.cacheDir, 10 * 1024 * 1024)
     }
 

@@ -20,6 +20,7 @@ interface NetworkMonitor {
 class ConnectivityManagerNetworkMonitor(
     private val context: Context,
 ) : NetworkMonitor {
+
     override val isOnline: Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService<ConnectivityManager>()
 

@@ -4,13 +4,11 @@ import android.inputmethodservice.InputMethodService
 import android.view.View
 import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
 import javax.inject.Inject
 
-@AndroidEntryPoint
 class TemplateKeyboardService : InputMethodService() {
 
     @Inject

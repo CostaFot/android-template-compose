@@ -1,43 +1,35 @@
 package com.feelsokman.androidtemplate
 
 import android.app.Application
-import androidx.work.Configuration
 import com.feelsokman.androidtemplate.core.initialize.AppInitializer
-import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
-import com.feelsokman.common.coroutine.DispatcherProvider
+import com.feelsokman.androidtemplate.di.AppComponent
 import com.feelsokman.logging.logDebug
-import dagger.hilt.EntryPoint
-import dagger.hilt.InstallIn
-import dagger.hilt.android.HiltAndroidApp
-import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
-@HiltAndroidApp
-class TemplateApplication : Application(), Configuration.Provider {
+class TemplateApplication : Application(), HasComponent<AppComponent> {
 
     @Inject
     lateinit var appInitializer: AppInitializer
 
-    @Inject
-    lateinit var workerConfiguration: Configuration
-
     override fun onCreate() {
         super.onCreate()
+        initialiseDagger()
         appInitializer.startup()
         logDebug { "onCreate application" }
     }
 
-    override fun getWorkManagerConfiguration(): Configuration {
-        return workerConfiguration
+    private fun initialiseDagger() {
+        AppComponent.initAppComponent(this).inject(this)
+    }
+
+    override val component: AppComponent by lazy {
+        AppComponent.instance
     }
 
 }
 
-@EntryPoint
-@InstallIn(SingletonComponent::class)
-interface ApplicationEntryPoint {
-    fun appInitializer(): AppInitializer
-
-    fun dispatcherProvider(): DispatcherProvider
-    fun jsonPlaceHolderRepository(): JsonPlaceHolderRepository
+interface HasComponent<T> {
+    val component: T
 }
+
+fun <T> Any.getComponent(): T = (this as HasComponent<T>).component

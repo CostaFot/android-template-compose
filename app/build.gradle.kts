@@ -1,8 +1,9 @@
 plugins {
     id("application.common")
     id("application.compose.common")
-    id("hilt.common")
+    id("kotlin-kapt")
     id("kotlinx-serialization")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -75,7 +76,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.compose.runtime.tracing)
     implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.window.manager)
     implementation(libs.androidx.compose.runtime.livedata)
@@ -84,6 +84,9 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
 
     implementation(libs.androidx.startup)
+
+    implementation("com.google.dagger:dagger:2.51")
+    kapt("com.google.dagger:dagger-compiler:2.51")
 
     // networking
     implementation(libs.kotlinx.serialization.json)
