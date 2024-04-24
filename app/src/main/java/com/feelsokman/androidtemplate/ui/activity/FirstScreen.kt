@@ -132,6 +132,12 @@ fun Testy(
     firstContainer: FirstContainer
 ) {
 
+    val rr = rememberScoped {
+        logDebug { "fffffffffffffffffffffffffffffffffffffffffffffffffff" }
+        5
+    }
+    
+
     Text(text = "fefwfewfwf")
 
 }
