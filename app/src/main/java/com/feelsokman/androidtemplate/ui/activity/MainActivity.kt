@@ -46,23 +46,13 @@ import javax.inject.Inject
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
-
-    val rr = "test lint issues"
-
     @Inject
     internal lateinit var viewModelFactory: ViewModelFactory
-
     @Inject
-    lateinit var networkMonitor: NetworkMonitor
-
+    internal lateinit var networkMonitor: NetworkMonitor
     override fun onCreate(savedInstanceState: Bundle?) {
         injectDependencies()
         super.onCreate(savedInstanceState)
-
-        // Turn off the decor fitting system windows, which allows us to handle insets,
-        // including IME animations, and go edge-to-edge
-        // This also sets up the initial system bar style based on the platform theme
-        // enableEdgeToEdge()
 
         val appComponentProvider = object : AppComponentProvider {
             override val get: () -> AppComponent

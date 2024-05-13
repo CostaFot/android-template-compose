@@ -1,18 +1,12 @@
 package com.feelsokman.androidtemplate.ui.activity
 
-import com.feelsokman.common.FlagProvider
 import com.feelsokman.logging.logDebug
 import javax.inject.Inject
 
-class FirstDependency(
-    private val flagProvider: FlagProvider
-) {
-
-    init {
-        logDebug { "FirstDependency init" }
+class FirstScreenTracker {
+    fun track(): Unit {
+        // track something
     }
-
-    fun doSomething(): Boolean = false
 }
 
 class SecondDependency @Inject constructor() {

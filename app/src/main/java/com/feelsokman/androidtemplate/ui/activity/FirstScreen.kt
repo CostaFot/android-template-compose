@@ -8,17 +8,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.feelsokman.androidtemplate.di.AppComponent
 import com.feelsokman.androidtemplate.di.ViewModelFactory
 import com.feelsokman.androidtemplate.di.ViewModelKey
 import com.feelsokman.androidtemplate.rememberscope.rememberScoped
-import com.feelsokman.common.FlagProvider
 import com.feelsokman.logging.logDebug
 import dagger.Binds
 import dagger.Component
@@ -42,8 +41,8 @@ annotation class FirstScope
 object FirstModule {
 
     @Provides
-    fun providesFirstDependency(flagProvider: FlagProvider): FirstDependency {
-        return FirstDependency(flagProvider)
+    fun providesFirstDependency(): FirstScreenTracker {
+        return FirstScreenTracker()
     }
 
 
@@ -59,39 +58,22 @@ abstract class VmModule {
 
 @FirstScope
 @Component(
-    dependencies = [AppComponent::class],
     modules = [FirstModule::class, VmModule::class]
 )
 interface FirstComponent {
-
     fun inject(firstContainer: FirstContainer)
-
     @Component.Builder
     interface Builder {
-
-        fun container(appComponent: AppComponent): Builder
-
         fun build(): FirstComponent
     }
 }
 
-
-interface Container {
-
-    fun inject()
-}
-
 @Stable
 class FirstContainer {
-
     @Inject
-    lateinit var firstDependency: FirstDependency
-
+    lateinit var firstScreenTracker: FirstScreenTracker
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-
-    fun isEnabled() = firstDependency.doSomething()
-
 }
 
 @Composable
@@ -123,7 +105,6 @@ private fun InnerFirstScreen(
         Spacer(modifier = Modifier.height(100.dp))
         Button(
             onClick = {
-                firstContainer.isEnabled()
                 navigate.invoke()
             }
         ) {
@@ -150,20 +131,15 @@ fun Testy(
 
 @Composable
 fun rememberFirstContainer(): FirstContainer {
-    val appComponentProvider = LocalAppComponentProvider.current
-    return rememberScoped(appComponentProvider) {
-        logDebug { "gggggggggggggggggggggggggggggggggggggggggggggg" }
-        // build component and container with all screen deps
+    return remember {
         FirstContainer().also {
-            val appComponent = appComponentProvider.get.invoke()
-            val isRunning = appComponent.flagProvider().isRunningUiTest
-            DaggerFirstComponent.builder().container(appComponent).build().inject(it)
+            DaggerFirstComponent.builder().build().inject(it)
         }
     }
 }
 
 class FirstViewModel @Inject constructor(
-    private val firstDependency: FirstDependency,
+    private val firstScreenTracker: FirstScreenTracker,
     private val secondDependency: SecondDependency
 ) : ViewModel() {
 
