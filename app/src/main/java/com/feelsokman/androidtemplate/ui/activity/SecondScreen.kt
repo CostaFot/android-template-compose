@@ -23,7 +23,8 @@ fun SecondScreen(
         Spacer(modifier = Modifier.height(100.dp))
         Button(
             onClick = {
-                navigate.invoke()
+
+            navigate.invoke()
             }
         ) {
             Text(text = "click for third")

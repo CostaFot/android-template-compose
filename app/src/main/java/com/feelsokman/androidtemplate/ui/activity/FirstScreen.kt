@@ -17,9 +17,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.feelsokman.androidtemplate.di.AppComponent
 import com.feelsokman.androidtemplate.di.ViewModelFactory
 import com.feelsokman.androidtemplate.di.ViewModelKey
+import com.feelsokman.androidtemplate.rememberscope.rememberScoped
 import com.feelsokman.common.FlagProvider
 import com.feelsokman.logging.logDebug
-import com.sebaslogen.resaca.rememberScoped
 import dagger.Binds
 import dagger.Component
 import dagger.Module
@@ -75,8 +75,14 @@ interface FirstComponent {
     }
 }
 
+
+interface Container {
+
+    fun inject()
+}
+
 @Stable
-class FirstContainer : ViewModel() {
+class FirstContainer {
 
     @Inject
     lateinit var firstDependency: FirstDependency
@@ -136,7 +142,7 @@ fun Testy(
         logDebug { "fffffffffffffffffffffffffffffffffffffffffffffffffff" }
         5
     }
-    
+
 
     Text(text = "fefwfewfwf")
 
@@ -149,7 +155,9 @@ fun rememberFirstContainer(): FirstContainer {
         logDebug { "gggggggggggggggggggggggggggggggggggggggggggggg" }
         // build component and container with all screen deps
         FirstContainer().also {
-            DaggerFirstComponent.builder().container(appComponentProvider.get.invoke()).build().inject(it)
+            val appComponent = appComponentProvider.get.invoke()
+            val isRunning = appComponent.flagProvider().isRunningUiTest
+            DaggerFirstComponent.builder().container(appComponent).build().inject(it)
         }
     }
 }

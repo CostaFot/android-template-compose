@@ -94,7 +94,7 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.kotlin.serialization)
 
-    implementation("io.github.sebaslogen:resaca:3.2.1")
+    //implementation("io.github.sebaslogen:resaca:3.2.1")
 
     implementation(libs.coil.kt.svg)
     implementation(libs.androidx.lifecycle.runtime.ktx)
