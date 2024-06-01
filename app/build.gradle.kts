@@ -65,7 +65,6 @@ dependencies {
     implementation(project(":logging"))
 
     implementation(libs.material.design)
-    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
@@ -81,7 +80,6 @@ dependencies {
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.svg)
-    implementation(libs.accompanist.systemuicontroller)
 
     implementation(libs.androidx.startup)
 

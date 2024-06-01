@@ -54,7 +54,6 @@ import com.feelsokman.androidtemplate.ui.SecondActivity
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import javax.inject.Inject
@@ -78,7 +77,6 @@ class MainActivity : AppCompatActivity() {
         // enableEdgeToEdge()
 
         setContent {
-            val systemUiController = rememberSystemUiController()
             val darkTheme = isSystemInDarkTheme()
 
             AppTheme {
