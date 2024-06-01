@@ -1,12 +1,12 @@
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
-import com.feelsokayman.template.configureFlavors
+import com.feelsokayman.template.configureGradleManagedDevices
 import com.feelsokayman.template.configureKotlinAndroid
+import com.feelsokayman.template.disableUnnecessaryAndroidTests
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
-import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.kotlin
 
 class LibraryCommonPlugin : Plugin<Project> {
@@ -20,9 +20,16 @@ class LibraryCommonPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
-                configureFlavors(this)
+                testOptions.animationsDisabled = true
+                configureGradleManagedDevices(this)
+                // The resource prefix is derived from the module name,
+                // so resources inside ":core:module1" must be prefixed with "core_module1_"
+                resourcePrefix =
+                    path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
             }
-            val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
+            extensions.configure<LibraryAndroidComponentsExtension> {
+                disableUnnecessaryAndroidTests(target)
+            }
 
             dependencies {
                 add("androidTestImplementation", kotlin("test"))

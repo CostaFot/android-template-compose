@@ -1,7 +1,5 @@
 package com.feelsokman.androidtemplate.ui.activity
 
-import android.app.ActivityOptions
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -12,7 +10,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -32,6 +29,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -50,7 +48,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.feelsokman.androidtemplate.R
-import com.feelsokman.androidtemplate.ui.SecondActivity
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
@@ -77,8 +74,6 @@ class MainActivity : AppCompatActivity() {
         // enableEdgeToEdge()
 
         setContent {
-            val darkTheme = isSystemInDarkTheme()
-
             AppTheme {
                 val defaultSystemBarColor = Color.Transparent
                 var systemBarStyle by remember {
@@ -98,23 +93,18 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = Color.Green
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     Column {
 
                         Spacer(modifier = Modifier.height(100.dp))
-                        Button(
-                            onClick = {
-                                startActivity(
-                                    Intent(this@MainActivity, SecondActivity::class.java),
-                                    ActivityOptions.makeSceneTransitionAnimation(this@MainActivity).toBundle()
-                                )
+                        var text by remember { mutableStateOf("Hello") }
 
-                            }
-                        ) {
-                            Text(text = "click for second")
-                        }
+                        TextField(
+                            value = text,
+                            onValueChange = { text = it },
+                            label = { Text("Label") }
+                        )
                     }
                 }
             }

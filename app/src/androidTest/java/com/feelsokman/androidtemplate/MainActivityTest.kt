@@ -37,7 +37,7 @@ class MainActivityTest {
     @Test
     fun firstScreen_isForYou() {
         composeTestRule.apply {
-            onNodeWithText("Get TODO").assertIsDisplayed()
+            onNodeWithText("Hello").assertIsDisplayed()
         }
     }
 }

@@ -11,8 +11,7 @@ import androidx.savedstate.SavedStateRegistryOwner
 
 class CustomLifecycleOwner : SavedStateRegistryOwner, ViewModelStoreOwner {
     private var mLifecycleRegistry: LifecycleRegistry = LifecycleRegistry(this)
-    private var mSavedStateRegistryController: SavedStateRegistryController =
-        SavedStateRegistryController.create(this)
+    private var mSavedStateRegistryController: SavedStateRegistryController = SavedStateRegistryController.create(this)
 
     private val internalViewModelStore: ViewModelStore by lazy {
         ViewModelStore()

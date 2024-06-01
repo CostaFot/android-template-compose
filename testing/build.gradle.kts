@@ -6,6 +6,11 @@ plugins {
 
 android {
     namespace = "com.feelsokman.testing"
+
+    defaultConfig {
+        testInstrumentationRunner = "com.feelsokman.testing.CustomTestRunner"
+    }
+
 }
 
 dependencies {
@@ -21,6 +26,4 @@ dependencies {
     api(libs.kotlinx.coroutines.test)
 
     debugApi(libs.androidx.compose.ui.testManifest)
-
-
 }

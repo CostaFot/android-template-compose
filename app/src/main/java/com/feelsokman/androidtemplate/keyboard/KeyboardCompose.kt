@@ -1,10 +1,14 @@
 package com.feelsokman.androidtemplate.keyboard
 
 import android.view.View
+import androidx.activity.OnBackPressedDispatcher
+import androidx.activity.OnBackPressedDispatcherOwner
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Recomposer
@@ -12,10 +16,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.compositionContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleRegistry
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.navigation.compose.NavHost
@@ -92,49 +98,63 @@ private fun ComposeView.setMainContent(
                 { keyboardVM }
             }
 
-            Surface(
-                modifier = Modifier
-                    .height(250.dp)
-                    .fillMaxWidth(),
-                color = MaterialTheme.colorScheme.background
+            val lifecycle = LocalLifecycleOwner.current.lifecycle
+            CompositionLocalProvider(
+                LocalOnBackPressedDispatcherOwner provides FakeOnBackPressedDispatcherOwner(lifecycle)
             ) {
-                val navController = rememberNavController()
-                val startRoute = "main"
-                LaunchedEffect(Unit) {
-                    // Collect from the a snapshotFlow reading the currentPage
-                    navController.currentBackStackEntryFlow.collect { page ->
-                        Timber
-                            .tag("KeyboardComposeView")
-                            .d("Route changed to ${page.destination.route}")
+                Surface(
+                    modifier = Modifier
+                        .height(250.dp)
+                        .fillMaxWidth(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    val navController = rememberNavController()
+                    val startRoute = "main"
+                    LaunchedEffect(Unit) {
+                        // Collect from the a snapshotFlow reading the currentPage
+                        navController.currentBackStackEntryFlow.collect { page ->
+                            Timber
+                                .tag("KeyboardComposeView")
+                                .d("Route changed to ${page.destination.route}")
+                        }
                     }
-                }
-                NavHost(navController, startDestination = startRoute) {
-                    composable("main") {
-                        StartScreen(
-                            goNext = {
-                                navController.navigate("second")
-                            }
-                        )
+                    NavHost(navController, startDestination = startRoute) {
+                        composable("main") {
+                            StartScreen(
+                                goNext = {
+                                    navController.navigate("second")
+                                }
+                            )
+                        }
+                        composable("second") {
+                            SecondScreen(
+                                goNext = { navController.popBackStack() }
+                            )
+                        }
                     }
-                    composable("second") {
-                        SecondScreen(
-                            goNext = { navController.popBackStack() }
-                        )
-                    }
-                }
 
 
+                }
+
+                DisposableEffect(Unit) {
+                    Timber.tag("KeyboardComposeView").d("MasterView entered composition")
+                    onDispose {
+                        Timber.tag("KeyboardComposeView").d("MasterView left composition")
+                    }
+                }
             }
 
-            DisposableEffect(Unit) {
-                Timber.tag("KeyboardComposeView").d("MasterView entered composition")
-                onDispose {
-                    Timber.tag("KeyboardComposeView").d("MasterView left composition")
-                }
-            }
+
         }
     }
 }
 
 
+private val FakeOnBackPressedDispatcherOwner: (lifecycle: Lifecycle) -> OnBackPressedDispatcherOwner = {
+    object : OnBackPressedDispatcherOwner {
+        override val onBackPressedDispatcher = OnBackPressedDispatcher()
 
+        override val lifecycle: LifecycleRegistry
+            get() = (it as LifecycleRegistry)
+    }
+}

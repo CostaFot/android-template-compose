@@ -1,5 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.feelsokayman.template.configureFlavors
+import com.feelsokayman.template.configureGradleManagedDevices
 import com.feelsokayman.template.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -18,7 +19,9 @@ class ApplicationCommonPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
+                testOptions.animationsDisabled = true
                 configureFlavors(this)
+                configureGradleManagedDevices(this)
             }
 
             dependencies {

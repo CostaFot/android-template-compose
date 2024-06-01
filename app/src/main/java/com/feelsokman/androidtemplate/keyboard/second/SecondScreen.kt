@@ -25,7 +25,7 @@ fun SecondScreen(
 
     DisposableEffect(Unit) {
         onDispose {
-            Timber.tag("KeyboardComposeView").d("StartScreen left composition")
+            Timber.tag("KeyboardComposeView").d("SecondScreen left composition")
         }
     }
 
