@@ -1,5 +1,6 @@
 package com.feelsokman.androidtemplate.ui.activity
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -112,6 +113,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 private fun ExpandingEdgeToEdge(
 ) {

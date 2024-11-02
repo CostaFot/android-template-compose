@@ -1,6 +1,6 @@
 [versions]
 androidDesugarJdkLibs = "2.0.4"
-androidGradlePlugin = "8.4.1"
+androidGradlePlugin = "8.7.2"
 androidxActivity = "1.9.0"
 androidxAppCompat = "1.7.0"
 androidxComposeBom = "2024.05.00"
@@ -35,7 +35,7 @@ kotlinxDatetime = "0.5.0"
 kotlinxSerializationJson = "1.6.3"
 ksp = "1.9.22-1.0.18"
 # Should be AGP + 23
-lint = "31.0.0"
+lint = "31.7.2"
 material = "1.12.0"
 okhttp = "4.12.0"
 protobuf = "3.25.2"
