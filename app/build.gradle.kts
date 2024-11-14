@@ -18,6 +18,12 @@ android {
         }
 
         resourceConfigurations += setOf("en", "en-rAU", "it")
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["dagger.hilt.disableModulesHaveInstallInCheck"] = "true"
+            }
+        }
     }
 
     buildFeatures {

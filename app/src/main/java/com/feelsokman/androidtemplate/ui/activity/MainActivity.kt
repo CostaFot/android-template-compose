@@ -49,30 +49,39 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.feelsokman.androidtemplate.R
+import com.feelsokman.androidtemplate.di.AppComponent
+import com.feelsokman.androidtemplate.di.Balls
+import com.feelsokman.androidtemplate.di.DaggerSomeComponent
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
-import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
-import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import kotlin.random.Random
 
-@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     val rr = "test lint issues"
 
     @Inject
-    lateinit var networkMonitor: NetworkMonitor
+    lateinit var balls: Balls
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //installSplashScreen()
         super.onCreate(savedInstanceState)
+        DaggerSomeComponent.factory().create(
+            EntryPointAccessors.fromApplication(
+                applicationContext,
+                AppComponent::class.java
+            )
+        ).inject(this)
 
         // Turn off the decor fitting system windows, which allows us to handle insets,
         // including IME animations, and go edge-to-edge
         // This also sets up the initial system bar style based on the platform theme
         // enableEdgeToEdge()
+
+        balls.toString()
 
         setContent {
             AppTheme {
