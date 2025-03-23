@@ -19,7 +19,7 @@ class LibraryCommonPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 34
+                defaultConfig.targetSdk = 35
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
                 // The resource prefix is derived from the module name,
