@@ -27,9 +27,8 @@ class TemplateApplication : Application(), Configuration.Provider {
         logDebug { "onCreate application" }
     }
 
-    override fun getWorkManagerConfiguration(): Configuration {
-        return workerConfiguration
-    }
+    override val workManagerConfiguration: Configuration
+        get() = workerConfiguration
 
 }
 
