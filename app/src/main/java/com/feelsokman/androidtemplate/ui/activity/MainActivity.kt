@@ -11,25 +11,27 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -51,8 +53,10 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.feelsokman.androidtemplate.R
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
+import com.feelsokman.androidtemplate.ui.activity.viewmodel.PullToRefreshViewModel
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -82,9 +86,8 @@ class MainActivity : AppCompatActivity() {
                 val defaultSystemBarColor = Color.Transparent
                 var systemBarStyle by remember {
                     mutableStateOf(
-                        SystemBarStyle.auto(
-                            lightScrim = defaultSystemBarColor.toArgb(),
-                            darkScrim = defaultSystemBarColor.toArgb()
+                        SystemBarStyle.dark(
+                            defaultSystemBarColor.toArgb(),
                         )
                     )
                 }
@@ -97,41 +100,50 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 Surface(
-                    modifier = Modifier.fillMaxSize()
+
                 ) {
 
+                    MainScreen()
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MainScreen(
+    viewModel: PullToRefreshViewModel = hiltViewModel()
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Blue)
+
+    ) {
+        val isRefreshing: Boolean by viewModel.isRefreshingState.collectAsStateWithLifecycle()
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = {
+                viewModel.onRefresh()
+            },
+            modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                item {
                     Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .safeDrawingPadding()
+                        Modifier
+                            .fillMaxWidth()
+                            .height(300.dp),
+                        contentAlignment = Alignment.Center
                     ) {
-                        PullToRefreshBox(
-                            isRefreshing = false,
-                            onRefresh = {
-
-                            }
-                        ) {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                repeat(5) {
-                                    item {
-                                        Spacer(modifier = Modifier.height(16.dp))
-
-                                        Text("hi")
-                                    }
-
-                                }
-
-
-                            }
-                        }
-
+                        Text(
+                            text = "Pull to refresh",
+                            style = MaterialTheme.typography.headlineLarge.copy(Color.White),
+                        )
                     }
-
-
                 }
             }
         }

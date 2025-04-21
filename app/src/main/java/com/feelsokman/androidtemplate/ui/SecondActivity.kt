@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.feelsokman.androidtemplate.ui.ui.theme.AndroidtemplatecomposeTheme
+import com.feelsokman.androidtemplate.ui.ui.theme.AndroidTemplateComposeTheme
 import com.feelsokman.design.theme.AppTheme
 
 class SecondActivity : ComponentActivity() {
@@ -65,7 +65,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
-    AndroidtemplatecomposeTheme {
+    AndroidTemplateComposeTheme {
         Greeting("Android")
     }
 }
