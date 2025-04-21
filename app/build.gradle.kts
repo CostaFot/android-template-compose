@@ -17,7 +17,9 @@ android {
             useSupportLibrary = true
         }
 
-        resourceConfigurations += setOf("en", "en-rAU", "it")
+        androidResources {
+            localeFilters += setOf("en", "en-rAU", "it")
+        }
     }
 
     buildFeatures {
