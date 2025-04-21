@@ -11,6 +11,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -22,15 +23,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -96,17 +99,39 @@ class MainActivity : AppCompatActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    Column {
 
-                        Spacer(modifier = Modifier.height(100.dp))
-                        var text by remember { mutableStateOf("Hello") }
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .safeDrawingPadding()
+                    ) {
+                        PullToRefreshBox(
+                            isRefreshing = false,
+                            onRefresh = {
 
-                        TextField(
-                            value = text,
-                            onValueChange = { text = it },
-                            label = { Text("Label") }
-                        )
+                            }
+                        ) {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                repeat(5) {
+                                    item {
+                                        Spacer(modifier = Modifier.height(16.dp))
+
+                                        Text("hi")
+                                    }
+
+                                }
+
+
+                            }
+                        }
+
                     }
+
+
                 }
             }
         }
@@ -167,7 +192,8 @@ private fun ExpandingEdgeToEdge(
                 ) {
 
                     val minimumBoxHeight = 200.dp
-                    val maximumBoxHeight = maxHeight - statusBarHeight // stop before covering the status bar
+                    val maximumBoxHeight =
+                        maxHeight - statusBarHeight // stop before covering the status bar
                     var boxHeight by remember {
                         mutableStateOf(minimumBoxHeight)
                     }
