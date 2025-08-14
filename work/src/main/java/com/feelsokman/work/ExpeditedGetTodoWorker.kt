@@ -7,7 +7,15 @@ import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.core.content.getSystemService
 import androidx.hilt.work.HiltWorker
-import androidx.work.*
+import androidx.work.Constraints
+import androidx.work.CoroutineWorker
+import androidx.work.ForegroundInfo
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkManager
+import androidx.work.WorkerParameters
 import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
 import dagger.assisted.Assisted
@@ -24,6 +32,7 @@ class ExpeditedGetTodoWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result = withContext(dispatcherProvider.io) {
         logDebug { "Starting work" }
+        val rr = WorkManager.getInstance(appContext).createCancelPendingIntent(id)
         delay(5000) // simulate a long running worker
         Result.success()
     }

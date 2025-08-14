@@ -4,6 +4,7 @@ import com.feelsokayman.template.configureGradleManagedDevices
 import com.feelsokayman.template.configureKotlinAndroid
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
@@ -11,10 +12,8 @@ import org.gradle.kotlin.dsl.kotlin
 class ApplicationCommonPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply("com.android.application")
-                apply("org.jetbrains.kotlin.android")
-            }
+            apply(plugin = "com.android.application")
+            apply(plugin = "org.jetbrains.kotlin.android")
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)
