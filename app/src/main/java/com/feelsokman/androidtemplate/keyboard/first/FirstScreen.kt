@@ -26,11 +26,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,12 +43,12 @@ fun FirstScreen(
     goNext: () -> Unit
 ) {
     val firstViewModel = customViewModel<FirstViewModel>()
-    val state by firstViewModel.uiState.collectAsState()
 
     InnerFirstScreenContent(
-        state = state,
-        getTodo = firstViewModel::getTodo,
-        goNext = goNext
+        goNext = goNext,
+        onText = {
+            firstViewModel.onText(it)
+        }
     )
 
     DisposableEffect(Unit) {
@@ -66,11 +61,9 @@ fun FirstScreen(
 
 @Composable
 private fun InnerFirstScreenContent(
-    state: String,
-    getTodo: () -> Unit,
-    goNext: () -> Unit
+    goNext: () -> Unit,
+    onText: (String) -> Unit
 ) {
-    var text by remember { mutableStateOf("") }
     val keyboardLayout = listOf(
         listOf("Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"),
         listOf("A", "S", "D", "F", "G", "H", "J", "K", "L"),
@@ -111,7 +104,7 @@ private fun InnerFirstScreenContent(
                     when (keyText) {
                         "Tab" -> {
                             Button(
-                                onClick = { /* Handle click */ },
+                                onClick = goNext,
                                 modifier = Modifier
                                     .weight(1f)
                                     .height(50.dp)
@@ -205,7 +198,7 @@ private fun InnerFirstScreenContent(
                         else -> {
                             KeyboardButton(
                                 text = keyText,
-                                onClick = { /* Handle click */ },
+                                onClick = onText,
                                 modifier = Modifier
                                     .weight(1f)
                                     .height(50.dp)
@@ -234,13 +227,7 @@ private fun InnerFirstScreenContent(
                         val weight = if (key == "Space") 3f else 1f // Define weight here
                         KeyboardButton(
                             text = key,
-                            onClick = {
-                                when (key) {
-                                    "Backspace" -> if (text.isNotEmpty()) text = text.dropLast(1)
-                                    "Space" -> text += " "
-                                    else -> text += key
-                                }
-                            },
+                            onClick = onText,
                             modifier = Modifier
                                 .weight(weight) // Apply weight
                                 .height(50.dp)
@@ -259,11 +246,13 @@ private fun InnerFirstScreenContent(
 @Composable
 fun KeyboardButton(
     text: String,
-    onClick: () -> Unit,
+    onClick: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = onClick,
+        onClick = {
+            onClick(text)
+        },
         modifier = modifier
             .clip(RoundedCornerShape(12.dp)), // More rounded corners
         shape = RoundedCornerShape(12.dp),
