@@ -5,9 +5,6 @@ import com.feelsokman.androidtemplate.keyboard.CustomViewModel
 import com.feelsokman.common.result.fold
 import com.feelsokman.logging.logDebug
 import com.feelsokman.logging.logError
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -18,10 +15,7 @@ import javax.inject.Inject
 
 class StartScreenVM @Inject constructor(
     private val jsonPlaceHolderRepository: JsonPlaceHolderRepository
-) : CustomViewModel {
-
-    override val viewModelScope: CoroutineScope =
-        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+) : CustomViewModel() {
 
     init {
         logDebug { "StartScreenVm init ${hashCode()}" }

@@ -1,13 +1,17 @@
 package com.feelsokman.androidtemplate.keyboard
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 
-interface CustomViewModel {
-    val viewModelScope: CoroutineScope
+abstract class CustomViewModel {
+    open val viewModelScope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
-    fun onCleared() {
+    open fun onCleared() {
         viewModelScope.cancel()
     }
 }
@@ -19,6 +23,6 @@ inline fun <reified T : CustomViewModel> customViewModel(
             "No CustomViewModelOwner was provided via LocalCustomViewModelOwner"
         },
     key: Any = LocalKeyProvider.current!!
-): T {
-    return viewModelStoreOwner.get(key)
+): T = remember(key) {
+    viewModelStoreOwner.get(key)
 }

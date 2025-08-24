@@ -10,7 +10,6 @@ import com.feelsokman.androidtemplate.keyboard.second.SecondScreenVM
 import com.feelsokman.androidtemplate.keyboard.start.StartScreenVM
 import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
-import dagger.hilt.android.EntryPointAccessors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancelChildren
@@ -40,30 +39,28 @@ class KeyboardVM @Inject constructor(
     val backStack = mutableStateListOf<Any>(RouteA)
     val customViewModelStore = mutableMapOf<Any, CustomViewModel>()
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : CustomViewModel> get(
         key: Any,
         modelClass: KClass<T>
     ): T {
-        val entryPoint =
-            EntryPointAccessors.fromApplication(application, KeyboardEntryPoint::class.java)
-        val create: () -> CustomViewModel = when (modelClass) {
-            StartScreenVM::class -> {
-                {
+
+        return customViewModelStore.getOrPut(key) {
+            val entryPoint = application.keyboardEntryPoint()
+            when (modelClass) {
+                StartScreenVM::class -> {
                     entryPoint.startScreenVM()
+
+
                 }
 
-            }
-
-            SecondScreenVM::class -> {
-                {
+                SecondScreenVM::class -> {
                     entryPoint.secondScreenVM()
                 }
 
+                else -> throw IllegalStateException("Unknown class $modelClass")
             }
-
-            else -> throw IllegalStateException("Unknown class $modelClass")
-        }
-        return customViewModelStore.getOrPut(key) { create() } as T
+        } as T
     }
 
 
