@@ -33,7 +33,6 @@ class TemplateKeyboardService : InputMethodService() {
             keyboardHandler.queue.collect {
                 when (it) {
                     is KeyboardMessage.Text -> {
-
                         currentInputConnection.commitText(it.text, 1)
                     }
 
