@@ -1,6 +1,9 @@
 package com.feelsokman.androidtemplate.keyboard
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
+import androidx.navigation3.runtime.NavEntryDecorator
+import androidx.navigation3.runtime.navEntryDecorator
 import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
@@ -29,6 +32,21 @@ class KeyboardVM @Inject constructor(
     }
 
     val backStack = mutableStateListOf<Any>(RouteA)
+
+    val onPop: (Any) -> Unit = { key ->
+        Log.d("KeyboardVM", "Popping $key")
+    }
+
+    val customDecorator: NavEntryDecorator<Any> = navEntryDecorator(onPop) { entry ->
+        Log.d(
+            "KeyboardVM",
+            "CustomDecorator called for with key: ${entry.contentKey}"
+        )
+
+        entry.Content()
+
+    }
+
 
     init {
         getTodo()

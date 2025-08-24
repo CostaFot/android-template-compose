@@ -119,6 +119,7 @@ private fun ComposeView.setMainContent(
                     val backStack = keyboardVM.backStack
 
                     NavDisplay(
+                        entryDecorators = listOf(keyboardVM.customDecorator),
                         backStack = backStack,
                         onBack = { backStack.removeLastOrNull() },
                         entryProvider = entryProvider {
@@ -171,4 +172,5 @@ private val FakeNavigationEventDispatcherOwner: NavigationEventDispatcherOwner =
         override val navigationEventDispatcher: NavigationEventDispatcher =
             NavigationEventDispatcher()
     }
+
 
