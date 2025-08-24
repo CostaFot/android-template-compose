@@ -2,17 +2,12 @@ package com.feelsokman.androidtemplate.keyboard
 
 import android.inputmethodservice.InputMethodService
 import android.view.View
-import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class TemplateKeyboardService : InputMethodService() {
-
-    @Inject
-    lateinit var dispatchers: DispatcherProvider
-
     @Inject
     lateinit var keyboardStateHolder: KeyboardStateHolder
 
@@ -22,12 +17,12 @@ class TemplateKeyboardService : InputMethodService() {
     }
 
     override fun onCreateInputView(): View {
-        logDebug { "keyboard on createInputView" }
+        logDebug { "keyboard onCreateInputView" }
         return createKeyboardComposeView(this, keyboardStateHolder)
     }
 
     override fun onDestroy() {
-        logDebug { "keyboard on onDestroy" }
+        logDebug { "keyboard onDestroy" }
         super.onDestroy()
     }
 }

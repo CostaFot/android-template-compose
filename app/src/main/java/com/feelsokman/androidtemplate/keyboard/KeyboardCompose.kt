@@ -52,9 +52,7 @@ fun createKeyboardComposeView(
 
     // composeView needs all these as we are not in the context of an activity/fragment
     composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
-
     customLifecycleOwner.performRestore(null)
-
     customLifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
 
     composeView.setViewTreeLifecycleOwner(customLifecycleOwner)
@@ -72,10 +70,7 @@ fun createKeyboardComposeView(
 
     recomposeScope.launch {
         recomposer.runRecomposeAndApplyChanges()
-    }.invokeOnCompletion {
-        Timber.tag("KeyboardComposeView").d("Recomposer on completion")
     }
-
 
     composeView.setMainContent(
         keyboardStateHolder = keyboardStateHolder
@@ -110,7 +105,6 @@ private fun ComposeView.setMainContent(
             LocalCustomViewModelStoreOwner provides keyboardStateHolder,
         ) {
             AppTheme {
-
                 Surface(
                     modifier = Modifier
                         .height(250.dp)
@@ -145,9 +139,9 @@ private fun ComposeView.setMainContent(
                 }
 
                 DisposableEffect(Unit) {
-                    Timber.tag("KeyboardComposeView").d("MasterView entered composition")
+                    Timber.tag("KeyboardComposeView").d("Keyboard entered composition")
                     onDispose {
-                        Timber.tag("KeyboardComposeView").d("MasterView left composition")
+                        Timber.tag("KeyboardComposeView").d("Keyboard left composition")
                     }
                 }
             }
