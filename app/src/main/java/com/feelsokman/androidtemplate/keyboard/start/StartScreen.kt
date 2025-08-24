@@ -19,14 +19,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.feelsokman.androidtemplate.keyboard.rememberFakeViewModel
+import com.feelsokman.androidtemplate.keyboard.customViewModel
 import timber.log.Timber
 
 @Composable
 fun StartScreen(
     goNext: () -> Unit
 ) {
-    val startScreenVM = rememberFakeViewModel<StartScreenVM>()
+    val startScreenVM = customViewModel<StartScreenVM>()
     val state by startScreenVM.uiState.collectAsState()
 
     InnerStartScreenContent(

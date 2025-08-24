@@ -106,7 +106,8 @@ private fun ComposeView.setMainContent(
             LocalOnBackPressedDispatcherOwner provides FakeOnBackPressedDispatcherOwner(
                 lifecycle
             ),
-            LocalNavigationEventDispatcherOwner provides FakeNavigationEventDispatcherOwner
+            LocalNavigationEventDispatcherOwner provides FakeNavigationEventDispatcherOwner,
+            LocalCustomViewModelOwner provides keyboardVM,
         ) {
             AppTheme {
 

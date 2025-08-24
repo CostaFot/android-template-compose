@@ -1,26 +1,30 @@
 package com.feelsokman.androidtemplate.keyboard.start
 
-import androidx.compose.runtime.Stable
 import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
-import com.feelsokman.androidtemplate.keyboard.FakeViewModel
+import com.feelsokman.androidtemplate.keyboard.CustomViewModel
 import com.feelsokman.common.result.fold
 import com.feelsokman.logging.logDebug
 import com.feelsokman.logging.logError
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
+import javax.inject.Inject
 
-@Stable
-class StartScreenVM(
-    override val viewModelScope: CoroutineScope,
+
+class StartScreenVM @Inject constructor(
     private val jsonPlaceHolderRepository: JsonPlaceHolderRepository
-) : FakeViewModel() {
+) : CustomViewModel {
+
+    override val viewModelScope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     init {
-        logDebug { hashCode().toString() }
+        logDebug { "StartScreenVm init ${hashCode()}" }
     }
 
     private val _textData = MutableStateFlow(UUID.randomUUID().toString())
@@ -39,5 +43,10 @@ class StartScreenVM(
                 }
             )
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        logDebug { "StartScreenVM cleared ${hashCode()}" }
     }
 }

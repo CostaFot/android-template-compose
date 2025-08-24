@@ -4,14 +4,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import com.feelsokman.androidtemplate.keyboard.rememberFakeViewModel
+import com.feelsokman.androidtemplate.keyboard.customViewModel
 import timber.log.Timber
 
 @Composable
 fun SecondScreen(
     goNext: () -> Unit
 ) {
-    val secondScreenVM = rememberFakeViewModel<SecondScreenVM>()
+    val secondScreenVM = customViewModel<SecondScreenVM>()
 
 
     Text(text = "grgrggr")
