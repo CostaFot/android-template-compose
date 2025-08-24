@@ -7,14 +7,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -31,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.feelsokman.androidtemplate.keyboard.customViewModel
 import timber.log.Timber
 
@@ -71,21 +80,148 @@ private fun InnerFirstScreenContent(
 
     Box(
         Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF2C3E50), // Dark Slate Blue
-                        Color(0xFF4CA1AF)  // Light Sea Green
+                        Color(0xFF6A11CB), // Purple
+                        Color(0xFF2575FC)  // Blue
                     )
                 )
             )
             .padding(8.dp)
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .windowInsetsPadding(
+                    WindowInsets.systemBars.only(
+                        WindowInsetsSides.Bottom
+                    )
+                ),
             horizontalAlignment = Alignment.CenterHorizontally // Center content horizontally
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+                    .height(IntrinsicSize.Min),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                listOf("Tab", "Ctrl", "Alt", "Shift").forEachIndexed { index, keyText ->
+                    when (keyText) {
+                        "Tab" -> {
+                            Button(
+                                onClick = { /* Handle click */ },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(50.dp)
+                                    .padding(horizontal = 4.dp)
+                                    .clip(RoundedCornerShape(12.dp)), // More rounded corners
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+                                    contentColor = Color.White
+                                ),
+                                border = BorderStroke(1.dp, Color.LightGray),
+                                contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
+                            ) {
+                                AsyncImage(
+                                    model = "https://cdn.betterttv.net/emote/5c548025009a2e73916b3a37/3x.webp",
+                                    contentDescription = "Tab Icon",
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                        }
+
+                        "Ctrl" -> {
+                            Button(
+                                onClick = { /* Handle click */ },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(50.dp)
+                                    .padding(horizontal = 4.dp)
+                                    .clip(RoundedCornerShape(12.dp)), // More rounded corners
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+                                    contentColor = Color.White
+                                ),
+                                border = BorderStroke(1.dp, Color.LightGray),
+                                contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
+                            ) {
+                                AsyncImage(
+                                    model = "https://cdn.betterttv.net/emote/5f1b0186cf6d2144653d2970/3x.webp",
+                                    contentDescription = "Ctrl Icon"
+                                )
+                            }
+                        }
+
+                        "Alt" -> {
+                            Button(
+                                onClick = { /* Handle click */ },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(50.dp)
+                                    .padding(horizontal = 4.dp)
+                                    .clip(RoundedCornerShape(12.dp)), // More rounded corners
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+                                    contentColor = Color.White
+                                ),
+                                border = BorderStroke(1.dp, Color.LightGray),
+                                contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
+                            ) {
+                                AsyncImage(
+                                    model = "https://cdn.betterttv.net/emote/5ada077451d4120ea3918426/3x.webp",
+                                    contentDescription = "Ctrl Icon"
+                                )
+                            }
+                        }
+
+                        "Shift" -> {
+                            Button(
+                                onClick = { /* Handle click */ },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(50.dp)
+                                    .padding(horizontal = 4.dp)
+                                    .clip(RoundedCornerShape(12.dp)), // More rounded corners
+                                shape = RoundedCornerShape(12.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+                                    contentColor = Color.White
+                                ),
+                                border = BorderStroke(1.dp, Color.LightGray),
+                                contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
+                            ) {
+                                AsyncImage(
+                                    model = "https://media.tenor.com/azqdSGcAGXoAAAAM/kekw-kewkwait.gif",
+                                    contentDescription = "Ctrl Icon"
+                                )
+                            }
+                        }
+
+                        else -> {
+                            KeyboardButton(
+                                text = keyText,
+                                onClick = { /* Handle click */ },
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .height(50.dp)
+                                    .padding(horizontal = 4.dp)
+                            )
+                        }
+                    }
+                    if (index < 3) {
+                        Spacer(modifier = Modifier.width(4.dp))
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+
             keyboardLayout.forEach { row ->
                 Row(
                     modifier = Modifier
@@ -116,34 +252,6 @@ private fun InnerFirstScreenContent(
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = goNext,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFE74C3C), // Alizarin Crimson
-                    contentColor = Color.White
-                )
-            ) {
-                Text("Go to Next Screen (current text: $state)")
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Button(
-                onClick = getTodo,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp)),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF2ECC71), // Emerald Green
-                    contentColor = Color.White
-                )
-            ) {
-                Text("Fetch Todo")
-            }
         }
     }
 }
@@ -170,12 +278,20 @@ fun KeyboardButton(
             modifier = Modifier.fillMaxSize(), // Fill the button's space
             contentAlignment = Alignment.Center // Center the text within the Box
         ) {
-            Text(
-                text = text,
-                color = Color.White,
-                fontSize = if (text.length > 1) 12.sp else 16.sp, // Smaller font for longer text like "Backspace"
-                textAlign = TextAlign.Center
-            )
+            if (text == "Backspace") {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Filled.Backspace,
+                    contentDescription = "Backspace",
+                    tint = Color.White
+                )
+            } else {
+                Text(
+                    text = text,
+                    color = Color.White,
+                    fontSize = if (text.length > 1) 12.sp else 16.sp, // Smaller font for longer text like "Backspace"
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
