@@ -31,10 +31,10 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -133,17 +133,13 @@ private fun MainScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 item {
-                    Box(
-                        Modifier
-                            .fillMaxWidth()
-                            .height(300.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Pull to refresh",
-                            style = MaterialTheme.typography.headlineLarge.copy(Color.White),
-                        )
-                    }
+                    var text by remember { mutableStateOf("type something") }
+                    TextField(
+                        value = text,
+                        onValueChange = { text = it },
+                        label = { Text("type something") },
+                        modifier = Modifier.padding(16.dp)
+                    )
                 }
             }
         }
