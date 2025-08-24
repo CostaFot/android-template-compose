@@ -32,11 +32,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import com.feelsokman.androidtemplate.keyboard.customViewModel
 import timber.log.Timber
+
+// Define colors at the top level for reusability
+private val BackgroundGradientStart = Color(0xFF2C3E50) // Darker Midnight Blue
+private val BackgroundGradientEnd = Color(0xFF000000)  // Black
+private val ButtonBackgroundColor = Color(0xFF6C7A7C) // Darker Asbestos
 
 @Composable
 fun FirstScreen(
@@ -77,8 +83,8 @@ private fun InnerFirstScreenContent(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color(0xFF6A11CB), // Purple
-                        Color(0xFF2575FC)  // Blue
+                        BackgroundGradientStart,
+                        BackgroundGradientEnd
                     )
                 )
             )
@@ -112,10 +118,13 @@ private fun InnerFirstScreenContent(
                                     .clip(RoundedCornerShape(12.dp)), // More rounded corners
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+                                    containerColor = ButtonBackgroundColor,
                                     contentColor = Color.White
                                 ),
-                                border = BorderStroke(1.dp, Color.LightGray),
+                                border = BorderStroke(
+                                    1.dp,
+                                    ButtonBackgroundColor
+                                ), // Darker Asbestos for border
                                 contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
                             ) {
                                 AsyncImage(
@@ -136,10 +145,10 @@ private fun InnerFirstScreenContent(
                                     .clip(RoundedCornerShape(12.dp)), // More rounded corners
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+                                    containerColor = ButtonBackgroundColor,
                                     contentColor = Color.White
                                 ),
-                                border = BorderStroke(1.dp, Color.LightGray),
+                                border = BorderStroke(1.dp, ButtonBackgroundColor),
                                 contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
                             ) {
                                 AsyncImage(
@@ -159,10 +168,10 @@ private fun InnerFirstScreenContent(
                                     .clip(RoundedCornerShape(12.dp)), // More rounded corners
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+                                    containerColor = ButtonBackgroundColor,
                                     contentColor = Color.White
                                 ),
-                                border = BorderStroke(1.dp, Color.LightGray),
+                                border = BorderStroke(1.dp, ButtonBackgroundColor),
                                 contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
                             ) {
                                 AsyncImage(
@@ -182,10 +191,10 @@ private fun InnerFirstScreenContent(
                                     .clip(RoundedCornerShape(12.dp)), // More rounded corners
                                 shape = RoundedCornerShape(12.dp),
                                 colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+                                    containerColor = ButtonBackgroundColor,
                                     contentColor = Color.White
                                 ),
-                                border = BorderStroke(1.dp, Color.LightGray),
+                                border = BorderStroke(1.dp, ButtonBackgroundColor),
                                 contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
                             ) {
                                 AsyncImage(
@@ -243,6 +252,14 @@ private fun InnerFirstScreenContent(
     }
 }
 
+@Preview
+@Composable
+private fun InnerFirstScreenContentPreview() {
+    InnerFirstScreenContent(
+        goNext = { /*TODO*/ },
+        onText = {}
+    )
+}
 @Composable
 fun KeyboardButton(
     text: String,
@@ -257,10 +274,10 @@ fun KeyboardButton(
             .clip(RoundedCornerShape(12.dp)), // More rounded corners
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF34495E), // Wet Asphalt - a darker gray
+            containerColor = ButtonBackgroundColor, // Silver
             contentColor = Color.White
         ),
-        border = BorderStroke(1.dp, Color.LightGray),
+        border = BorderStroke(1.dp, ButtonBackgroundColor),
         contentPadding = ButtonDefaults.TextButtonContentPadding // Ensure text is centered
     ) {
         Box(
