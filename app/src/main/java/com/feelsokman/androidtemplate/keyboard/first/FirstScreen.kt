@@ -40,9 +40,10 @@ import com.feelsokman.androidtemplate.keyboard.customViewModel
 import timber.log.Timber
 
 // Define colors at the top level for reusability
-private val BackgroundGradientStart = Color(0xFF2C3E50) // Darker Midnight Blue
-private val BackgroundGradientEnd = Color(0xFF000000)  // Black
-private val ButtonBackgroundColor = Color(0xFF6C7A7C) // Darker Asbestos
+private val BackgroundGradientStart = Color(0xFF000000)  // Black
+private val BackgroundGradientMiddle = Color(0xFF282323)  // Black
+private val BackgroundGradientEnd = Color(0xFFBB5377) // Darker Gray
+private val ButtonBackgroundColor = Color(0xFF6C6565) // Medium Gray for contrast
 
 @Composable
 fun FirstScreen(
@@ -83,8 +84,9 @@ private fun InnerFirstScreenContent(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        BackgroundGradientStart,
-                        BackgroundGradientEnd
+                        BackgroundGradientEnd, // Inverted for more generous gradient
+                        BackgroundGradientMiddle,
+                        BackgroundGradientStart // Added extra start to make it more generous
                     )
                 )
             )
