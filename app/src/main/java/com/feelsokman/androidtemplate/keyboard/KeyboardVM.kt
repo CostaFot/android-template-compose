@@ -1,5 +1,6 @@
 package com.feelsokman.androidtemplate.keyboard
 
+import androidx.compose.runtime.mutableStateListOf
 import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.common.coroutine.DispatcherProvider
 import com.feelsokman.logging.logDebug
@@ -26,6 +27,8 @@ class KeyboardVM @Inject constructor(
     private val viewModelScope by lazy {
         CoroutineScope(dispatcherProvider.ui + SupervisorJob())
     }
+
+    val backStack = mutableStateListOf<Any>(RouteA)
 
     init {
         getTodo()

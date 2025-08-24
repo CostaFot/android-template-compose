@@ -10,23 +10,25 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Recomposer
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.compositionContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.setViewTreeLifecycleOwner
 import androidx.lifecycle.setViewTreeViewModelStoreOwner
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entry
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
+import androidx.navigationevent.NavigationEventDispatcher
+import androidx.navigationevent.NavigationEventDispatcherOwner
+import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
+import androidx.navigationevent.setViewTreeNavigationEventDispatcherOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.feelsokman.androidtemplate.R
 import com.feelsokman.androidtemplate.keyboard.second.SecondScreen
@@ -35,6 +37,11 @@ import com.feelsokman.design.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
+
+
+data object RouteA
+
+data class RouteB(val id: String)
 
 fun createKeyboardComposeView(
     service: TemplateKeyboardService,
@@ -53,6 +60,7 @@ fun createKeyboardComposeView(
     composeView.setViewTreeLifecycleOwner(customLifecycleOwner)
     composeView.setViewTreeViewModelStoreOwner(customLifecycleOwner)
     composeView.setViewTreeSavedStateRegistryOwner(customLifecycleOwner)
+    composeView.setViewTreeNavigationEventDispatcherOwner(FakeNavigationEventDispatcherOwner)
 
     val coroutineContext = AndroidUiDispatcher.CurrentThread
 
@@ -93,45 +101,43 @@ private fun ComposeView.setMainContent(
     )
 
     setContent {
-        AppTheme {
-            val getKeyboardVM: () -> KeyboardVM = remember {
-                { keyboardVM }
-            }
+        val lifecycle = LocalLifecycleOwner.current.lifecycle
+        CompositionLocalProvider(
+            LocalOnBackPressedDispatcherOwner provides FakeOnBackPressedDispatcherOwner(
+                lifecycle
+            ),
+            LocalNavigationEventDispatcherOwner provides FakeNavigationEventDispatcherOwner
+        ) {
+            AppTheme {
 
-            val lifecycle = LocalLifecycleOwner.current.lifecycle
-            CompositionLocalProvider(
-                LocalOnBackPressedDispatcherOwner provides FakeOnBackPressedDispatcherOwner(lifecycle)
-            ) {
                 Surface(
                     modifier = Modifier
                         .height(250.dp)
                         .fillMaxWidth(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val navController = rememberNavController()
-                    val startRoute = "main"
-                    LaunchedEffect(Unit) {
-                        // Collect from the a snapshotFlow reading the currentPage
-                        navController.currentBackStackEntryFlow.collect { page ->
-                            Timber
-                                .tag("KeyboardComposeView")
-                                .d("Route changed to ${page.destination.route}")
+                    val backStack = keyboardVM.backStack
+
+                    NavDisplay(
+                        backStack = backStack,
+                        onBack = { backStack.removeLastOrNull() },
+                        entryProvider = entryProvider {
+                            entry<RouteA> {
+                                StartScreen(
+                                    goNext = {
+                                        backStack.add(RouteB("123"))
+                                    }
+                                )
+                            }
+                            entry<RouteB> { key ->
+                                SecondScreen(
+                                    goNext = {
+                                        backStack.removeLastOrNull()
+                                    }
+                                )
+                            }
                         }
-                    }
-                    NavHost(navController, startDestination = startRoute) {
-                        composable("main") {
-                            StartScreen(
-                                goNext = {
-                                    navController.navigate("second")
-                                }
-                            )
-                        }
-                        composable("second") {
-                            SecondScreen(
-                                goNext = { navController.popBackStack() }
-                            )
-                        }
-                    }
+                    )
 
 
                 }
@@ -143,18 +149,26 @@ private fun ComposeView.setMainContent(
                     }
                 }
             }
+        }
+
+    }
+}
 
 
+private val FakeOnBackPressedDispatcherOwner: (lifecycle: Lifecycle) -> OnBackPressedDispatcherOwner =
+    {
+        object : OnBackPressedDispatcherOwner {
+            override val onBackPressedDispatcher = OnBackPressedDispatcher()
+
+            override val lifecycle: LifecycleRegistry
+                get() = (it as LifecycleRegistry)
         }
     }
-}
 
 
-private val FakeOnBackPressedDispatcherOwner: (lifecycle: Lifecycle) -> OnBackPressedDispatcherOwner = {
-    object : OnBackPressedDispatcherOwner {
-        override val onBackPressedDispatcher = OnBackPressedDispatcher()
-
-        override val lifecycle: LifecycleRegistry
-            get() = (it as LifecycleRegistry)
+private val FakeNavigationEventDispatcherOwner: NavigationEventDispatcherOwner =
+    object : NavigationEventDispatcherOwner {
+        override val navigationEventDispatcher: NavigationEventDispatcher =
+            NavigationEventDispatcher()
     }
-}
+
