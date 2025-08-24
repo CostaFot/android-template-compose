@@ -11,7 +11,6 @@ import dagger.hilt.components.SingletonComponent
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface KeyboardEntryPoint {
-
     fun startScreenVM(): StartScreenVM
     fun secondScreenVM(): SecondScreenVM
 }

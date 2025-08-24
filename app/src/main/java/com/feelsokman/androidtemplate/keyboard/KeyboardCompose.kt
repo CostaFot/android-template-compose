@@ -45,7 +45,7 @@ data class RouteB(val id: String)
 
 fun createKeyboardComposeView(
     service: TemplateKeyboardService,
-    keyboardVM: KeyboardVM
+    keyboardViewModel: KeyboardViewModel
 ): ComposeView {
     val composeView = ComposeView(service)
     val customLifecycleOwner = CustomLifecycleOwner()
@@ -78,14 +78,14 @@ fun createKeyboardComposeView(
 
 
     composeView.setMainContent(
-        keyboardVM = keyboardVM
+        keyboardViewModel = keyboardViewModel
     )
 
     return composeView
 }
 
 private fun ComposeView.setMainContent(
-    keyboardVM: KeyboardVM
+    keyboardViewModel: KeyboardViewModel
 ) {
     id = R.id.keyboardComposeView
     addOnAttachStateChangeListener(
@@ -107,7 +107,7 @@ private fun ComposeView.setMainContent(
                 lifecycle
             ),
             LocalNavigationEventDispatcherOwner provides FakeNavigationEventDispatcherOwner,
-            LocalCustomViewModelOwner provides keyboardVM,
+            LocalCustomViewModelOwner provides keyboardViewModel,
         ) {
             AppTheme {
 
@@ -117,10 +117,10 @@ private fun ComposeView.setMainContent(
                         .fillMaxWidth(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val backStack = keyboardVM.backStack
+                    val backStack = keyboardViewModel.backStack
 
                     NavDisplay(
-                        entryDecorators = listOf(keyboardVM.customDecorator),
+                        entryDecorators = listOf(keyboardViewModel.customDecorator),
                         backStack = backStack,
                         onBack = { backStack.removeLastOrNull() },
                         entryProvider = entryProvider {
