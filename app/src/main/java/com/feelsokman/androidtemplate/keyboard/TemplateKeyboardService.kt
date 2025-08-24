@@ -14,7 +14,7 @@ class TemplateKeyboardService : InputMethodService() {
     lateinit var dispatchers: DispatcherProvider
 
     @Inject
-    lateinit var keyboardViewModel: KeyboardViewModel
+    lateinit var keyboardStateHolder: KeyboardStateHolder
 
     override fun onCreate() {
         logDebug { "keyboard on create" }
@@ -23,7 +23,7 @@ class TemplateKeyboardService : InputMethodService() {
 
     override fun onCreateInputView(): View {
         logDebug { "keyboard on createInputView" }
-        return createKeyboardComposeView(this, keyboardViewModel)
+        return createKeyboardComposeView(this, keyboardStateHolder)
     }
 
     override fun onDestroy() {

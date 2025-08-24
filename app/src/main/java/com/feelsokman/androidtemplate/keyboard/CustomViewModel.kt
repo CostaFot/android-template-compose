@@ -18,8 +18,8 @@ abstract class CustomViewModel {
 
 @Composable
 inline fun <reified T : CustomViewModel> customViewModel(
-    viewModelStoreOwner: CustomViewModelOwner =
-        checkNotNull(LocalCustomViewModelOwner.current) {
+    viewModelStoreOwner: CustomViewModelStoreOwner =
+        checkNotNull(LocalCustomViewModelStoreOwner.current) {
             "No CustomViewModelOwner was provided via LocalCustomViewModelOwner"
         },
     key: Any = LocalKeyProvider.current!!

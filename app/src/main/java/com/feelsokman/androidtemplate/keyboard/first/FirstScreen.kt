@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.keyboard.start
+package com.feelsokman.androidtemplate.keyboard.first
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -23,15 +23,15 @@ import com.feelsokman.androidtemplate.keyboard.customViewModel
 import timber.log.Timber
 
 @Composable
-fun StartScreen(
+fun FirstScreen(
     goNext: () -> Unit
 ) {
-    val startScreenVM = customViewModel<StartScreenVM>()
-    val state by startScreenVM.uiState.collectAsState()
+    val firstViewModel = customViewModel<FirstViewModel>()
+    val state by firstViewModel.uiState.collectAsState()
 
-    InnerStartScreenContent(
+    InnerFirstScreenContent(
         state = state,
-        getTodo = startScreenVM::getTodo,
+        getTodo = firstViewModel::getTodo,
         goNext = goNext
     )
 
@@ -44,7 +44,7 @@ fun StartScreen(
 }
 
 @Composable
-private fun InnerStartScreenContent(
+private fun InnerFirstScreenContent(
     state: String,
     getTodo: () -> Unit,
     goNext: () -> Unit

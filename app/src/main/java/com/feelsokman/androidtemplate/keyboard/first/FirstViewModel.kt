@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.keyboard.start
+package com.feelsokman.androidtemplate.keyboard.first
 
 import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.androidtemplate.keyboard.CustomViewModel
@@ -13,12 +13,12 @@ import java.util.UUID
 import javax.inject.Inject
 
 
-class StartScreenVM @Inject constructor(
+class FirstViewModel @Inject constructor(
     private val jsonPlaceHolderRepository: JsonPlaceHolderRepository
 ) : CustomViewModel() {
 
     init {
-        logDebug { "StartScreenVm init ${hashCode()}" }
+        logDebug { "FirstViewModel init ${hashCode()}" }
     }
 
     private val _textData = MutableStateFlow(UUID.randomUUID().toString())
@@ -41,6 +41,6 @@ class StartScreenVM @Inject constructor(
 
     override fun onCleared() {
         super.onCleared()
-        logDebug { "StartScreenVM cleared ${hashCode()}" }
+        logDebug { "FirstViewModel cleared ${hashCode()}" }
     }
 }

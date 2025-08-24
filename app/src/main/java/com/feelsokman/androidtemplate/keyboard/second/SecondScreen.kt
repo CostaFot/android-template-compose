@@ -11,7 +11,7 @@ import timber.log.Timber
 fun SecondScreen(
     goNext: () -> Unit
 ) {
-    val secondScreenVM = customViewModel<SecondScreenVM>()
+    val secondViewModel = customViewModel<SecondViewModel>()
 
 
     Text(text = "grgrggr")

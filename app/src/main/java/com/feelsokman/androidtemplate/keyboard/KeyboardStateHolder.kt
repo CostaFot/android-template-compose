@@ -5,16 +5,16 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateListOf
 import androidx.navigation3.runtime.NavEntryDecorator
 import androidx.navigation3.runtime.navEntryDecorator
-import com.feelsokman.androidtemplate.keyboard.second.SecondScreenVM
-import com.feelsokman.androidtemplate.keyboard.start.StartScreenVM
+import com.feelsokman.androidtemplate.keyboard.first.FirstViewModel
+import com.feelsokman.androidtemplate.keyboard.second.SecondViewModel
 import com.feelsokman.logging.logDebug
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
-class KeyboardViewModel @Inject constructor(
+class KeyboardStateHolder @Inject constructor(
     private val application: Application,
-) : CustomViewModelOwner {
-    val backStack = mutableStateListOf<Any>(RouteA)
+) : CustomViewModelStoreOwner {
+    val backStack = mutableStateListOf<Any>(First)
     val customViewModelStore = mutableMapOf<Any, CustomViewModel>()
 
     @Suppress("UNCHECKED_CAST")
@@ -24,14 +24,14 @@ class KeyboardViewModel @Inject constructor(
     ): T = customViewModelStore.getOrPut(key) {
         val entryPoint = application.keyboardEntryPoint()
         when (modelClass) {
-            StartScreenVM::class -> {
-                entryPoint.startScreenVM()
+            FirstViewModel::class -> {
+                entryPoint.firstScreenViewModel()
 
 
             }
 
-            SecondScreenVM::class -> {
-                entryPoint.secondScreenVM()
+            SecondViewModel::class -> {
+                entryPoint.secondScreenViewModel()
             }
 
             else -> throw IllegalStateException("Unknown class $modelClass")
@@ -39,7 +39,7 @@ class KeyboardViewModel @Inject constructor(
     } as T
 
 
-    val onPop: (Any) -> Unit = { key ->
+    private val onPop: (Any) -> Unit = { key ->
         logDebug { "Popping $key" }
         logDebug { "${customViewModelStore.keys}" }
         customViewModelStore[key]?.let { vm ->
@@ -49,7 +49,7 @@ class KeyboardViewModel @Inject constructor(
         }
     }
 
-    val customDecorator: NavEntryDecorator<Any> = navEntryDecorator(onPop) { entry ->
+    val keyboardNavEntryDecorator: NavEntryDecorator<Any> = navEntryDecorator(onPop) { entry ->
         logDebug {
             "CustomDecorator called for with key: ${entry.contentKey}"
         }
@@ -59,12 +59,10 @@ class KeyboardViewModel @Inject constructor(
         ) {
             entry.Content()
         }
-
-
     }
 
 
     init {
-        logDebug { "Init KeyboardVM, id: ${hashCode()}" }
+        logDebug { "Init KeyboardStateHolder, id: ${hashCode()}" }
     }
 }

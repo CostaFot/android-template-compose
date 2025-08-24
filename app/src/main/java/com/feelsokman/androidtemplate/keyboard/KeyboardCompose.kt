@@ -31,21 +31,21 @@ import androidx.navigationevent.compose.LocalNavigationEventDispatcherOwner
 import androidx.navigationevent.setViewTreeNavigationEventDispatcherOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.feelsokman.androidtemplate.R
+import com.feelsokman.androidtemplate.keyboard.first.FirstScreen
 import com.feelsokman.androidtemplate.keyboard.second.SecondScreen
-import com.feelsokman.androidtemplate.keyboard.start.StartScreen
 import com.feelsokman.design.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
 
-data object RouteA
+data object First
 
-data class RouteB(val id: String)
+data class Second(val id: String)
 
 fun createKeyboardComposeView(
     service: TemplateKeyboardService,
-    keyboardViewModel: KeyboardViewModel
+    keyboardStateHolder: KeyboardStateHolder
 ): ComposeView {
     val composeView = ComposeView(service)
     val customLifecycleOwner = CustomLifecycleOwner()
@@ -78,14 +78,14 @@ fun createKeyboardComposeView(
 
 
     composeView.setMainContent(
-        keyboardViewModel = keyboardViewModel
+        keyboardStateHolder = keyboardStateHolder
     )
 
     return composeView
 }
 
 private fun ComposeView.setMainContent(
-    keyboardViewModel: KeyboardViewModel
+    keyboardStateHolder: KeyboardStateHolder
 ) {
     id = R.id.keyboardComposeView
     addOnAttachStateChangeListener(
@@ -107,7 +107,7 @@ private fun ComposeView.setMainContent(
                 lifecycle
             ),
             LocalNavigationEventDispatcherOwner provides FakeNavigationEventDispatcherOwner,
-            LocalCustomViewModelOwner provides keyboardViewModel,
+            LocalCustomViewModelStoreOwner provides keyboardStateHolder,
         ) {
             AppTheme {
 
@@ -117,21 +117,21 @@ private fun ComposeView.setMainContent(
                         .fillMaxWidth(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val backStack = keyboardViewModel.backStack
+                    val backStack = keyboardStateHolder.backStack
 
                     NavDisplay(
-                        entryDecorators = listOf(keyboardViewModel.customDecorator),
+                        entryDecorators = listOf(keyboardStateHolder.keyboardNavEntryDecorator),
                         backStack = backStack,
                         onBack = { backStack.removeLastOrNull() },
                         entryProvider = entryProvider {
-                            entry<RouteA> {
-                                StartScreen(
+                            entry<First> {
+                                FirstScreen(
                                     goNext = {
-                                        backStack.add(RouteB("123"))
+                                        backStack.add(Second("123"))
                                     }
                                 )
                             }
-                            entry<RouteB> { key ->
+                            entry<Second> { key ->
                                 SecondScreen(
                                     goNext = {
                                         backStack.removeLastOrNull()
