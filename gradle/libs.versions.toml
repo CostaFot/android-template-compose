@@ -1,9 +1,9 @@
 [versions]
-androidDesugarJdkLibs = "2.0.4"
-androidGradlePlugin = "8.12.0"
+androidDesugarJdkLibs = "2.1.5"
+androidGradlePlugin = "8.12.1"
 androidxActivity = "1.10.1"
 androidxAppCompat = "1.7.1"
-androidxComposeBom = "2025.07.00"
+androidxComposeBom = "2025.08.00"
 androidxComposeRuntimeTracing = "1.8.3"
 androidxCore = "1.16.0"
 androidxCoreSplashscreen = "1.0.1"
@@ -25,7 +25,7 @@ androidxTracing = "1.3.0"
 androidxUiAutomator = "2.3.0"
 androidxWork = "2.10.3"
 coil = "2.7.0"
-hilt = "2.57"
+hilt = "2.57.1"
 hiltExt = "1.2.0"
 jacoco = "0.8.7"
 junit4 = "4.13.2"
@@ -35,7 +35,7 @@ kotlinxDatetime = "0.7.1"
 kotlinxSerializationJson = "1.9.0"
 ksp = "2.1.10-1.0.31"
 # Should be AGP + 23
-lint = "31.12.0"
+lint = "31.12.1"
 material = "1.12.0"
 okhttp = "5.1.0"
 protobuf = "4.31.1"
@@ -47,6 +47,8 @@ secrets = "2.0.1"
 turbine = "1.2.1"
 timber = "5.0.1"
 lifecycleRuntimeKtx = "2.9.2"
+navigation3 = "1.0.0-alpha07"
+lifecycleViewmodel = "1.0.0-SNAPSHOT"
 
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -77,6 +79,14 @@ androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "life
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
+
+androidx-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodel" }
+androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "navigation3" }
+androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "navigation3" }
+
+
+
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "androidxProfileinstaller" }
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidxStartup" }
