@@ -1,5 +1,6 @@
 package com.feelsokman.androidtemplate.keyboard.start
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import com.feelsokman.androidtemplate.keyboard.rememberFakeViewModel
 import timber.log.Timber
 
@@ -48,7 +50,11 @@ private fun InnerStartScreenContent(
     goNext: () -> Unit
 ) {
 
-    Box(Modifier.fillMaxSize()) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(Color.Red)
+    ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
