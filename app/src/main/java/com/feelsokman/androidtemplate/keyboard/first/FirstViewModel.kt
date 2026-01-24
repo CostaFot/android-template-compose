@@ -1,6 +1,5 @@
 package com.feelsokman.androidtemplate.keyboard.first
 
-import com.feelsokman.androidtemplate.domain.JsonPlaceHolderRepository
 import com.feelsokman.androidtemplate.keyboard.CustomViewModel
 import com.feelsokman.androidtemplate.keyboard.KeyboardHandler
 import com.feelsokman.androidtemplate.keyboard.KeyboardMessage
@@ -10,7 +9,6 @@ import javax.inject.Inject
 
 
 class FirstViewModel @Inject constructor(
-    private val jsonPlaceHolderRepository: JsonPlaceHolderRepository,
     private val keyboardHandler: KeyboardHandler,
 ) : CustomViewModel() {
 

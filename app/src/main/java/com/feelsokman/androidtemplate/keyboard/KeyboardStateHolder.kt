@@ -15,7 +15,7 @@ class KeyboardStateHolder @Inject constructor(
     private val application: Application,
 ) : CustomViewModelStoreOwner {
     val backStack = mutableStateListOf<Any>(First)
-    val customViewModelStore = mutableMapOf<Any, CustomViewModel>()
+    private val customViewModelStore = mutableMapOf<Any, CustomViewModel>()
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : CustomViewModel> get(
@@ -24,16 +24,8 @@ class KeyboardStateHolder @Inject constructor(
     ): T = customViewModelStore.getOrPut(key) {
         val entryPoint = application.keyboardEntryPoint()
         when (modelClass) {
-            FirstViewModel::class -> {
-                entryPoint.firstScreenViewModel()
-
-
-            }
-
-            SecondViewModel::class -> {
-                entryPoint.secondScreenViewModel()
-            }
-
+            FirstViewModel::class -> entryPoint.firstScreenViewModel()
+            SecondViewModel::class -> entryPoint.secondScreenViewModel()
             else -> throw IllegalStateException("Unknown class $modelClass")
         }
     } as T

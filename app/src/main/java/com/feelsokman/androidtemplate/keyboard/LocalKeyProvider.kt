@@ -5,7 +5,6 @@ import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.compositionLocalOf
 
 object LocalKeyProvider {
-
     private val LocalKeyProvider = compositionLocalOf<Any?> { null }
 
     val current: Any?

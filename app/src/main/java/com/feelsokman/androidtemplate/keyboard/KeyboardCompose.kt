@@ -3,9 +3,7 @@ package com.feelsokman.androidtemplate.keyboard
 import android.view.View
 import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.OnBackPressedDispatcherOwner
-import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
@@ -17,9 +15,7 @@ import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.platform.compositionContext
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleRegistry
-import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.setViewTreeLifecycleOwner
-import androidx.lifecycle.setViewTreeViewModelStoreOwner
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
@@ -48,25 +44,30 @@ fun createKeyboardComposeView(
     val composeView = ComposeView(service)
     val customLifecycleOwner = CustomLifecycleOwner()
 
-    // composeView needs all these as we are not in the context of an activity/fragment
+    // nice to have
     composeView.setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnDetachedFromWindow)
+
+
+    // stop crash!
+    // java.lang.IllegalStateException: You can 'consumeRestoredStateForKey' only after the corresponding component has moved to the 'CREATED' state
     customLifecycleOwner.performRestore(null)
+
+    // nothing will show without this one!
     customLifecycleOwner.handleLifecycleEvent(Lifecycle.Event.ON_CREATE)
 
     composeView.setViewTreeLifecycleOwner(customLifecycleOwner)
-    composeView.setViewTreeViewModelStoreOwner(customLifecycleOwner)
     composeView.setViewTreeSavedStateRegistryOwner(customLifecycleOwner)
+
+    // navigation 3 expects this
     composeView.setViewTreeNavigationEventDispatcherOwner(FakeNavigationEventDispatcherOwner)
 
     val coroutineContext = AndroidUiDispatcher.CurrentThread
-
     val recomposeScope = CoroutineScope(coroutineContext)
-
     val recomposer = Recomposer(coroutineContext)
-
     composeView.compositionContext = recomposer
 
     recomposeScope.launch {
+        // responsible for re-drawing stuff on the screen
         recomposer.runRecomposeAndApplyChanges()
     }
 
@@ -94,19 +95,13 @@ private fun ComposeView.setMainContent(
     )
 
     setContent {
-        val lifecycle = LocalLifecycleOwner.current.lifecycle
         CompositionLocalProvider(
-            LocalOnBackPressedDispatcherOwner provides FakeOnBackPressedDispatcherOwner(
-                lifecycle
-            ),
             LocalNavigationEventDispatcherOwner provides FakeNavigationEventDispatcherOwner,
             LocalCustomViewModelStoreOwner provides keyboardStateHolder,
         ) {
             AppTheme {
                 Surface(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     val backStack = keyboardStateHolder.backStack
 
@@ -124,7 +119,7 @@ private fun ComposeView.setMainContent(
                             }
                             entry<Second> { key ->
                                 SecondScreen(
-                                    goNext = {
+                                    goBack = {
                                         backStack.removeLastOrNull()
                                     }
                                 )

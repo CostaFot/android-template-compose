@@ -21,7 +21,7 @@ import timber.log.Timber
 
 @Composable
 fun SecondScreen(
-    goNext: () -> Unit
+    goBack: () -> Unit
 ) {
     val secondViewModel = customViewModel<SecondViewModel>()
 
@@ -43,9 +43,7 @@ fun SecondScreen(
                 color = Color.DarkGray // nicer text color
             )
             Button(
-                onClick = {
-                    goNext()
-                }
+                onClick = goBack
             ) {
                 Text(text = "go back")
             }
