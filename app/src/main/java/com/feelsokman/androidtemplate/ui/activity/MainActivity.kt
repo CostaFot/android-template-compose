@@ -11,6 +11,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -31,6 +33,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -54,17 +57,30 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.feelsokman.androidtemplate.R
 import com.feelsokman.androidtemplate.retain.SampleRetainedViewModel
+import com.feelsokman.androidtemplate.retain.rememberRetainDecorator
 import com.feelsokman.androidtemplate.retain.rememberRetainedViewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.PullToRefreshViewModel
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
+import com.feelsokman.logging.logDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.serialization.Serializable
 import javax.inject.Inject
 import kotlin.random.Random
+
+@Serializable
+private data object RouteA : NavKey
+
+@Serializable
+private data class RouteB(val id: String) : NavKey
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -102,10 +118,84 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 Surface {
-                    MainScreen()
+                    val backStack = rememberNavBackStack(RouteA)
+
+                    val retainDecorator = rememberRetainDecorator()
+
+                    NavDisplay(
+                        backStack = backStack,
+                        onBack = { backStack.removeLastOrNull() },
+                        entryDecorators = listOf(
+                            retainDecorator,
+                        ),
+                        entryProvider = entryProvider {
+                            entry<RouteA> {
+                                ContentGreen(goToSecondScreen = {
+                                    backStack.add(RouteB("123"))
+                                })
+                            }
+                            entry<RouteB> { key ->
+                                ContentBlue("Route id: ${key.id} ")
+                            }
+                        }
+                    )
+
                 }
             }
         }
+    }
+
+    override fun onDestroy() {
+        logDebug { "onDestroy" }
+        super.onDestroy()
+    }
+}
+
+
+@Composable
+fun ContentGreen(goToSecondScreen: () -> Unit) {
+    val retainedViewModel = rememberRetainedViewModel<SampleRetainedViewModel>()
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Green)
+            .safeDrawingPadding()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(
+            text = "First screen",
+            color = Color.White,
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+        Button(onClick = {
+            goToSecondScreen()
+
+        }) {
+            Text("Go to second screen")
+        }
+    }
+}
+
+@Composable
+fun ContentBlue(
+    text: String
+) {
+    val retainedViewModel = rememberRetainedViewModel<SampleRetainedViewModel>()
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Blue)
+            .safeDrawingPadding(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            color = Color.White,
+            style = MaterialTheme.typography.bodyLarge
+        )
     }
 }
 
@@ -126,7 +216,11 @@ private fun MainScreen(
             onRefresh = {
                 viewModel.onRefresh()
             },
-            modifier = Modifier.windowInsetsPadding(WindowInsets.statusBars.only(WindowInsetsSides.Top))
+            modifier = Modifier.windowInsetsPadding(
+                WindowInsets.statusBars.only(
+                    WindowInsetsSides.Top
+                )
+            )
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
@@ -182,7 +276,8 @@ private fun ExpandingEdgeToEdge(
 
                 val animatedColor by animateColorAsState(targetValue = color, label = "")
 
-                val statusBarHeight = WindowInsets.statusBars.getTop(LocalDensity.current).pxToDp()
+                val statusBarHeight =
+                    WindowInsets.statusBars.getTop(LocalDensity.current).pxToDp()
 
                 var isFullExpanded by remember {
                     mutableStateOf(false)

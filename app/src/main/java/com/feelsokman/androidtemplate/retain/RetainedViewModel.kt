@@ -1,11 +1,11 @@
 package com.feelsokman.androidtemplate.retain
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.RetainObserver
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.platform.LocalContext
 import com.feelsokman.androidtemplate.ui.Hello
+import com.feelsokman.logging.logDebug
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -23,38 +23,33 @@ import kotlin.reflect.KClass
 abstract class RetainedViewModel : RetainObserver {
     private var _viewModelScope: CoroutineScope? = null
 
-    val viewModelScope: CoroutineScope
-        get() =
-            _viewModelScope ?: CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate).also {
-                _viewModelScope = it
-            }
+    val viewModelScope: CoroutineScope =
+        CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onEnteredComposition() {
-        Log.d("COSTA", "onEnteredComposition")
+        logDebug { "onEnteredComposition ${hashCode()}" }
     }
 
     override fun onExitedComposition() {
-        Log.d("COSTA", "onExitedComposition")
+        logDebug { "onExitedComposition ${hashCode()}" }
     }
 
     override fun onRetained() {
-        Log.d("COSTA", "onRetained")
+        logDebug { "onRetained ${hashCode()}" }
     }
 
     override fun onUnused() {
-        Log.d("COSTA", "onUnused")
+        logDebug { "onUnused ${hashCode()}" }
     }
 
     override fun onRetired() {
-        Log.d("COSTA", "onRetired")
+        logDebug { "onRetired ${hashCode()}" }
         clear()
     }
 
     private fun clear() {
-        _viewModelScope?.cancel()
-        _viewModelScope = null
-
         onCleared()
+        viewModelScope.cancel()
     }
 
     protected open fun onCleared() {
@@ -99,10 +94,10 @@ class SampleRetainedViewModel @Inject constructor(
     val state: StateFlow<Boolean> = _state.asStateFlow()
 
     init {
-        Log.d("COSTA", "init SampleRetainedViewModel ${hashCode()}")
+        logDebug { "init SampleRetainedViewModel ${hashCode()}" }
     }
 
     override fun onCleared() {
-        Log.d("COSTA", "onRetired SampleRetainedViewModel ${hashCode()}")
+        logDebug { "onCleared SampleRetainedViewModel ${hashCode()}" }
     }
 }
