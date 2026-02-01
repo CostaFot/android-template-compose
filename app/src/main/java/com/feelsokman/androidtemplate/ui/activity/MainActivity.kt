@@ -55,8 +55,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.feelsokman.androidtemplate.R
+import com.feelsokman.androidtemplate.ui.SampleRetainedViewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.PullToRefreshViewModel
+import com.feelsokman.androidtemplate.ui.rememberRetainedViewModel
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -99,10 +101,7 @@ class MainActivity : AppCompatActivity() {
                     onDispose {}
                 }
 
-                Surface(
-
-                ) {
-
+                Surface {
                     MainScreen()
                 }
             }
@@ -114,6 +113,7 @@ class MainActivity : AppCompatActivity() {
 private fun MainScreen(
     viewModel: PullToRefreshViewModel = hiltViewModel()
 ) {
+    val ff = rememberRetainedViewModel<SampleRetainedViewModel>()
     Box(
         modifier = Modifier
             .fillMaxWidth()

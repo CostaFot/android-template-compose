@@ -1,5 +1,6 @@
 package com.feelsokman.androidtemplate.ui
 
+import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.RetainObserver
@@ -91,7 +92,7 @@ inline fun <reified T : RetainedViewModel> rememberRetainedViewModel(): T {
 
 @RetainedEntryPoint(SampleEntryPoint::class)
 class SampleRetainedViewModel @Inject constructor(
-
+    private val application: Application,
 ) : RetainedViewModel() {
     private val _state = MutableStateFlow(false)
     val state: StateFlow<Boolean> = _state.asStateFlow()
