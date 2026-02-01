@@ -28,11 +28,9 @@ class RetainDecorator<T : Any>(
 fun rememberRetainDecorator(): RetainDecorator<Any> {
     val retainedValuesStoreRegistry = retainRetainedValuesStoreRegistry()
 
-    val retainDecorator = remember {
-        RetainDecorator<Any>(
+    return remember {
+        RetainDecorator(
             retainedValuesStoreRegistry = retainedValuesStoreRegistry,
         )
     }
-
-    return retainDecorator
 }

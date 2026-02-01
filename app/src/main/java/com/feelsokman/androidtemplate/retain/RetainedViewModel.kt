@@ -27,23 +27,23 @@ abstract class RetainedViewModel : RetainObserver {
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     override fun onEnteredComposition() {
-        logDebug { "onEnteredComposition ${hashCode()}" }
+        logDebug { "onEnteredComposition" }
     }
 
     override fun onExitedComposition() {
-        logDebug { "onExitedComposition ${hashCode()}" }
+        logDebug { "onExitedComposition" }
     }
 
     override fun onRetained() {
-        logDebug { "onRetained ${hashCode()}" }
+        logDebug { "onRetained" }
     }
 
     override fun onUnused() {
-        logDebug { "onUnused ${hashCode()}" }
+        logDebug { "onUnused" }
     }
 
     override fun onRetired() {
-        logDebug { "onRetired ${hashCode()}" }
+        logDebug { "onRetired" }
         clear()
     }
 
@@ -53,7 +53,7 @@ abstract class RetainedViewModel : RetainObserver {
     }
 
     protected open fun onCleared() {
-        // implement for cleanup in subclass if necessary
+        // override if necessary
     }
 }
 
