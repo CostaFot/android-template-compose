@@ -1,11 +1,11 @@
-package com.feelsokman.androidtemplate.ui
+package com.feelsokman.androidtemplate.retain
 
-import android.app.Application
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.retain.RetainObserver
 import androidx.compose.runtime.retain.retain
 import androidx.compose.ui.platform.LocalContext
+import com.feelsokman.androidtemplate.ui.Hello
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -73,6 +73,7 @@ annotation class RetainedEntryPoint(
 )
 
 @EntryPoint
+// can only work with ActivityComponent
 @InstallIn(ActivityComponent::class)
 interface SampleEntryPoint : RetainedViewModelEntryPoint<SampleRetainedViewModel>
 
@@ -92,7 +93,7 @@ inline fun <reified T : RetainedViewModel> rememberRetainedViewModel(): T {
 
 @RetainedEntryPoint(SampleEntryPoint::class)
 class SampleRetainedViewModel @Inject constructor(
-    private val application: Application,
+    private val hello: Hello
 ) : RetainedViewModel() {
     private val _state = MutableStateFlow(false)
     val state: StateFlow<Boolean> = _state.asStateFlow()
