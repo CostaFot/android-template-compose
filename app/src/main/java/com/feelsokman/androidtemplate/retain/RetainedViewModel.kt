@@ -21,8 +21,6 @@ import javax.inject.Inject
 import kotlin.reflect.KClass
 
 abstract class RetainedViewModel : RetainObserver {
-    private var _viewModelScope: CoroutineScope? = null
-
     val viewModelScope: CoroutineScope =
         CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
