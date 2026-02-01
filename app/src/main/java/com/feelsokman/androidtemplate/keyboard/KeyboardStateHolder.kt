@@ -1,7 +1,6 @@
 package com.feelsokman.androidtemplate.keyboard
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateListOf
 import androidx.navigation3.runtime.NavEntryDecorator
@@ -63,6 +62,5 @@ class KeyboardNavEntryDecorator<T : Any>(
     },
     onPop = { contentKey ->
         onPop(contentKey)
-        Log.d("CustomNavEntryDecorator", "entry with $contentKey was popped")
     }
 )
