@@ -1,10 +1,10 @@
 package com.feelsokman.androidtemplate.keyboard
 
 import android.app.Application
+import android.util.Log
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateListOf
 import androidx.navigation3.runtime.NavEntryDecorator
-import androidx.navigation3.runtime.navEntryDecorator
 import com.feelsokman.androidtemplate.keyboard.first.FirstViewModel
 import com.feelsokman.androidtemplate.keyboard.second.SecondViewModel
 import com.feelsokman.logging.logDebug
@@ -41,20 +41,28 @@ class KeyboardStateHolder @Inject constructor(
         }
     }
 
-    val keyboardNavEntryDecorator: NavEntryDecorator<Any> = navEntryDecorator(onPop) { entry ->
-        logDebug {
-            "CustomDecorator called for with key: ${entry.contentKey}"
-        }
+    val keyboardNavEntryDecorator = KeyboardNavEntryDecorator<Any>(onPop)
 
-        CompositionLocalProvider(
-            LocalKeyProvider provides entry.contentKey
-        ) {
-            entry.Content()
-        }
-    }
 
 
     init {
         logDebug { "Init KeyboardStateHolder, id: ${hashCode()}" }
     }
 }
+
+
+class KeyboardNavEntryDecorator<T : Any>(
+    onPop: (contentKey: Any) -> Unit
+) : NavEntryDecorator<T>(
+    decorate = { entry ->
+        CompositionLocalProvider(
+            LocalKeyProvider provides entry.contentKey
+        ) {
+            entry.Content()
+        }
+    },
+    onPop = { contentKey ->
+        onPop(contentKey)
+        Log.d("CustomNavEntryDecorator", "entry with $contentKey was popped")
+    }
+)
