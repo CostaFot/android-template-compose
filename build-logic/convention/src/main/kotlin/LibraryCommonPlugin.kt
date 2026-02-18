@@ -1,5 +1,5 @@
+import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.android.build.gradle.LibraryExtension
 import com.feelsokayman.template.configureGradleManagedDevices
 import com.feelsokayman.template.configureKotlinAndroid
 import com.feelsokayman.template.disableUnnecessaryAndroidTests
@@ -14,11 +14,9 @@ class LibraryCommonPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "com.android.library")
-            apply(plugin = "org.jetbrains.kotlin.android")
 
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = 35
                 testOptions.animationsDisabled = true
                 configureGradleManagedDevices(this)
                 // The resource prefix is derived from the module name,

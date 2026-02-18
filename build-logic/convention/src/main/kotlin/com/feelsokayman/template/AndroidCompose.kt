@@ -12,25 +12,25 @@ import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginE
  */
 
 internal fun Project.configureAndroidCompose(
-    commonExtension: CommonExtension<*, *, *, *, *, *>
+    commonExtension: CommonExtension
 ) {
 
     commonExtension.apply {
-        buildFeatures {
+        buildFeatures.apply {
             compose = true
         }
+    }
 
-        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
-            compilerOptions {
-                freeCompilerArgs.addAll(buildComposeMetricsParameters())
-            }
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
+        compilerOptions {
+            freeCompilerArgs.addAll(buildComposeMetricsParameters())
         }
+    }
 
-        dependencies {
-            val bom = libs.findLibrary("androidx-compose-bom").get()
-            add("implementation", platform(bom))
-            add("androidTestImplementation", platform(bom))
-        }
+    dependencies {
+        val bom = libs.findLibrary("androidx-compose-bom").get()
+        add("api", platform(bom))
+        add("androidTestImplementation", platform(bom))
     }
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
