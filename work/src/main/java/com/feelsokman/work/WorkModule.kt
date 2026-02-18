@@ -19,7 +19,7 @@ object WorkModule {
 
     @Provides
     @Singleton
-    internal fun providesWorkManager(
+    fun providesWorkManager(
         @ApplicationContext context: Context,
         flagProvider: FlagProvider,
         configuration: Configuration

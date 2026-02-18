@@ -23,13 +23,13 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    internal fun providesCache(@ApplicationContext context: Context): Cache {
+    fun providesCache(@ApplicationContext context: Context): Cache {
         return Cache(context.cacheDir, 10 * 1024 * 1024)
     }
 
     @Provides
     @Singleton
-    internal fun providesHttpLoggingInterceptor(
+    fun providesHttpLoggingInterceptor(
         flagProvider: FlagProvider
     ): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
@@ -42,7 +42,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    internal fun providesOkHttpClient(
+    fun providesOkHttpClient(
         cache: Cache,
         httpLoggingInterceptor: HttpLoggingInterceptor
     ): OkHttpClient {
@@ -60,7 +60,7 @@ object NetworkModule {
     }
 
     @Provides
-    internal fun providesRetrofit(
+    fun providesRetrofit(
         okHttpClient: OkHttpClient,
         json: Json
     ): Retrofit {
@@ -75,7 +75,7 @@ object NetworkModule {
     }
 
     @Provides
-    internal fun providesJsonPlaceHolderService(
+    fun providesJsonPlaceHolderService(
         retrofit: Retrofit
     ): JsonPlaceHolderService = retrofit.create(JsonPlaceHolderService::class.java)
 }
