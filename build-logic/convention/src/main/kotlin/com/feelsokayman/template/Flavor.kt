@@ -23,7 +23,7 @@ fun Project.configureFlavors(
             Flavor.values().forEach {
                 create(it.name) {
                     dimension = it.dimension.name
-                    if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
+                    if (commonExtension is ApplicationExtension && this is ApplicationProductFlavor) {
                         if (it.applicationIdSuffix != null) {
                             this.applicationIdSuffix = it.applicationIdSuffix
                         }
