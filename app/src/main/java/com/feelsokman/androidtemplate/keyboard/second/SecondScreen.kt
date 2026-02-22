@@ -16,12 +16,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.feelsokman.androidtemplate.retain.rememberRetainedViewModel
+import dagger.hilt.EntryPoints
 import timber.log.Timber
 
 @Composable
 fun SecondScreen(
     goBack: () -> Unit
 ) {
+    val secondViewModel = rememberRetainedViewModel { context ->
+        EntryPoints.get(context.applicationContext, SecondViewModelEntryPoint::class.java)
+            .secondViewModel()
+    }
+
 
     Box(
         modifier = Modifier

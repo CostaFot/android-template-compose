@@ -28,6 +28,7 @@ import androidx.savedstate.setViewTreeSavedStateRegistryOwner
 import com.feelsokman.androidtemplate.R
 import com.feelsokman.androidtemplate.keyboard.first.FirstScreen
 import com.feelsokman.androidtemplate.keyboard.second.SecondScreen
+import com.feelsokman.androidtemplate.retain.rememberRetainDecorator
 import com.feelsokman.design.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -103,6 +104,7 @@ private fun ComposeView.setMainContent() {
                     NavDisplay(
                         backStack = backStack,
                         onBack = { backStack.removeLastOrNull() },
+                        entryDecorators = listOf(rememberRetainDecorator()),
                         entryProvider = entryProvider {
                             entry<First> {
                                 FirstScreen(
