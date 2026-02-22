@@ -130,9 +130,7 @@ class MainActivity : AppCompatActivity() {
                         ),
                         entryProvider = entryProvider {
                             entry<RouteA> {
-                                ContentGreen(goToSecondScreen = {
-                                    backStack.add(RouteB("123"))
-                                })
+                                MainScreen()
                             }
                             entry<RouteB> { key ->
                                 ContentBlue("Route id: ${key.id} ")
