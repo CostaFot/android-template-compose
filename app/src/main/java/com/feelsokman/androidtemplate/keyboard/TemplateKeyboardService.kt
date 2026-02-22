@@ -13,9 +13,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class TemplateKeyboardService : InputMethodService() {
     @Inject
-    lateinit var keyboardStateHolder: KeyboardStateHolder
-
-    @Inject
     lateinit var dispatcherProvider: DispatcherProvider
 
     @Inject
@@ -52,7 +49,7 @@ class TemplateKeyboardService : InputMethodService() {
 
     override fun onCreateInputView(): View {
         logDebug { "keyboard onCreateInputView" }
-        return createKeyboardComposeView(this, keyboardStateHolder)
+        return createKeyboardComposeView(this)
     }
 
 

@@ -1,17 +1,25 @@
 package com.feelsokman.androidtemplate.keyboard.second
 
-import com.feelsokman.androidtemplate.keyboard.CustomViewModel
+import com.feelsokman.androidtemplate.retain.RetainedViewModel
 import com.feelsokman.logging.logDebug
+import dagger.hilt.EntryPoint
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 
-class SecondViewModel @Inject constructor() : CustomViewModel() {
+@EntryPoint
+@InstallIn(SingletonComponent::class)
+interface SecondViewModelEntryPoint {
+    fun secondViewModel(): SecondViewModel
+}
+
+class SecondViewModel @Inject constructor() : RetainedViewModel() {
 
     init {
         logDebug { "SecondViewModel init ${hashCode()}" }
     }
 
     override fun onCleared() {
-        super.onCleared()
         logDebug { "SecondViewModel cleared ${hashCode()}" }
     }
 }

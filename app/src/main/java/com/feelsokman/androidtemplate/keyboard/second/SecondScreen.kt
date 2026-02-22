@@ -16,14 +16,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.feelsokman.androidtemplate.keyboard.customViewModel
 import timber.log.Timber
 
 @Composable
 fun SecondScreen(
     goBack: () -> Unit
 ) {
-    val secondViewModel = customViewModel<SecondViewModel>()
 
     Box(
         modifier = Modifier

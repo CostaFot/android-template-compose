@@ -8,6 +8,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Recomposer
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.platform.ComposeView
@@ -38,7 +40,6 @@ data class Second(val id: String)
 
 fun createKeyboardComposeView(
     service: TemplateKeyboardService,
-    keyboardStateHolder: KeyboardStateHolder
 ): ComposeView {
     val composeView = ComposeView(service)
     val customLifecycleOwner = CustomLifecycleOwner()
@@ -70,16 +71,12 @@ fun createKeyboardComposeView(
         recomposer.runRecomposeAndApplyChanges()
     }
 
-    composeView.setMainContent(
-        keyboardStateHolder = keyboardStateHolder
-    )
+    composeView.setMainContent()
 
     return composeView
 }
 
-private fun ComposeView.setMainContent(
-    keyboardStateHolder: KeyboardStateHolder
-) {
+private fun ComposeView.setMainContent() {
     id = R.id.keyboardComposeView
     addOnAttachStateChangeListener(
         object : View.OnAttachStateChangeListener {
@@ -96,16 +93,14 @@ private fun ComposeView.setMainContent(
     setContent {
         CompositionLocalProvider(
             LocalNavigationEventDispatcherOwner provides FakeNavigationEventDispatcherOwner,
-            LocalCustomViewModelStoreOwner provides keyboardStateHolder,
         ) {
             AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    val backStack = keyboardStateHolder.backStack
+                    val backStack = remember { mutableStateListOf<Any>(First) }
 
                     NavDisplay(
-                        entryDecorators = listOf(keyboardStateHolder.keyboardNavEntryDecorator),
                         backStack = backStack,
                         onBack = { backStack.removeLastOrNull() },
                         entryProvider = entryProvider {
@@ -116,7 +111,7 @@ private fun ComposeView.setMainContent(
                                     }
                                 )
                             }
-                            entry<Second> { key ->
+                            entry<Second> { _ ->
                                 SecondScreen(
                                     goBack = {
                                         backStack.removeLastOrNull()
@@ -125,8 +120,6 @@ private fun ComposeView.setMainContent(
                             }
                         }
                     )
-
-
                 }
 
                 DisposableEffect(Unit) {

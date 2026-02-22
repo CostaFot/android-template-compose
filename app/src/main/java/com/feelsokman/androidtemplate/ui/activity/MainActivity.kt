@@ -62,7 +62,9 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.feelsokman.androidtemplate.R
-import com.feelsokman.androidtemplate.retain.SampleRetainedViewModel
+import com.feelsokman.androidtemplate.retain.CustomRetainedViewModelEntryPoint
+import com.feelsokman.androidtemplate.retain.SampleEntryPoint
+import com.feelsokman.androidtemplate.retain.SampleEntryPoint2
 import com.feelsokman.androidtemplate.retain.rememberRetainDecorator
 import com.feelsokman.androidtemplate.retain.rememberRetainedViewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
@@ -70,6 +72,7 @@ import com.feelsokman.androidtemplate.ui.activity.viewmodel.PullToRefreshViewMod
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
 import com.feelsokman.logging.logDebug
+import dagger.hilt.EntryPoints
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.serialization.Serializable
@@ -154,7 +157,16 @@ class MainActivity : AppCompatActivity() {
 
 @Composable
 fun ContentGreen(goToSecondScreen: () -> Unit) {
-    val retainedViewModel = rememberRetainedViewModel<SampleRetainedViewModel>()
+    val retainedViewModel = rememberRetainedViewModel { context ->
+        EntryPoints.get(context, SampleEntryPoint::class.java).sampleRetainedViewModel()
+    }
+    val customRetainedViewModel = rememberRetainedViewModel { context ->
+        EntryPoints.get(context, CustomRetainedViewModelEntryPoint::class.java)
+            .customRetainedViewModel()
+    }
+
+    var text by remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -170,6 +182,12 @@ fun ContentGreen(goToSecondScreen: () -> Unit) {
             style = MaterialTheme.typography.titleLarge
         )
         Spacer(modifier = Modifier.height(12.dp))
+        TextField(
+            value = text,
+            onValueChange = { text = it },
+            label = { Text("Enter text") }
+        )
+        Spacer(modifier = Modifier.height(12.dp))
         Button(onClick = {
             goToSecondScreen()
 
@@ -183,7 +201,12 @@ fun ContentGreen(goToSecondScreen: () -> Unit) {
 fun ContentBlue(
     text: String
 ) {
-    val retainedViewModel = rememberRetainedViewModel<SampleRetainedViewModel>()
+    val retainedViewModel = rememberRetainedViewModel { context ->
+        EntryPoints.get(context, SampleEntryPoint::class.java).sampleRetainedViewModel()
+    }
+    val retainedViewModel2 = rememberRetainedViewModel { context ->
+        EntryPoints.get(context, SampleEntryPoint2::class.java).sampleRetainedViewModel2()
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -203,7 +226,9 @@ fun ContentBlue(
 private fun MainScreen(
     viewModel: PullToRefreshViewModel = hiltViewModel()
 ) {
-    val ff = rememberRetainedViewModel<SampleRetainedViewModel>()
+    val ff = rememberRetainedViewModel { context ->
+        EntryPoints.get(context, SampleEntryPoint::class.java).sampleRetainedViewModel()
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
