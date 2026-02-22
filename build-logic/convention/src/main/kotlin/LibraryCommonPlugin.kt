@@ -1,6 +1,5 @@
 import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.feelsokayman.template.configureGradleManagedDevices
 import com.feelsokayman.template.configureKotlinAndroid
 import com.feelsokayman.template.disableUnnecessaryAndroidTests
 import org.gradle.api.Plugin
@@ -18,7 +17,6 @@ class LibraryCommonPlugin : Plugin<Project> {
             extensions.configure<LibraryExtension> {
                 configureKotlinAndroid(this)
                 testOptions.animationsDisabled = true
-                configureGradleManagedDevices(this)
                 // The resource prefix is derived from the module name,
                 // so resources inside ":core:module1" must be prefixed with "core_module1_"
                 resourcePrefix =
