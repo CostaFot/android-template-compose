@@ -28,12 +28,13 @@ android {
     }
 
     buildTypes {
-        val debug by getting {
+        debug {
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "Compose Debug")
         }
-        val release by getting {
+        release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -65,6 +66,7 @@ dependencies {
     implementation(project(":common"))
     implementation(project(":work"))
     implementation(project(":logging"))
+    implementation(project(":jank"))
 
     implementation(libs.material.design)
     implementation(libs.androidx.activity.compose)

@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -57,6 +58,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.metrics.performance.JankStats
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
@@ -69,6 +71,9 @@ import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.PullToRefreshViewModel
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
+import com.feelsokman.jank.NavigationTrackingSideEffect
+import com.feelsokman.jank.ScreenVisitJankAggregator
+import com.feelsokman.jank.TrackScrollJank
 import com.feelsokman.logging.logDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -89,6 +94,16 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var networkMonitor: NetworkMonitor
+
+    @Inject
+    lateinit var lazyStats: dagger.Lazy<JankStats>
+
+    /**
+     * Lazily inject the aggregator behind [lazyStats]'s frame listener, so that the
+     * in-progress screen visit can be flushed when this activity pauses.
+     */
+    @Inject
+    lateinit var lazyJankAggregator: dagger.Lazy<ScreenVisitJankAggregator>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //installSplashScreen()
@@ -120,6 +135,8 @@ class MainActivity : AppCompatActivity() {
                 Surface {
                     val backStack = rememberNavBackStack(RouteA)
 
+                    backStack.lastOrNull()?.let { NavigationTrackingSideEffect(it) }
+
                     val retainDecorator = rememberRetainDecorator()
 
                     NavDisplay(
@@ -141,6 +158,21 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lazyStats.get().isTrackingEnabled = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Tracking stops below and JankStats is bound to this activity's window, so no more
+        // frames arrive for this visit — report what accumulated. "activity_pause" covers
+        // everything an activity can't distinguish: backgrounding, another activity or
+        // dialog on top, multi-window focus loss.
+        lazyJankAggregator.get().flush(reason = "activity_pause")
+        lazyStats.get().isTrackingEnabled = false
     }
 
     override fun onDestroy() {
@@ -209,6 +241,8 @@ private fun MainScreen(
 
     ) {
         val isRefreshing: Boolean by viewModel.isRefreshingState.collectAsStateWithLifecycle()
+        val listState = rememberLazyListState()
+        TrackScrollJank(scrollableState = listState, stateName = "mainScreen:list")
         PullToRefreshBox(
             isRefreshing = isRefreshing,
             onRefresh = {
@@ -221,6 +255,7 @@ private fun MainScreen(
             )
         ) {
             LazyColumn(
+                state = listState,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -436,7 +471,3 @@ fun ThirdRouteScreen(
 
 val generateRandomColor
     get() = Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-
-
-
-

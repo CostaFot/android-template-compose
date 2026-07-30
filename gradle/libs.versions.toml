@@ -1,7 +1,7 @@
 [versions]
-androidGradlePlugin = "9.0.1"
+androidGradlePlugin = "9.3.1"
 # Should be AGP + 23
-lint = "32.0.1"
+lint = "32.3.1"
 
 androidDesugarJdkLibs = "2.1.5"
 androidxActivity = "1.12.3"
@@ -12,6 +12,7 @@ androidxCore = "1.16.0"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.1.7"
 androidxEspresso = "3.7.0"
+androidxFragment = "1.8.9"
 androidxHiltNavigationCompose = "1.2.0"
 androidxLifecycle = "2.10.0"
 androidxMacroBenchmark = "1.1.0"
@@ -36,7 +37,7 @@ kotlin = "2.2.10"
 kotlinxCoroutines = "1.10.2"
 kotlinxDatetime = "0.7.1"
 kotlinxSerializationJson = "1.9.0"
-ksp = "2.2.10-2.0.2"
+ksp = "2.3.2"
 
 material = "1.12.0"
 okhttp = "5.1.0"
@@ -79,6 +80,7 @@ androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navig
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-fragment = { group = "androidx.fragment", name = "fragment", version.ref = "androidxFragment" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 
