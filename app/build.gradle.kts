@@ -59,12 +59,6 @@ android {
     namespace = "com.feelsokman.androidtemplate"
 }
 
-// The unit test source set only holds test helpers (CoroutinesTestRule, LiveDataTestUtil)
-// until actual tests exist for this module.
-tasks.withType<Test>().configureEach {
-    failOnNoDiscoveredTests = false
-}
-
 dependencies {
     implementation(project(":auth"))
     implementation(project(":design"))
@@ -114,10 +108,6 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.testManifest)
-
-    // unit testing
-    testImplementation(libs.junit4)
-    testImplementation(libs.kotlinx.coroutines.test)
 
     // UI testing
     androidTestImplementation(project(":testing"))

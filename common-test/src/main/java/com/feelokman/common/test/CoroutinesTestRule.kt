@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate
+package com.feelokman.common.test
 
 import com.feelsokman.common.coroutine.DispatcherProvider
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,7 +15,7 @@ import org.junit.runner.Description
 
 @ExperimentalCoroutinesApi
 class CoroutinesTestRule(
-    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    val testDispatcher: TestDispatcher = UnconfinedTestDispatcher(),
 ) : TestWatcher() {
 
     val testDispatcherProvider = object : DispatcherProvider {

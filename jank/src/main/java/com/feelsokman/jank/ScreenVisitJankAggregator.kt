@@ -12,8 +12,8 @@ import androidx.metrics.performance.JankStats
  * Frames are attributed to the current navigation destination through the "Navigation"
  * value in [FrameData.states] (see [NavigationTrackingSideEffect]). When that value
  * changes, the accumulated visit is flushed to the [reporter]. Callers should also
- * [flush] when the app goes to the background, since no further frames (and therefore no
- * further state changes) will arrive while backgrounded.
+ * [flush] when the tracked activity pauses, since no further frames (and therefore no
+ * further state changes) will arrive while it is not in the foreground.
  */
 class ScreenVisitJankAggregator(
     private val reporter: JankReporter,

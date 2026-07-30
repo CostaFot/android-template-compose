@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Lazily inject the aggregator behind [lazyStats]'s frame listener, so that the
-     * in-progress screen visit can be flushed when the app goes to the background.
+     * in-progress screen visit can be flushed when this activity pauses.
      */
     @Inject
     lateinit var lazyJankAggregator: dagger.Lazy<ScreenVisitJankAggregator>
@@ -167,8 +167,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        // No frames arrive while backgrounded, so report the visit accumulated so far.
-        lazyJankAggregator.get().flush(reason = "app_background")
+        // Tracking stops below and JankStats is bound to this activity's window, so no more
+        // frames arrive for this visit — report what accumulated. "activity_pause" covers
+        // everything an activity can't distinguish: backgrounding, another activity or
+        // dialog on top, multi-window focus loss.
+        lazyJankAggregator.get().flush(reason = "activity_pause")
         lazyStats.get().isTrackingEnabled = false
     }
 

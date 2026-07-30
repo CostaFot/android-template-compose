@@ -25,7 +25,7 @@ data class ScreenVisitJank(
      * ("le_16" .. "gt_700"). Null below API 31.
      */
     val jankFrameOverrunBucketsMs: Map<String, Int>?,
-    /** Why the report was emitted: "navigation", "app_background" or "buffer_limit". */
+    /** Why the report was emitted: "navigation", "activity_pause" or "buffer_limit". */
     val flushReason: String,
 )
 

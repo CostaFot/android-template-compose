@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate
+package com.feelokman.common.test
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer

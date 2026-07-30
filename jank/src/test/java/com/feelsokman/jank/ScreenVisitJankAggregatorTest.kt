@@ -25,7 +25,7 @@ class ScreenVisitJankAggregatorTest {
         assertEquals(emptyList(), reports)
 
         timeMs = 500
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
 
         val report = reports.single()
         assertEquals("RouteA", report.screen)
@@ -33,7 +33,7 @@ class ScreenVisitJankAggregatorTest {
         assertEquals(11, report.totalFrames)
         assertEquals(1, report.jankFrames)
         assertEquals(0, report.frozenFrames)
-        assertEquals("app_background", report.flushReason)
+        assertEquals("activity_pause", report.flushReason)
     }
 
     @Test
@@ -50,7 +50,7 @@ class ScreenVisitJankAggregatorTest {
     @Test
     fun navigationKeyArgumentsAreStripped() {
         aggregator.onFrame(frame(screen = "RouteB(id=42)", durationMs = 8))
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
 
         assertEquals("RouteB", reports.single().screen)
     }
@@ -63,7 +63,7 @@ class ScreenVisitJankAggregatorTest {
                 durationMs = 8,
             ),
         )
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
 
         assertEquals("RouteA", reports.single().screen)
     }
@@ -73,7 +73,7 @@ class ScreenVisitJankAggregatorTest {
         aggregator.onFrame(
             frame(screen = "com.example.feature.topic.RouteB(id=42)", durationMs = 8),
         )
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
 
         assertEquals("RouteB", reports.single().screen)
     }
@@ -81,7 +81,7 @@ class ScreenVisitJankAggregatorTest {
     @Test
     fun framesWithoutNavigationStateReportUnknownScreen() {
         aggregator.onFrame(FrameData(0, 8_000_000, false, emptyList()))
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
 
         assertEquals("unknown", reports.single().screen)
     }
@@ -93,7 +93,7 @@ class ScreenVisitJankAggregatorTest {
         aggregator.onFrame(
             frame(screen = "RouteA", durationMs = 40, isJank = true, isScrolling = true),
         )
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
 
         val report = reports.single()
         assertEquals(3, report.totalFrames)
@@ -105,7 +105,7 @@ class ScreenVisitJankAggregatorTest {
     @Test
     fun frozenFramesAreCounted() {
         aggregator.onFrame(frame(screen = "RouteA", durationMs = 800, isJank = true))
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
 
         val report = reports.single()
         assertEquals(1, report.jankFrames)
@@ -115,7 +115,7 @@ class ScreenVisitJankAggregatorTest {
     @Test
     fun overrunDataIsAbsentForPreApi31FrameData() {
         aggregator.onFrame(frame(screen = "RouteA", durationMs = 40, isJank = true))
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
 
         val report = reports.single()
         assertNull(report.maxFrameOverrunMs)
@@ -124,10 +124,10 @@ class ScreenVisitJankAggregatorTest {
 
     @Test
     fun flushWithoutFramesReportsNothing() {
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
         aggregator.onFrame(frame(screen = "RouteA", durationMs = 8))
-        aggregator.flush(reason = "app_background")
-        aggregator.flush(reason = "app_background")
+        aggregator.flush(reason = "activity_pause")
+        aggregator.flush(reason = "activity_pause")
 
         assertEquals(1, reports.size)
     }
