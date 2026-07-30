@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -55,7 +56,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.metrics.performance.JankStats
@@ -64,10 +64,6 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.feelsokman.androidtemplate.R
-import com.feelsokman.androidtemplate.jank.NAVIGATION_STATE_KEY
-import com.feelsokman.androidtemplate.jank.ScreenVisitJankAggregator
-import com.feelsokman.androidtemplate.jank.TrackDisposableJank
-import com.feelsokman.androidtemplate.jank.TrackScrollJank
 import com.feelsokman.androidtemplate.retain.SampleRetainedViewModel
 import com.feelsokman.androidtemplate.retain.rememberRetainDecorator
 import com.feelsokman.androidtemplate.retain.rememberRetainedViewModel
@@ -75,6 +71,9 @@ import com.feelsokman.androidtemplate.ui.activity.viewmodel.MainViewModel
 import com.feelsokman.androidtemplate.ui.activity.viewmodel.PullToRefreshViewModel
 import com.feelsokman.common.NetworkMonitor
 import com.feelsokman.design.theme.AppTheme
+import com.feelsokman.jank.NavigationTrackingSideEffect
+import com.feelsokman.jank.ScreenVisitJankAggregator
+import com.feelsokman.jank.TrackScrollJank
 import com.feelsokman.logging.logDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -176,18 +175,6 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         logDebug { "onDestroy" }
         super.onDestroy()
-    }
-}
-
-/**
- * Stores the current navigation destination in [androidx.metrics.performance.PerformanceMetricsState]
- * so that ScreenVisitJankAggregator can attribute frames to screens.
- */
-@Composable
-private fun NavigationTrackingSideEffect(currentKey: NavKey) {
-    TrackDisposableJank(currentKey) { metricsHolder ->
-        metricsHolder.state?.putState(NAVIGATION_STATE_KEY, currentKey.toString())
-        onDispose {}
     }
 }
 
@@ -481,7 +468,3 @@ fun ThirdRouteScreen(
 
 val generateRandomColor
     get() = Color(Random.nextInt(256), Random.nextInt(256), Random.nextInt(256))
-
-
-
-

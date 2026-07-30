@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.jank
+package com.feelsokman.jank
 
 /**
  * Aggregated jank data for a single visit to one screen (one navigation destination

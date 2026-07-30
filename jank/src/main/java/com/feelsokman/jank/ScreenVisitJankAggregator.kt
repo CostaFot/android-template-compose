@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.jank
+package com.feelsokman.jank
 
 import android.os.SystemClock
 import androidx.metrics.performance.FrameData
@@ -10,8 +10,8 @@ import androidx.metrics.performance.JankStats
  * so that report volume scales with navigation events instead of rendered frames.
  *
  * Frames are attributed to the current navigation destination through the "Navigation"
- * value in [FrameData.states] (see NavigationTrackingSideEffect in MainActivity). When that
- * value changes, the accumulated visit is flushed to the [reporter]. Callers should also
+ * value in [FrameData.states] (see [NavigationTrackingSideEffect]). When that value
+ * changes, the accumulated visit is flushed to the [reporter]. Callers should also
  * [flush] when the app goes to the background, since no further frames (and therefore no
  * further state changes) will arrive while backgrounded.
  */

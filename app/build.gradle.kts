@@ -59,12 +59,19 @@ android {
     namespace = "com.feelsokman.androidtemplate"
 }
 
+// The unit test source set only holds test helpers (CoroutinesTestRule, LiveDataTestUtil)
+// until actual tests exist for this module.
+tasks.withType<Test>().configureEach {
+    failOnNoDiscoveredTests = false
+}
+
 dependencies {
     implementation(project(":auth"))
     implementation(project(":design"))
     implementation(project(":common"))
     implementation(project(":work"))
     implementation(project(":logging"))
+    implementation(project(":jank"))
 
     implementation(libs.material.design)
     implementation(libs.androidx.activity.compose)
@@ -87,7 +94,6 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
-    implementation(libs.androidx.metrics)
 
     implementation(libs.androidx.startup)
 

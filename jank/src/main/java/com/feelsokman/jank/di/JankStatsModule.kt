@@ -1,12 +1,12 @@
-package com.feelsokman.androidtemplate.di
+package com.feelsokman.jank.di
 
 import android.app.Activity
 import android.view.Window
 import androidx.metrics.performance.JankStats
 import androidx.metrics.performance.JankStats.OnFrameListener
-import com.feelsokman.androidtemplate.jank.JankReporter
-import com.feelsokman.androidtemplate.jank.LogcatJankReporter
-import com.feelsokman.androidtemplate.jank.ScreenVisitJankAggregator
+import com.feelsokman.jank.JankReporter
+import com.feelsokman.jank.LogcatJankReporter
+import com.feelsokman.jank.ScreenVisitJankAggregator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

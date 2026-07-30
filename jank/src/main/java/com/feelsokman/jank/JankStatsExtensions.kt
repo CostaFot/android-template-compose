@@ -15,7 +15,7 @@
  */
 // Adapted from the Now in Android sample (core/ui/JankStatsExtensions.kt).
 
-package com.feelsokman.androidtemplate.jank
+package com.feelsokman.jank
 
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.runtime.Composable

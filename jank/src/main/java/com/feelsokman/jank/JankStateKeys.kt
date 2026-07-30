@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.jank
+package com.feelsokman.jank
 
 // Contract between the composables that write PerformanceMetricsState
 // (NavigationTrackingSideEffect, TrackScrollJank) and ScreenVisitJankAggregator,

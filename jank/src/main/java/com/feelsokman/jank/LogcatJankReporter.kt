@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.jank
+package com.feelsokman.jank
 
 import android.util.Log
 import org.json.JSONObject

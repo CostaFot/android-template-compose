@@ -1,4 +1,4 @@
-package com.feelsokman.androidtemplate.jank
+package com.feelsokman.jank
 
 import androidx.metrics.performance.FrameData
 import androidx.metrics.performance.StateInfo
