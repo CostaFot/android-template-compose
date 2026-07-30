@@ -87,6 +87,7 @@ dependencies {
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.metrics)
 
     implementation(libs.androidx.startup)
 
@@ -107,6 +108,10 @@ dependencies {
 
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.testManifest)
+
+    // unit testing
+    testImplementation(libs.junit4)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // UI testing
     androidTestImplementation(project(":testing"))

@@ -55,13 +55,19 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.metrics.performance.JankStats
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.feelsokman.androidtemplate.R
+import com.feelsokman.androidtemplate.jank.NAVIGATION_STATE_KEY
+import com.feelsokman.androidtemplate.jank.ScreenVisitJankAggregator
+import com.feelsokman.androidtemplate.jank.TrackDisposableJank
+import com.feelsokman.androidtemplate.jank.TrackScrollJank
 import com.feelsokman.androidtemplate.retain.SampleRetainedViewModel
 import com.feelsokman.androidtemplate.retain.rememberRetainDecorator
 import com.feelsokman.androidtemplate.retain.rememberRetainedViewModel
@@ -89,6 +95,16 @@ class MainActivity : AppCompatActivity() {
 
     @Inject
     lateinit var networkMonitor: NetworkMonitor
+
+    @Inject
+    lateinit var lazyStats: dagger.Lazy<JankStats>
+
+    /**
+     * Lazily inject the aggregator behind [lazyStats]'s frame listener, so that the
+     * in-progress screen visit can be flushed when the app goes to the background.
+     */
+    @Inject
+    lateinit var lazyJankAggregator: dagger.Lazy<ScreenVisitJankAggregator>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         //installSplashScreen()
@@ -120,6 +136,8 @@ class MainActivity : AppCompatActivity() {
                 Surface {
                     val backStack = rememberNavBackStack(RouteA)
 
+                    backStack.lastOrNull()?.let { NavigationTrackingSideEffect(it) }
+
                     val retainDecorator = rememberRetainDecorator()
 
                     NavDisplay(
@@ -143,9 +161,33 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        lazyStats.get().isTrackingEnabled = true
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // No frames arrive while backgrounded, so report the visit accumulated so far.
+        lazyJankAggregator.get().flush(reason = "app_background")
+        lazyStats.get().isTrackingEnabled = false
+    }
+
     override fun onDestroy() {
         logDebug { "onDestroy" }
         super.onDestroy()
+    }
+}
+
+/**
+ * Stores the current navigation destination in [androidx.metrics.performance.PerformanceMetricsState]
+ * so that ScreenVisitJankAggregator can attribute frames to screens.
+ */
+@Composable
+private fun NavigationTrackingSideEffect(currentKey: NavKey) {
+    TrackDisposableJank(currentKey) { metricsHolder ->
+        metricsHolder.state?.putState(NAVIGATION_STATE_KEY, currentKey.toString())
+        onDispose {}
     }
 }
 
@@ -209,6 +251,8 @@ private fun MainScreen(
 
     ) {
         val isRefreshing: Boolean by viewModel.isRefreshingState.collectAsStateWithLifecycle()
+        val listState = rememberLazyListState()
+        TrackScrollJank(scrollableState = listState, stateName = "mainScreen:list")
         PullToRefreshBox(
             isRefreshing = isRefreshing,
             onRefresh = {
@@ -221,6 +265,7 @@ private fun MainScreen(
             )
         ) {
             LazyColumn(
+                state = listState,
                 modifier = Modifier.fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
