@@ -20,5 +20,7 @@ To wire an activity (see `MainActivity` for the reference setup):
 - In Compose: call `NavigationTrackingSideEffect(currentNavKey)` with the current back stack
   key (any type; attributed via `toString()`), and `TrackScrollJank(listState, "screen:list")`
   on scrollables.
+- For fragment-based screens: register `NavigationTrackingFragmentCallbacks` on the activity's
+  `supportFragmentManager` instead — the resumed fragment's class name becomes the screen.
 
 To ship reports to a real backend, replace the `JankReporter` binding in `JankStatsModule`.

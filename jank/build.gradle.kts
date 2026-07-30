@@ -12,6 +12,7 @@ dependencies {
     api(libs.androidx.metrics)
     api(libs.androidx.compose.runtime)
     api(libs.androidx.compose.foundation)
+    api(libs.androidx.fragment)
     implementation(libs.androidx.ui)
 
     testImplementation(libs.junit4)
