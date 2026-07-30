@@ -28,11 +28,11 @@ android {
     }
 
     buildTypes {
-        val debug by getting {
+        debug {
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "Compose Debug")
         }
-        val release by getting {
+        release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
